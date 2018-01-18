@@ -1,0 +1,3 @@
+[submodule "wdl-tasks"]
+	path = wdl-tasks
+	url = git@git.lumc.nl:sasc/wdl-tasks.git
