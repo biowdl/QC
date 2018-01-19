@@ -1,0 +1,4 @@
+{
+    "QC.read1":"test/data/1k_R1_001.fq",
+    "QC.read2":"test/data/1k_R2_001.fq"
+}
