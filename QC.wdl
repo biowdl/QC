@@ -5,25 +5,39 @@ import "wdl-tasks/cutadapt.wdl" as cutadapt
 
 workflow QC {
     File read1
+    String outputDir
+    File extractAdaptersFastqcJar
     File? read2
+    String? cutadaptOutput = outputDir + "/cutadapt"
+    String? fastqcOutput = outputDir + "/fastqc"
+    String? extractAdaptersOutput = outputDir + "/extractAdapters"
 
     call fastqc.fastqc as fastqcRead1 {
         input:
-            seqFile=read1
+            seqFile=read1,
+            outdirPath=fastqcOutput
     }
+
     call fastqc.extractAdapters as extractAdaptersRead1 {
         input:
-            inputFile=fastqcRead1.rawReport
+            extractAdaptersFastqcJar=extractAdaptersFastqcJar,
+
+            inputFile=fastqcRead1.rawReport,
+             adaptersOutputFilePath=extractAdaptersOutput + "/" + basename(read1) + ".adapters"
     }
 
     if (defined(read2)) {
         call fastqc.fastqc as fastqcRead2 {
             input:
+                outdirPath=fastqcOutput,
                 seqFile=read2
         }
         call fastqc.extractAdapters as extractAdaptersRead2 {
             input:
-                inputFile=fastqcRead2.rawReport
+                extractAdaptersFastqcJar=extractAdaptersFastqcJar,
+                inputFile=fastqcRead2.rawReport,
+                adaptersOutputFilePath=extractAdaptersOutput + "/" + basename(read2) + ".adapters"
+
         }
     }
 
@@ -31,6 +45,8 @@ workflow QC {
         input:
             read1=read1,
             read2=read2,
+            read1output=cutadaptOutput + "/cutadapt_" + basename(read1),
+            read2output=cutadaptOutput + "/cutadapt_" + basename(read2),
             adapter=read_lines(extractAdaptersRead1.adapterOutputFile),
             adapterRead2=read_lines(extractAdaptersRead2.adapterOutputFile)
     }
