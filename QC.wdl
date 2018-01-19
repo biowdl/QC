@@ -9,8 +9,7 @@ workflow QC {
 
     call fastqc.fastqc {
         input:
-            read1=read1,
-            read2=read2
+            seqFiles=select_all([read1,read2])
     }
 
     call fastqc.extractAdapters {
@@ -22,7 +21,8 @@ workflow QC {
         input:
             read1=read1,
             read2=read2,
-            adapterList=extractAdapters.adapterList
+            adapter=extractAdapters.adapterList,
+            adapterRead2=extractAdapters.adapterListRead2
     }
 
     output {
