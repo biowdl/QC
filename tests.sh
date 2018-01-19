@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+set -eu -o pipefail
+
 bash download_cromwell.sh
+bash download_extractAdaptersFastqc.sh
 
 for test in test/*.json
 do
