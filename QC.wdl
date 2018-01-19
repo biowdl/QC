@@ -29,28 +29,28 @@ workflow QC {
         input:
             condaEnv=installFastqc.condaEnvPath,
             seqFile=read1,
-            outdirPath=fastqcOutput
+            outdirPath=select_first([fastqcOutput])
     }
 
     call fastqc.extractAdapters as extractAdaptersRead1 {
         input:
             extractAdaptersFastqcJar=extractAdaptersFastqcJar,
             inputFile=fastqcRead1.rawReport,
-             adapterOutputFilePath=extractAdaptersOutput + "/" + basename(read1) + ".adapters"
+            outputDir=select_first([extractAdaptersOutput])
     }
 
     if (defined(read2)) {
         call fastqc.fastqc as fastqcRead2 {
             input:
                 condaEnv=installFastqc.condaEnvPath,
-                outdirPath=fastqcOutput,
-                seqFile=select_first([read2])
+                 outdirPath=select_first([fastqcOutput]),
+                 seqFile=select_first([read2])
         }
         call fastqc.extractAdapters as extractAdaptersRead2 {
             input:
                 extractAdaptersFastqcJar=extractAdaptersFastqcJar,
                 inputFile=fastqcRead2.rawReport,
-                adapterOutputFilePath=extractAdaptersOutput + "/" + basename(select_first([read2])) + ".adapters"
+                outputDir=select_first([extractAdaptersOutput])
         }
     }
 
@@ -60,9 +60,9 @@ workflow QC {
             read1=read1,
             read2=read2,
             read1output=cutadaptOutput + "/cutadapt_" + basename(read1),
-            read2output=cutadaptOutput + "/cutadapt_" + basename(select_first([read2])),
-            adapter=read_lines(extractAdaptersRead1.adapterOutputFile),
-            adapterRead2=read_lines(extractAdaptersRead2.adapterOutputFile)
+#            read2output=if defined(read2) then cutadaptOutput + "/cutadapt_" + basename(select_first([read2])) else read2,
+            adapter=extractAdaptersRead1.adapterList,
+            adapterRead2=extractAdaptersRead2.adapterList
     }
 
     output {
