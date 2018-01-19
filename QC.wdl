@@ -7,22 +7,32 @@ workflow QC {
     File read1
     File? read2
 
-    call fastqc.fastqc {
+    call fastqc.fastqc as fastqcRead1 {
         input:
-            seqFiles=select_all([read1,read2])
+            seqFile=read1
+    }
+    call fastqc.extractAdapters as extractAdaptersRead1 {
+        input:
+            inputFile=fastqcRead1.rawReport
     }
 
-    call fastqc.extractAdapters {
-        input:
-            fastqcRawReport=fastqc.rawReport
+    if (defined(read2)) {
+        call fastqc.fastqc as fastqcRead2 {
+            input:
+                seqFile=read2
+        }
+        call fastqc.extractAdapters as extractAdaptersRead2 {
+            input:
+                inputFile=fastqcRead2.rawReport
+        }
     }
 
     call cutadapt.cutadapt {
         input:
             read1=read1,
             read2=read2,
-            adapter=extractAdapters.adapterList,
-            adapterRead2=extractAdapters.adapterListRead2
+            adapter=read_lines(extractAdaptersRead1.adapterOutputFile),
+            adapterRead2=read_lines(extractAdaptersRead2.adapterOutputFile)
     }
 
     output {
