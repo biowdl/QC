@@ -1,3 +1,5 @@
 {
-  "QC.read1":"test/data/1k_R.singles.fq"
+  "QC.read1":"test/data/1k_R.singles.fq",
+  "QC.outputDir":"test_output",
+  "QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar"
 }

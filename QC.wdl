@@ -36,7 +36,7 @@ workflow QC {
         input:
             extractAdaptersFastqcJar=extractAdaptersFastqcJar,
             inputFile=fastqcRead1.rawReport,
-             adaptersOutputFilePath=extractAdaptersOutput + "/" + basename(read1) + ".adapters"
+             adapterOutputFilePath=extractAdaptersOutput + "/" + basename(read1) + ".adapters"
     }
 
     if (defined(read2)) {
@@ -44,13 +44,13 @@ workflow QC {
             input:
                 condaEnv=installFastqc.condaEnvPath,
                 outdirPath=fastqcOutput,
-                seqFile=read2
+                seqFile=select_first([read2])
         }
         call fastqc.extractAdapters as extractAdaptersRead2 {
             input:
                 extractAdaptersFastqcJar=extractAdaptersFastqcJar,
                 inputFile=fastqcRead2.rawReport,
-                adaptersOutputFilePath=extractAdaptersOutput + "/" + basename(read2) + ".adapters"
+                adapterOutputFilePath=extractAdaptersOutput + "/" + basename(select_first([read2])) + ".adapters"
         }
     }
 
@@ -60,7 +60,7 @@ workflow QC {
             read1=read1,
             read2=read2,
             read1output=cutadaptOutput + "/cutadapt_" + basename(read1),
-            read2output=cutadaptOutput + "/cutadapt_" + basename(read2),
+            read2output=cutadaptOutput + "/cutadapt_" + basename(select_first([read2])),
             adapter=read_lines(extractAdaptersRead1.adapterOutputFile),
             adapterRead2=read_lines(extractAdaptersRead2.adapterOutputFile)
     }
@@ -68,8 +68,6 @@ workflow QC {
     output {
     File read1afterQC = cutadapt.cutRead1
     File? read2afterQC = cutadapt.cutRead2
-    File fastQcHtmlReport = fastqc.htmlReport
-    File fastQcRawReport = fastqc.rawReport
     File cutadaptReport = cutadapt.report
     }
 }
