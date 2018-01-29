@@ -16,52 +16,53 @@ workflow QC {
 
     call fastqc.getConfiguration as getFastqcConfiguration {
         input:
-            preCommand=preCommands["fastqc"]
+            preCommand = preCommands["fastqc"]
     }
 
     call fastqc.fastqc as fastqcRead1 {
         input:
-            preCommand=preCommands["fastqc"],
-            seqFile=read1,
-            outdirPath=select_first([fastqcOutput])
+            preCommand = preCommands["fastqc"],
+            seqFile = read1,
+            outdirPath = select_first([fastqcOutput])
     }
 
     call fastqc.extractAdapters as extractAdaptersRead1 {
         input:
-            extractAdaptersFastqcJar=extractAdaptersFastqcJar,
-            inputFile=fastqcRead1.rawReport,
-            outputDir=select_first([extractAdaptersOutput]),
-            knownAdapterFile=getFastqcConfiguration.adapterList,
-            knownContamFile=getFastqcConfiguration.contaminantList
+            extractAdaptersFastqcJar = extractAdaptersFastqcJar,
+            inputFile = fastqcRead1.rawReport,
+            outputDir = select_first([extractAdaptersOutput]),
+            knownAdapterFile = getFastqcConfiguration.adapterList,
+            knownContamFile = getFastqcConfiguration.contaminantList
     }
 
     if (defined(read2)) {
         call fastqc.fastqc as fastqcRead2 {
             input:
-                 preCommand=preCommands["fastqc"],
-                 outdirPath=select_first([fastqcOutput]),
-                 seqFile=select_first([read2])
+                 preCommand = preCommands["fastqc"],
+                 outdirPath = select_first([fastqcOutput]),
+                 seqFile = select_first([read2])
         }
         call fastqc.extractAdapters as extractAdaptersRead2 {
             input:
-                extractAdaptersFastqcJar=extractAdaptersFastqcJar,
-                inputFile=fastqcRead2.rawReport,
-                outputDir=select_first([extractAdaptersOutput]),
-                knownAdapterFile=getFastqcConfiguration.adapterList,
-                knownContamFile=getFastqcConfiguration.contaminantList
+                extractAdaptersFastqcJar = extractAdaptersFastqcJar,
+                inputFile = fastqcRead2.rawReport,
+                outputDir = select_first([extractAdaptersOutput]),
+                knownAdapterFile = getFastqcConfiguration.adapterList,
+                knownContamFile = getFastqcConfiguration.contaminantList
         }
-        String read2outputPath=cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
+        String read2outputPath = cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
     }
 
     call cutadapt.cutadapt {
         input:
-            preCommand=preCommands["cutadapt"],
-            read1=read1,
-            read2=read2,
-            read1output=cutadaptOutput + "/cutadapt_" + basename(read1),
-            read2output=read2outputPath,
-            adapter=extractAdaptersRead1.adapterList,
-            adapterRead2=extractAdaptersRead2.adapterList
+            preCommand = preCommands["cutadapt"],
+            read1 = read1,
+            read2 = read2,
+            read1output = cutadaptOutput + "/cutadapt_" + basename(read1),
+            read2output = read2outputPath,
+            adapter = extractAdaptersRead1.adapterList,
+            adapterRead2 = extractAdaptersRead2.adapterList,
+            reportPath = cutadaptOutput + "/report.txt"
     }
 
     output {
