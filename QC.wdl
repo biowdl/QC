@@ -14,7 +14,7 @@ workflow QC {
     String? fastqcOutput = outputDir + "/fastqc"
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
 
-    call fastqc.getConfiguration {
+    call fastqc.getConfiguration as getFastqcConfiguration {
         input:
             preCommand=preCommands["fastqc"]
     }
@@ -31,8 +31,8 @@ workflow QC {
             extractAdaptersFastqcJar=extractAdaptersFastqcJar,
             inputFile=fastqcRead1.rawReport,
             outputDir=select_first([extractAdaptersOutput]),
-            knownAdapterFile=getConfiguration.adapterList,
-            knownContamFile=getConfiguration.contaminantList
+            knownAdapterFile=getFastqcConfiguration.adapterList,
+            knownContamFile=getFastqcConfiguration.contaminantList
     }
 
     if (defined(read2)) {
@@ -47,8 +47,8 @@ workflow QC {
                 extractAdaptersFastqcJar=extractAdaptersFastqcJar,
                 inputFile=fastqcRead2.rawReport,
                 outputDir=select_first([extractAdaptersOutput]),
-                knownAdapterFile=getConfiguration.adapterList,
-                knownContamFile=getConfiguration.contaminantList
+                knownAdapterFile=getFastqcConfiguration.adapterList,
+                knownContamFile=getFastqcConfiguration.contaminantList
         }
         String read2outputPath=cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
     }
