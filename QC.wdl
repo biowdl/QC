@@ -9,6 +9,10 @@ workflow QC {
     String outputDir
     File extractAdaptersFastqcJar
     File? read2
+    File? read1KnownContamFile
+    File? read1KnownAdapterFile
+    File? read2KnownContamFile
+    File? read2KnownAdapterFile
     String? cutadaptOutput = outputDir + "/cutadapt"
     String? fastqcOutput = outputDir + "/fastqc"
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
@@ -36,7 +40,9 @@ workflow QC {
         input:
             extractAdaptersFastqcJar=extractAdaptersFastqcJar,
             inputFile=fastqcRead1.rawReport,
-            outputDir=select_first([extractAdaptersOutput])
+            outputDir=select_first([extractAdaptersOutput]),
+            knownAdapterFile=read1KnownAdapterFile,
+            knownContamFile=read1KnownContamFile
     }
 
     if (defined(read2)) {
@@ -50,7 +56,9 @@ workflow QC {
             input:
                 extractAdaptersFastqcJar=extractAdaptersFastqcJar,
                 inputFile=fastqcRead2.rawReport,
-                outputDir=select_first([extractAdaptersOutput])
+                outputDir=select_first([extractAdaptersOutput]),
+                knownAdapterFile=read2KnownAdapterFile,
+                knownContamFile=read2KnownContamFile
         }
     }
 

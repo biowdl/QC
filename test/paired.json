@@ -1,6 +1,8 @@
 {
     "QC.read1":"test/data/1k_R1_001.fq",
     "QC.read2":"test/data/1k_R2_001.fq",
+    "QC.read1KnownContamFile":"test/data/1k_R1_001.contams.txt",
+    "QC.read2KnownContamFile":"test/data/1k_R2_001.contams.txt",
     "QC.outputDir":"test_output",
     "QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar"
 }
