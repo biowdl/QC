@@ -2,15 +2,13 @@ digraph QC {
   compound=true;
   "call extractAdaptersRead2" -> "call cutadapt" 
   "call fastqcRead1" -> "call extractAdaptersRead1" 
-  "call installFastqc" -> "call fastqcRead1" 
-  "call installFastqc" -> "if (defined(read2))" [lhead=cluster_0]
+  "call getConfiguration" -> "call extractAdaptersRead2" 
   "call fastqcRead2" -> "call extractAdaptersRead2" 
+  "call getConfiguration" -> "if (defined(read2))" [lhead=cluster_0]
+  "call getConfiguration" -> "call extractAdaptersRead1" 
   "call extractAdaptersRead1" -> "call cutadapt" 
-  "call installFastqc" -> "call fastqcRead2" 
-  "call installCutadapt" -> "call cutadapt" 
-  "call installCutadapt"
   "call fastqcRead1"
-  "call installFastqc"
+  "call getConfiguration"
   "call cutadapt"
   "call extractAdaptersRead1"
   
