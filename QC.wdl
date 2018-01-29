@@ -16,7 +16,7 @@ workflow QC {
 
     call fastqc.getConfiguration {
         input:
-            precommand=preCommands["fastqc"]
+            preCommand=preCommands["fastqc"]
     }
 
     call fastqc.fastqc as fastqcRead1 {
@@ -31,8 +31,8 @@ workflow QC {
             extractAdaptersFastqcJar=extractAdaptersFastqcJar,
             inputFile=fastqcRead1.rawReport,
             outputDir=select_first([extractAdaptersOutput]),
-            knownAdapterFile=fastqc.getConfiguration.adapterList,
-            knownContamFile=fastqc.getConfiguration.contaminantList
+            knownAdapterFile=getConfiguration.adapterList,
+            knownContamFile=getConfiguration.contaminantList
     }
 
     if (defined(read2)) {
@@ -47,9 +47,10 @@ workflow QC {
                 extractAdaptersFastqcJar=extractAdaptersFastqcJar,
                 inputFile=fastqcRead2.rawReport,
                 outputDir=select_first([extractAdaptersOutput]),
-                knownAdapterFile=fastqc.getConfiguration.adapterList,
-                knownContamFile=fastqc.getConfiguration.contaminantList
+                knownAdapterFile=getConfiguration.adapterList,
+                knownContamFile=getConfiguration.contaminantList
         }
+        String read2outputPath=cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
     }
 
     call cutadapt.cutadapt {
@@ -58,7 +59,7 @@ workflow QC {
             read1=read1,
             read2=read2,
             read1output=cutadaptOutput + "/cutadapt_" + basename(read1),
-#            read2output=if defined(read2) then cutadaptOutput + "/cutadapt_" + basename(select_first([read2])) else read2,
+            read2output=read2outputPath,
             adapter=extractAdaptersRead1.adapterList,
             adapterRead2=extractAdaptersRead2.adapterList
     }
