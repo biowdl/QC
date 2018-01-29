@@ -2,5 +2,9 @@
   "QC.read1":"test/data/1k_R.singles.fq",
   "QC.read1KnownContamFile":"test/data/1k_R1_001.contams.txt",
   "QC.outputDir":"test_output",
-  "QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar"
+  "QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar",
+  "QC.preCommands": {
+    "fastqc":"source activate fastqc",
+    "cutadapt":"source activate cutadapt"
+  }
 }

@@ -8,30 +8,20 @@ workflow QC {
     File read1
     String outputDir
     File extractAdaptersFastqcJar
+    Map[String,String?] preCommands
     File? read2
-    File? read1KnownContamFile
-    File? read1KnownAdapterFile
-    File? read2KnownContamFile
-    File? read2KnownAdapterFile
     String? cutadaptOutput = outputDir + "/cutadapt"
     String? fastqcOutput = outputDir + "/fastqc"
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
 
-    call bioconda.installPrefix as installFastqc {
+    call fastqc.getConfiguration {
         input:
-            prefix= "conda/fastqc",
-            requirements=["fastqc"]
-    }
-
-    call bioconda.installPrefix as installCutadapt {
-        input:
-            prefix="conda/cutadapt",
-            requirements=["cutadapt"]
+            precommand=preCommands["fastqc"]
     }
 
     call fastqc.fastqc as fastqcRead1 {
         input:
-            condaEnv=installFastqc.condaEnvPath,
+            preCommand=preCommands["fastqc"],
             seqFile=read1,
             outdirPath=select_first([fastqcOutput])
     }
@@ -41,14 +31,14 @@ workflow QC {
             extractAdaptersFastqcJar=extractAdaptersFastqcJar,
             inputFile=fastqcRead1.rawReport,
             outputDir=select_first([extractAdaptersOutput]),
-            knownAdapterFile=read1KnownAdapterFile,
-            knownContamFile=read1KnownContamFile
+            knownAdapterFile=fastqc.getConfiguration.adapterList,
+            knownContamFile=fastqc.getConfiguration.contaminantList
     }
 
     if (defined(read2)) {
         call fastqc.fastqc as fastqcRead2 {
             input:
-                condaEnv=installFastqc.condaEnvPath,
+                 preCommand=preCommands["fastqc"],
                  outdirPath=select_first([fastqcOutput]),
                  seqFile=select_first([read2])
         }
@@ -57,14 +47,14 @@ workflow QC {
                 extractAdaptersFastqcJar=extractAdaptersFastqcJar,
                 inputFile=fastqcRead2.rawReport,
                 outputDir=select_first([extractAdaptersOutput]),
-                knownAdapterFile=read2KnownAdapterFile,
-                knownContamFile=read2KnownContamFile
+                knownAdapterFile=fastqc.getConfiguration.adapterList,
+                knownContamFile=fastqc.getConfiguration.contaminantList
         }
     }
 
     call cutadapt.cutadapt {
         input:
-            condaEnv=installCutadapt.condaEnvPath,
+            preCommand=preCommands["cutadapt"],
             read1=read1,
             read2=read2,
             read1output=cutadaptOutput + "/cutadapt_" + basename(read1),
