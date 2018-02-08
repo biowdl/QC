@@ -14,11 +14,14 @@ workflow QC {
     String? fastqcOutput = outputDir + "/fastqc"
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
 
+    # Run this step to get the known adapter and contaminant list to extract
+    # the adapters later.
     call fastqc.getConfiguration as getFastqcConfiguration {
         input:
             preCommand = preCommands["fastqc"]
     }
 
+    # FastQC on Read1
     call fastqc.fastqc as fastqcRead1 {
         input:
             preCommand = preCommands["fastqc"],
@@ -26,6 +29,7 @@ workflow QC {
             outdirPath = select_first([fastqcOutput])
     }
 
+    # Extract adapter sequences from the fastqc report.
     call fastqc.extractAdapters as extractAdaptersRead1 {
         input:
             extractAdaptersFastqcJar = extractAdaptersFastqcJar,
@@ -36,10 +40,14 @@ workflow QC {
     }
 
 
+    # Logic step. If no adapters are found adapterListRead1 will be null.
+    # If more are found adapterListRead1 will be an array that contains at
+    # least one item.
     if (length(extractAdaptersRead1.adapterList) > 0) {
         Array[String]+ adapterListRead1 = extractAdaptersRead1.adapterList
     }
 
+    # For paired-end also perform fastqc on read2. Steps are the same as on read 1.
     if (defined(read2)) {
         call fastqc.fastqc as fastqcRead2 {
             input:
@@ -58,6 +66,10 @@ workflow QC {
         if (length(extractAdaptersRead2.adapterList) > 0) {
             Array[String]+ adapterListRead2 = extractAdaptersRead2.adapterList
         }
+
+        # Because it is placed inside the if block read2outputPath is optional. It
+        # will default to null if read2 is not used. This is necessary to run
+        # cutadapt without a read2 output if there is no read2.
         String read2outputPath = cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
     }
 
