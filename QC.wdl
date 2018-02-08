@@ -35,6 +35,10 @@ workflow QC {
             knownContamFile = getFastqcConfiguration.contaminantList
     }
 
+    if (length(extractAdaptersRead1.adapterList) > 0) {
+        Array[String]+ adapterListRead1 = extractAdaptersRead1.adapterList
+    }
+
     if (defined(read2)) {
         call fastqc.fastqc as fastqcRead2 {
             input:
@@ -50,6 +54,9 @@ workflow QC {
                 knownAdapterFile = getFastqcConfiguration.adapterList,
                 knownContamFile = getFastqcConfiguration.contaminantList
         }
+        if (length(extractAdaptersRead2.adapterList) > 0) {
+            Array[String]+ adapterListRead2 = extractAdaptersRead2.adapterList
+        }
         String read2outputPath = cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
     }
 
@@ -60,8 +67,8 @@ workflow QC {
             read2 = read2,
             read1output = cutadaptOutput + "/cutadapt_" + basename(read1),
             read2output = read2outputPath,
-            adapter = extractAdaptersRead1.adapterList,
-            adapterRead2 = extractAdaptersRead2.adapterList,
+            adapter = adapterListRead1,
+            adapterRead2 = adapterListRead2,
             reportPath = cutadaptOutput + "/report.txt"
     }
 
@@ -71,3 +78,6 @@ workflow QC {
     File cutadaptReport = cutadapt.report
     }
 }
+
+
+
