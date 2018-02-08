@@ -35,6 +35,7 @@ workflow QC {
             knownContamFile = getFastqcConfiguration.contaminantList
     }
 
+
     if (length(extractAdaptersRead1.adapterList) > 0) {
         Array[String]+ adapterListRead1 = extractAdaptersRead1.adapterList
     }
