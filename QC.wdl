@@ -13,6 +13,7 @@ workflow QC {
     String? cutadaptOutput = outputDir + "/cutadapt"
     String? fastqcOutput = outputDir + "/fastqc"
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
+    Boolean? alwaysRunCutadapt = false
 
     # Run this step to get the known adapter and contaminant list to extract
     # the adapters later.
@@ -43,6 +44,7 @@ workflow QC {
     # Logic step. If no adapters are found adapterListRead1 will be null.
     # If more are found adapterListRead1 will be an array that contains at
     # least one item.
+    # This is because cutadapt requires an array of at least one item.
     if (length(extractAdaptersRead1.adapterList) > 0) {
         Array[String]+ adapterListRead1 = extractAdaptersRead1.adapterList
     }
@@ -73,22 +75,28 @@ workflow QC {
         String read2outputPath = cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
     }
 
-    call cutadapt.cutadapt {
-        input:
-            preCommand = preCommands["cutadapt"],
-            read1 = read1,
-            read2 = read2,
-            read1output = cutadaptOutput + "/cutadapt_" + basename(read1),
-            read2output = read2outputPath,
-            adapter = adapterListRead1,
-            adapterRead2 = adapterListRead2,
-            reportPath = cutadaptOutput + "/report.txt"
+    # if no adapters are found, why run cutadapt? Unless cutadapt is used for quality trimming.
+    # In which case alwaysRunCutadapt can be set to true by the user.
+    Boolean runCutadapt = defined(adapterListRead1) || defined(adapterListRead2) || alwaysRunCutadapt
+
+    if (runCutadapt) {
+        call cutadapt.cutadapt {
+            input:
+                preCommand = preCommands["cutadapt"],
+                read1 = read1,
+                read2 = read2,
+                read1output = cutadaptOutput + "/cutadapt_" + basename(read1),
+                read2output = read2outputPath,
+                adapter = adapterListRead1,
+                adapterRead2 = adapterListRead2,
+                reportPath = cutadaptOutput + "/report.txt"
+        }
     }
 
     output {
-    File read1afterQC = cutadapt.cutRead1
-    File? read2afterQC = cutadapt.cutRead2
-    File cutadaptReport = cutadapt.report
+        File read1afterQC = if runCutadapt then select_first([cutadapt.cutRead1]) else read1
+        File? read2afterQC = if runCutadapt then cutadapt.cutRead2 else read2
+        File? cutadaptReport = cutadapt.report
     }
 }
 
