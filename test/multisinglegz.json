@@ -10,8 +10,8 @@
     }
   ],
   "qcMulti.outputDir":"test_output",
-  "QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar",
-  "QC.preCommands": {
+  "qcMulti.QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar",
+  "qcMulti.QC.preCommands": {
     "fastqc":"source activate fastqc",
     "cutadapt":"source activate cutadapt"
   }
