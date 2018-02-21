@@ -9,5 +9,5 @@ bash create_environments.sh
 for test in test/{single,singlegz,paired,pairedgz}.json
 do
     echo "Running with input: $test"
-    bash run_pipeline.sh $test
+    bash run_QC.sh $test
 done

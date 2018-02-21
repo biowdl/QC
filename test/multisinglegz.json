@@ -1,0 +1,18 @@
+{
+  "qcMulti.libraries": [
+    {"name":"lib1",
+      "R1":"test/data/ct_r1.fq.gz",
+      "R2":null
+    },
+    {"name":"lib2",
+      "R1":"test/data/ct_r1.fq.gz",
+      "R2":null
+    }
+  ],
+  "qcMulti.outputDir":"test_output",
+  "QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar",
+  "QC.preCommands": {
+    "fastqc":"source activate fastqc",
+    "cutadapt":"source activate cutadapt"
+  }
+}
