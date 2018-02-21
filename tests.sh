@@ -11,3 +11,8 @@ do
     echo "Running with input: $test"
     bash run_QC.sh $test
 done
+for test in test/multi*.json
+do
+    echo "Running with input: $test"
+    bash run_multiQC.sh $test
+done
