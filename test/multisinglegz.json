@@ -9,6 +9,7 @@
       "R2":null
     }
   ],
+  "qcMulti.combineReads": true,
   "qcMulti.outputDir":"test_output",
   "qcMulti.QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar",
   "qcMulti.QC.preCommands": {

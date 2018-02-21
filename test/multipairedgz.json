@@ -9,6 +9,7 @@
       "R2":"test/data/ct_r2.fq.gz"
     }
   ],
+  "qcMulti.combineReads": true,
   "qcMulti.outputDir":"test_output",
   "qcMulti.QC.extractAdaptersFastqcJar":"ExtractAdaptersFastqc-assembly-0.1.jar",
   "qcMulti.QC.preCommands": {
