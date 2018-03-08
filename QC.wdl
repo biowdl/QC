@@ -8,26 +8,20 @@ workflow QC {
     File read1
     String outputDir
     File extractAdaptersFastqcJar
-    Map[String,String?] preCommands
     File? read2
-    String? cutadaptOutput = outputDir + "/cutadapt"
-    String? fastqcOutput = outputDir + "/fastqc"
+    String cutadaptOutput = outputDir + "/cutadapt"
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
     Boolean? alwaysRunCutadapt = false
 
     # Run this step to get the known adapter and contaminant list to extract
     # the adapters later.
-    call fastqc.getConfiguration as getFastqcConfiguration {
-        input:
-            preCommand = preCommands["fastqc"]
-    }
+    call fastqc.getConfiguration as getFastqcConfiguration {}
 
     # FastQC on Read1
     call fastqc.fastqc as fastqcRead1 {
         input:
-            preCommand = preCommands["fastqc"],
             seqFile = read1,
-            outdirPath = select_first([fastqcOutput])
+            outdirPath = outputDir + "/fastqc/R1"
     }
 
     # Extract adapter sequences from the fastqc report.
@@ -53,8 +47,7 @@ workflow QC {
     if (defined(read2)) {
         call fastqc.fastqc as fastqcRead2 {
             input:
-                 preCommand = preCommands["fastqc"],
-                 outdirPath = select_first([fastqcOutput]),
+                 outdirPath = outputDir + "/fastqc/R2",
                  seqFile = select_first([read2])
         }
         call fastqc.extractAdapters as extractAdaptersRead2 {
