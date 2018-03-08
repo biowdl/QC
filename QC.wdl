@@ -75,7 +75,6 @@ workflow QC {
     if (runCutadapt) {
         call cutadapt.cutadapt {
             input:
-                preCommand = preCommands["cutadapt"],
                 read1 = read1,
                 read2 = read2,
                 read1output = cutadaptOutput + "/cutadapt_" + basename(read1),
