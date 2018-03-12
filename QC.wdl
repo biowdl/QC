@@ -1,8 +1,8 @@
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
-import "wdl-tasks/fastqc.wdl" as fastqc
-import "wdl-tasks/cutadapt.wdl" as cutadapt
-import "wdl-tasks/bioconda.wdl" as bioconda
+import "tasks/fastqc.wdl" as fastqc
+import "tasks/cutadapt.wdl" as cutadapt
+import "tasks/bioconda.wdl" as bioconda
 
 workflow QC {
     File read1
