@@ -1,32 +1,27 @@
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
-import "wdl-tasks/fastqc.wdl" as fastqc
-import "wdl-tasks/cutadapt.wdl" as cutadapt
-import "wdl-tasks/bioconda.wdl" as bioconda
+import "tasks/fastqc.wdl" as fastqc
+import "tasks/cutadapt.wdl" as cutadapt
+import "tasks/bioconda.wdl" as bioconda
 
 workflow QC {
     File read1
     String outputDir
     File extractAdaptersFastqcJar
-    Map[String,String?] preCommands
     File? read2
-    String? cutadaptOutput = outputDir + "/cutadapt"
-    String? fastqcOutput = outputDir + "/fastqc"
+    String cutadaptOutput = outputDir + "/cutadapt"
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
+    Boolean? alwaysRunCutadapt = false
 
     # Run this step to get the known adapter and contaminant list to extract
     # the adapters later.
-    call fastqc.getConfiguration as getFastqcConfiguration {
-        input:
-            preCommand = preCommands["fastqc"]
-    }
+    call fastqc.getConfiguration as getFastqcConfiguration {}
 
     # FastQC on Read1
     call fastqc.fastqc as fastqcRead1 {
         input:
-            preCommand = preCommands["fastqc"],
             seqFile = read1,
-            outdirPath = select_first([fastqcOutput])
+            outdirPath = outputDir + "/fastqc/R1"
     }
 
     # Extract adapter sequences from the fastqc report.
@@ -43,6 +38,7 @@ workflow QC {
     # Logic step. If no adapters are found adapterListRead1 will be null.
     # If more are found adapterListRead1 will be an array that contains at
     # least one item.
+    # This is because cutadapt requires an array of at least one item.
     if (length(extractAdaptersRead1.adapterList) > 0) {
         Array[String]+ adapterListRead1 = extractAdaptersRead1.adapterList
     }
@@ -51,8 +47,7 @@ workflow QC {
     if (defined(read2)) {
         call fastqc.fastqc as fastqcRead2 {
             input:
-                 preCommand = preCommands["fastqc"],
-                 outdirPath = select_first([fastqcOutput]),
+                 outdirPath = outputDir + "/fastqc/R2",
                  seqFile = select_first([read2])
         }
         call fastqc.extractAdapters as extractAdaptersRead2 {
@@ -73,22 +68,27 @@ workflow QC {
         String read2outputPath = cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
     }
 
-    call cutadapt.cutadapt {
-        input:
-            preCommand = preCommands["cutadapt"],
-            read1 = read1,
-            read2 = read2,
-            read1output = cutadaptOutput + "/cutadapt_" + basename(read1),
-            read2output = read2outputPath,
-            adapter = adapterListRead1,
-            adapterRead2 = adapterListRead2,
-            reportPath = cutadaptOutput + "/report.txt"
+    # if no adapters are found, why run cutadapt? Unless cutadapt is used for quality trimming.
+    # In which case alwaysRunCutadapt can be set to true by the user.
+    Boolean runCutadapt = defined(adapterListRead1) || defined(adapterListRead2) || alwaysRunCutadapt
+
+    if (runCutadapt) {
+        call cutadapt.cutadapt {
+            input:
+                read1 = read1,
+                read2 = read2,
+                read1output = cutadaptOutput + "/cutadapt_" + basename(read1),
+                read2output = read2outputPath,
+                adapter = adapterListRead1,
+                adapterRead2 = adapterListRead2,
+                reportPath = cutadaptOutput + "/report.txt"
+        }
     }
 
     output {
-    File read1afterQC = cutadapt.cutRead1
-    File? read2afterQC = cutadapt.cutRead2
-    File cutadaptReport = cutadapt.report
+        File read1afterQC = if runCutadapt then select_first([cutadapt.cutRead1]) else read1
+        File? read2afterQC = if runCutadapt then cutadapt.cutRead2 else read2
+        File? cutadaptReport = cutadapt.report
     }
 }
 
