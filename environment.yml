@@ -1,0 +1,10 @@
+name: qc
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+  - r
+dependencies:
+  - cutadapt
+  - fastqc
+  - biopet-extractadaptersfastqc
