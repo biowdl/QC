@@ -26,7 +26,7 @@ import java.io.File
 import nl.biopet.utils.biowdl.Pipeline
 
 trait TestPipeline extends Pipeline {
-  override def inputs: Map[String, String] =
+  override def inputs: Map[String, Any] =
     super.inputs ++
       Map(
         "test.echo.text" -> "Hello world!",
