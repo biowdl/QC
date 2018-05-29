@@ -14,6 +14,7 @@ pipeline {
         CROMWELL_JAR    = credentials('cromwell-jar')
         CROMWELL_CONFIG = credentials('cromwell-config')
         CONDA_PREFIX    = credentials('conda-prefix')
+
     }
     stages {
         stage('Init') {
@@ -24,7 +25,10 @@ pipeline {
                 script {
                     def sbtHome = tool 'sbt 1.0.4'
                     env.outputDir= "./test-output"
+                    env.condaEnv= "/tmp/conda_env-$RANDOM"
                     env.sbt= "${sbtHome}/bin/sbt -Dbiowdl.output_dir=${outputDir} -Dcromwell.jar=${CROMWELL_JAR} -Dcromwell.config=${CROMWELL_CONFIG} -no-colors -batch"
+                    env.activateEnv= "source ${CONDA_PREFIX}/activate ${condaEnv}"
+                    env.createEnv= "${CONDA_PREFIX}/conda-env create -f environment.yml -p ${condaEnv}"
                 }
                 sh "rm -rf ${outputDir}"
                 sh "mkdir -p ${outputDir}"
@@ -35,8 +39,8 @@ pipeline {
             steps {
                 sh "#!/bin/bash\n" +
                         "set -e -v -o pipefail\n" +
-                        "${CONDA_PREFIX}/conda-env create -f environment.yml -p conda_env\n" +
-                        "source ${CONDA_PREFIX}/activate $(readlink -f conda_env)\n" +
+                        "${createEnv}\n" +
+                        "${activateEnv}\n" +
                         "${sbt} clean evicted scalafmt headerCreate test | tee sbt.log"
                 sh 'n=`grep -ce "\\* com.github.biopet" sbt.log || true`; if [ "$n" -ne \"0\" ]; then echo "ERROR: Found conflicting dependencies inside biopet"; exit 1; fi'
                 sh "git diff --exit-code || (echo \"ERROR: Git changes detected, please regenerate the readme, create license headers and run scalafmt: sbt biopetGenerateReadme headerCreate scalafmt\" && exit 1)"
