@@ -22,10 +22,11 @@ pipeline {
                 sh 'java -version'
                 checkout scm
                 sh 'git submodule update --init --recursive'
+                Random random = new Random()
                 script {
                     def sbtHome = tool 'sbt 1.0.4'
                     env.outputDir= "./test-output"
-                    env.condaEnv= "/tmp/conda_env-$RANDOM"
+                    env.condaEnv= "/tmp/conda_env-" + random.nextInt()
                     env.sbt= "${sbtHome}/bin/sbt -Dbiowdl.output_dir=${outputDir} -Dcromwell.jar=${CROMWELL_JAR} -Dcromwell.config=${CROMWELL_CONFIG} -no-colors -batch"
                     env.activateEnv= "source ${CONDA_PREFIX}/activate ${condaEnv}"
                     env.createEnv= "${CONDA_PREFIX}/conda-env create -f environment.yml -p ${condaEnv}"
