@@ -35,7 +35,7 @@ pipeline {
             steps {
                 sh "#!/bin/bash\n" +
                         "set -e -v -o pipefail\n" +
-                        "${CONDA_PREFIX/conda-env create -f environment.yml -p conda_env\n"
+                        "${CONDA_PREFIX}/conda-env create -f environment.yml -p conda_env\n"
                         "source ${CONDA_PREFIX}/activate $(readlink -f conda_env)\n"
                         "${sbt} clean evicted scalafmt headerCreate test | tee sbt.log"
                 sh 'n=`grep -ce "\\* com.github.biopet" sbt.log || true`; if [ "$n" -ne \"0\" ]; then echo "ERROR: Found conflicting dependencies inside biopet"; exit 1; fi'
