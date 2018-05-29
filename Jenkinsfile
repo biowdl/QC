@@ -28,7 +28,7 @@ pipeline {
                     env.condaEnv= "${outputDir}/conda_env"
                     env.sbt= "${sbtHome}/bin/sbt -Dbiowdl.output_dir=${outputDir} -Dcromwell.jar=${CROMWELL_JAR} -Dcromwell.config=${CROMWELL_CONFIG} -no-colors -batch"
                     env.activateEnv= "source ${CONDA_PREFIX}/activate \$(readlink -f ${condaEnv}"
-                    env.createEnv= "${CONDA_PREFIX}/conda-env create -f environment.yml -p ${condaEnv})"
+                    env.createEnv= "${CONDA_PREFIX}/conda-env create -f environment.yml -p ${condaEnv}"
                 }
                 sh "rm -rf ${outputDir}"
                 sh "mkdir -p ${outputDir}"
