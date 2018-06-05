@@ -21,8 +21,28 @@
 
 package biowdl.test
 
-import nl.biopet.utils.biowdl.PipelineSuccess
+import java.io.File
 
-trait TestPipelineSuccess extends TestPipeline with PipelineSuccess {
-  addMustHaveFile("echo.out")
+import nl.biopet.utils.biowdl.Pipeline
+import nl.biopet.utils.biowdl.fixtureFile
+
+
+trait QC extends Pipeline {
+
+  def r1: File
+
+  def r2: Option[File]
+
+  def alwaysRunCutadapt: Option[Boolean] = None
+
+  def startFile: File = new File("QC.wdl")
+
+  override def inputs: Map[String, Any] =
+    super.inputs ++
+      Map(
+        "QC.read1" -> r1.getAbsolutePath,
+        "QC.outputDir" -> outputDir.getAbsolutePath
+      ) ++ alwaysRunCutadapt.map("QC.alwaysRunCutAdapt" -> _) ++
+      r2.map( "QC.read2" -> _.getAbsolutePath)
+
 }

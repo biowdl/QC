@@ -21,4 +21,6 @@
 
 package biowdl.test
 
-class TestPipelineTest extends TestPipelineSuccess {}
+class QCBothReads extends QCSucces {
+
+}

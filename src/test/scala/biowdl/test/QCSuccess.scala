@@ -21,19 +21,8 @@
 
 package biowdl.test
 
-import java.io.File
+import nl.biopet.utils.biowdl.PipelineSuccess
 
-import nl.biopet.utils.biowdl.Pipeline
-import nl.biopet.utils.biowdl.fixtureFile
-
-trait TestPipeline extends Pipeline {
-  override def inputs: Map[String, Any] =
-    super.inputs ++
-      Map(
-        "QC.read1" -> fixtureFile("flexiprep/ct_r1.fq"),
-        "QC.read2" -> fixtureFile("flexiprep/ct_r2.fq"),
-        "QC.outputDir" -> outputDir.getAbsolutePath
-      )
-
-  def startFile: File = new File("./test.wdl")
+trait QCSuccess extends QC with PipelineSuccess {
+  addMustHaveFile("")
 }
