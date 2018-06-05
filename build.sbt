@@ -1,5 +1,5 @@
 organization := "com.github.biopet"
-organizationName := "biowdl"
+organizationName := "Biowdl"
 name := "QC"
 
 biopetUrlName := "QC"
