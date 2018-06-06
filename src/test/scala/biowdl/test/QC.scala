@@ -24,8 +24,6 @@ package biowdl.test
 import java.io.File
 
 import nl.biopet.utils.biowdl.Pipeline
-import nl.biopet.utils.biowdl.fixtureFile
-
 
 trait QC extends Pipeline {
 
@@ -43,6 +41,6 @@ trait QC extends Pipeline {
         "QC.read1" -> r1.getAbsolutePath,
         "QC.outputDir" -> outputDir.getAbsolutePath
       ) ++ alwaysRunCutadapt.map("QC.alwaysRunCutAdapt" -> _) ++
-      r2.map( "QC.read2" -> _.getAbsolutePath)
+      r2.map("QC.read2" -> _.getAbsolutePath)
 
 }

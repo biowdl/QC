@@ -23,6 +23,4 @@ package biowdl.test
 
 import nl.biopet.utils.biowdl.PipelineSuccess
 
-trait QCSuccess extends QC with PipelineSuccess {
-  addMustHaveFile("")
-}
+trait QCSuccess extends QC with PipelineSuccess {}
