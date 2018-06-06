@@ -36,11 +36,18 @@ pipeline {
             }
         }
 
+        stage('Create conda environment') {
+            steps {
+                sh "#!/bin/bash\n" +
+                    "set -e -v -o pipefail\n" +
+                    "${createEnv}\n"
+            }
+        }
+
         stage('Build & Test') {
             steps {
                 sh "#!/bin/bash\n" +
                         "set -e -v -o pipefail\n" +
-                        "${createEnv}\n" +
                         "${activateEnv}\n" +
                         "${sbt} clean evicted scalafmt headerCreate test | tee sbt.log"
                 sh 'n=`grep -ce "\\* com.github.biopet" sbt.log || true`; if [ "$n" -ne \"0\" ]; then echo "ERROR: Found conflicting dependencies inside biopet"; exit 1; fi'
