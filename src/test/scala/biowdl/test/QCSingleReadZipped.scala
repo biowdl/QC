@@ -26,6 +26,6 @@ import java.io.File
 import nl.biopet.utils.biowdl.fixtureFile
 
 class QCSingleReadZipped extends QCSuccess {
-  def r1: File = fixtureFile("flexiprep/ct_r1.fq.gz")
-  def r2: Option[File] = None
+  def read1: File = fixtureFile("flexiprep/ct_r1.fq.gz")
+  def read2: Option[File] = None
 }

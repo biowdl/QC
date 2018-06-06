@@ -22,5 +22,40 @@
 package biowdl.test
 
 import nl.biopet.utils.biowdl.PipelineSuccess
+import scala.util.matching.Regex
 
-trait QCSuccess extends QC with PipelineSuccess {}
+trait QCSuccess extends QC with PipelineSuccess {
+  // When run on clean reads, cutadapt should not be run
+  def cutadaptRuns: Boolean = true
+
+  val gzip: Regex = "\\.gz$".r
+  val extension: Regex = "\\.[^\\.]*$".r
+  def fastqcName(name: String): String =
+    extension.replaceFirstIn(gzip.replaceFirstIn(name, ""), "_fastqc")
+
+  def mustHaveFastqcDir(fastqcBase: String): Unit = {
+    addMustHaveFile(fastqcBase)
+    addMustHaveFile(fastqcBase + ".zip")
+    addMustHaveFile(fastqcBase + ".html")
+    addMustHaveFile(fastqcBase, "fastqc_data.txt")
+    addMustHaveFile(fastqcBase, "fastqc_report.html")
+    addMustHaveFile(fastqcBase, "summary.txt")
+    addMustHaveFile(fastqcBase,"Images")
+  }
+
+  // Files from the fastqc task
+  mustHaveFastqcDir(s"fastqc/R1/${fastqcName(read1.getName)}")
+  if (read2.isDefined) {
+    mustHaveFastqcDir(s"fastqc/R2/${fastqcName(read2.map(_.getName).getOrElse(""))}")
+  }
+
+  // Files from the extract adapters task
+  addMustHaveFile("extractAdapters")
+  addMustHaveFile("extractAdapters/adapter.list")
+  addMustHaveFile("extractAdapters/contaminations.list")
+
+  if (cutadaptRuns) {
+    addMustHaveFile("cutadapt/report.txt")
+
+  }
+}

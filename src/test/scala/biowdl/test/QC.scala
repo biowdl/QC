@@ -27,9 +27,9 @@ import nl.biopet.utils.biowdl.Pipeline
 
 trait QC extends Pipeline {
 
-  def r1: File
+  def read1: File
 
-  def r2: Option[File]
+  def read2: Option[File]
 
   def alwaysRunCutadapt: Option[Boolean] = None
 
@@ -38,9 +38,9 @@ trait QC extends Pipeline {
   override def inputs: Map[String, Any] =
     super.inputs ++
       Map(
-        "QC.read1" -> r1.getAbsolutePath,
+        "QC.read1" -> read1.getAbsolutePath,
         "QC.outputDir" -> outputDir.getAbsolutePath
       ) ++ alwaysRunCutadapt.map("QC.alwaysRunCutAdapt" -> _) ++
-      r2.map("QC.read2" -> _.getAbsolutePath)
+      read2.map("QC.read2" -> _.getAbsolutePath)
 
 }
