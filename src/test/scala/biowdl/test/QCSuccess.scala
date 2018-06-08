@@ -40,14 +40,14 @@ trait QCSuccess extends QC with PipelineSuccess {
     addMustHaveFile(fastqcBase, "fastqc_data.txt")
     addMustHaveFile(fastqcBase, "fastqc_report.html")
     addMustHaveFile(fastqcBase, "summary.txt")
-    addMustHaveFile(fastqcBase,"Images")
+    addMustHaveFile(fastqcBase, "Images")
   }
 
   // Files from the fastqc task
   mustHaveFastqcDir(s"fastqc/R1/${fastqcName(read1.getName)}")
   addConditionalFile(read2.isDefined, s"fastqc/R2/")
-  read2.foreach( file => mustHaveFastqcDir(s"fastqc/R2/${fastqcName(file.getName)}"))
-
+  read2.foreach(file =>
+    mustHaveFastqcDir(s"fastqc/R2/${fastqcName(file.getName)}"))
 
   // Files from the extract adapters task
   addMustHaveFile("extractAdapters")
