@@ -45,9 +45,9 @@ trait QCSuccess extends QC with PipelineSuccess {
 
   // Files from the fastqc task
   mustHaveFastqcDir(s"fastqc/R1/${fastqcName(read1.getName)}")
-  if (read2.isDefined) {
-    mustHaveFastqcDir(s"fastqc/R2/${fastqcName(read2.map(_.getName).getOrElse(""))}")
-  }
+  addConditionalFile(read2.isDefined, s"fastqc/R2/")
+  read2.foreach( file => mustHaveFastqcDir(s"fastqc/R2/${fastqcName(file.getName)}"))
+
 
   // Files from the extract adapters task
   addMustHaveFile("extractAdapters")
