@@ -13,9 +13,8 @@ pipeline {
     environment {
         CROMWELL_JAR    = credentials('cromwell-jar')
         CROMWELL_CONFIG = credentials('cromwell-config')
-        FIXTURE_DIR = credentials('fixture-dir')
+        FIXTURE_DIR     = credentials('fixture-dir')
         CONDA_PREFIX    = credentials('conda-prefix')
-
     }
     stages {
         stage('Init') {
