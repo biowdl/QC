@@ -29,7 +29,7 @@ workflow QC {
         input:
             toolJar = extractAdaptersFastqcJar,
             inputFile = fastqcRead1.rawReport,
-            outputDir = select_first([extractAdaptersOutput]),
+            outputDir = select_first([extractAdaptersOutput]) + "/R1",
             knownAdapterFile = getFastqcConfiguration.adapterList,
             knownContamFile = getFastqcConfiguration.contaminantList
     }
@@ -54,7 +54,7 @@ workflow QC {
             input:
                 toolJar = extractAdaptersFastqcJar,
                 inputFile = fastqcRead2.rawReport,
-                outputDir = select_first([extractAdaptersOutput]),
+                outputDir = select_first([extractAdaptersOutput]) + "/R2",
                 knownAdapterFile = getFastqcConfiguration.adapterList,
                 knownContamFile = getFastqcConfiguration.contaminantList
         }

@@ -51,9 +51,10 @@ trait QCSuccess extends QC with PipelineSuccess {
 
   // Files from the extract adapters task
   addMustHaveFile("extractAdapters")
-  addMustHaveFile("extractAdapters/adapter.list")
-  addMustHaveFile("extractAdapters/contaminations.list")
-
+  addMustHaveFile("extractAdapters/R1/adapter.list")
+  addMustHaveFile("extractAdapters/R1/contaminations.list")
+  addConditionalFile(read2.isDefined, "extractAdapters/R2/adapter.list")
+  addConditionalFile(read2.isDefined, "extractAdapters/R2/contaminations.list")
   if (cutadaptRuns) {
     addMustHaveFile("cutadapt/report.txt")
 
