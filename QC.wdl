@@ -2,12 +2,12 @@
 
 import "tasks/fastqc.wdl" as fastqc
 import "tasks/cutadapt.wdl" as cutadapt
-import "tasks/bioconda.wdl" as bioconda
+import "tasks/biopet.wdl" as biopet
 
 workflow QC {
     File read1
     String outputDir
-    File extractAdaptersFastqcJar
+    File? extractAdaptersFastqcJar
     File? read2
     String cutadaptOutput = outputDir + "/cutadapt"
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
@@ -25,11 +25,11 @@ workflow QC {
     }
 
     # Extract adapter sequences from the fastqc report.
-    call fastqc.extractAdapters as extractAdaptersRead1 {
+    call biopet.extractAdaptersFastqc as extractAdaptersRead1 {
         input:
-            extractAdaptersFastqcJar = extractAdaptersFastqcJar,
+            toolJar = extractAdaptersFastqcJar,
             inputFile = fastqcRead1.rawReport,
-            outputDir = select_first([extractAdaptersOutput]),
+            outputDir = select_first([extractAdaptersOutput]) + "/R1",
             knownAdapterFile = getFastqcConfiguration.adapterList,
             knownContamFile = getFastqcConfiguration.contaminantList
     }
@@ -50,11 +50,11 @@ workflow QC {
                  outdirPath = outputDir + "/fastqc/R2",
                  seqFile = select_first([read2])
         }
-        call fastqc.extractAdapters as extractAdaptersRead2 {
+        call biopet.extractAdaptersFastqc as extractAdaptersRead2 {
             input:
-                extractAdaptersFastqcJar = extractAdaptersFastqcJar,
+                toolJar = extractAdaptersFastqcJar,
                 inputFile = fastqcRead2.rawReport,
-                outputDir = select_first([extractAdaptersOutput]),
+                outputDir = select_first([extractAdaptersOutput]) + "/R2",
                 knownAdapterFile = getFastqcConfiguration.adapterList,
                 knownContamFile = getFastqcConfiguration.contaminantList
         }
