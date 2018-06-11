@@ -24,7 +24,6 @@ package biowdl.test
 import nl.biopet.utils.biowdl.PipelineSuccess
 import scala.util.matching.Regex
 
-
 trait QCSuccess extends QC with PipelineSuccess {
   // When run on clean reads, cutadapt should not be run
   def cutadaptRuns: Boolean = true
