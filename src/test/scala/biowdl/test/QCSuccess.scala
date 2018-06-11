@@ -24,6 +24,7 @@ package biowdl.test
 import nl.biopet.utils.biowdl.PipelineSuccess
 import scala.util.matching.Regex
 
+
 trait QCSuccess extends QC with PipelineSuccess {
   // When run on clean reads, cutadapt should not be run
   def cutadaptRuns: Boolean = true
@@ -55,8 +56,5 @@ trait QCSuccess extends QC with PipelineSuccess {
   addMustHaveFile("extractAdapters/R1/contaminations.list")
   addConditionalFile(read2.isDefined, "extractAdapters/R2/adapter.list")
   addConditionalFile(read2.isDefined, "extractAdapters/R2/contaminations.list")
-  if (cutadaptRuns) {
-    addMustHaveFile("cutadapt/report.txt")
-
-  }
+  addConditionalFile(cutadaptRuns, "cutadapt/report.txt")
 }
