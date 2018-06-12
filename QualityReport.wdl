@@ -3,7 +3,7 @@
 import "tasks/fastqc.wdl" as fastqc
 import "tasks/biopet.wdl" as biopet
 
-workflow QC {
+workflow QualityReport {
     File read
     String outputDir
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
