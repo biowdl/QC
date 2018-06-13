@@ -21,7 +21,7 @@ workflow QualityReport {
     if (select_first([extractAdapters])) {
         call fastqc.getConfiguration as getFastqcConfiguration {}
 
-        call biopet.extractAdaptersFastqc as extractAdaptersTask {
+        call biopet.ExtractAdaptersFastqc as extractAdaptersTask {
             input:
                 inputFile = fastqc.rawReport,
                 outputDir = select_first([extractAdaptersOutput]),
