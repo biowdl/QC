@@ -26,7 +26,7 @@ import scala.util.matching.Regex
 
 trait QCSuccess extends QC with PipelineSuccess {
   // When run on clean reads, cutadapt should not be run
-  def cutadaptRuns: Boolean = true
+  def adapterClippingRuns: Boolean = true
 
   val gzip: Regex = "\\.gz$".r
   val extension: Regex = "\\.[^\\.]*$".r
@@ -44,16 +44,27 @@ trait QCSuccess extends QC with PipelineSuccess {
   }
 
   // Files from the fastqc task
-  mustHaveFastqcDir(s"fastqc/R1/${fastqcName(read1.getName)}")
-  addConditionalFile(read2.isDefined, s"fastqc/R2/")
+  mustHaveFastqcDir(s"QC/read1/fastqc/${fastqcName(read1.getName)}")
+  addConditionalFile(read2.isDefined, s"QC/read2/fastqc/")
   read2.foreach(file =>
-    mustHaveFastqcDir(s"fastqc/R2/${fastqcName(file.getName)}"))
+    mustHaveFastqcDir(s"QC/read2/fastqc/${fastqcName(file.getName)}"))
 
   // Files from the extract adapters task
-  addMustHaveFile("extractAdapters")
-  addMustHaveFile("extractAdapters/R1/adapter.list")
-  addMustHaveFile("extractAdapters/R1/contaminations.list")
-  addConditionalFile(read2.isDefined, "extractAdapters/R2/adapter.list")
-  addConditionalFile(read2.isDefined, "extractAdapters/R2/contaminations.list")
-  addConditionalFile(cutadaptRuns, "cutadapt/report.txt")
+  addMustHaveFile("QC/read1/extractAdapters")
+  addMustHaveFile("QC/read1/extractAdapters/adapter.list")
+  addMustHaveFile("QC/read1/extractAdapters/contaminations.list")
+  addConditionalFile(read2.isDefined, "QC/read2/extractAdapters/adapter.list")
+  addConditionalFile(read2.isDefined, "QC/read2/extractAdapters/contaminations.list")
+
+  addConditionalFile(adapterClippingRuns, "AdapterClipping/cutadapt/report.txt")
+
+  addConditionalFile(adapterClippingRuns, "QCafter/read1/extractAdapters/adapter.list")
+  addConditionalFile(adapterClippingRuns, "QCafter/read1/extractAdapters/contimatinations.list")
+  addConditionalFile(adapterClippingRuns && read2.isDefined, "QCafter/read2/extractAdapters/adapter.list")
+  addConditionalFile(adapterClippingRuns && read2.isDefined, "QCafter/read2/extractAdapters/contimatinations.list")
+  if (adapterClippingRuns) {
+    mustHaveFastqcDir(s"QCafter/read1/fastqc/${fastqcName(read1.getName)}")
+    read2.foreach(file =>
+      mustHaveFastqcDir(s"QCafter/read2/fastqc/${fastqcName(file.getName)}"))
+  }
 }
