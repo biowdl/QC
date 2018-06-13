@@ -4,7 +4,7 @@ import "tasks/cutadapt.wdl" as cutadapt
 
 workflow QualityTrim {
     File read1
-    File read2
+    File? read2
     String? outputDir
     Array[String]+? end3adapterListRead1
     Array[String]+? end3adapterListRead2
