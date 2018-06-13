@@ -57,19 +57,27 @@ trait QCSuccess extends QC with PipelineSuccess {
   addConditionalFile(read2.isDefined,
                      "QC/read2/extractAdapters/contaminations.list")
 
-  addConditionalFile(adapterClippingRuns, "AdapterClipping/cutadapt/report.txt")
+  addConditionalFile(adapterClippingRuns, "AdapterClipping/cutadaptReport.txt")
+  addConditionalFile(adapterClippingRuns,
+                     "AdapterClipping/cutadapt_" + read1.getName)
+  addConditionalFile(
+    adapterClippingRuns && read2.isDefined,
+    "AdapterClipping/cutadapt_" + read2.map(_.getName).getOrElse("read2"))
 
-  addConditionalFile(adapterClippingRuns,
-                     "QCafter/read1/extractAdapters/adapter.list")
-  addConditionalFile(adapterClippingRuns,
-                     "QCafter/read1/extractAdapters/contimatinations.list")
-  addConditionalFile(adapterClippingRuns && read2.isDefined,
-                     "QCafter/read2/extractAdapters/adapter.list")
-  addConditionalFile(adapterClippingRuns && read2.isDefined,
-                     "QCafter/read2/extractAdapters/contimatinations.list")
   if (adapterClippingRuns) {
-    mustHaveFastqcDir(s"QCafter/read1/fastqc/${fastqcName(read1.getName)}")
-    read2.foreach(file =>
-      mustHaveFastqcDir(s"QCafter/read2/fastqc/${fastqcName(file.getName)}"))
+    addMustNotHaveFile("QCafter/read1/extractAdapters/adapter.list")
+    addMustNotHaveFile("QCafter/read1/extractAdapters/contaminations.list")
+  }
+  if (adapterClippingRuns && read2.isDefined) {
+    addMustNotHaveFile("QCafter/read2/extractAdapters/adapter.list")
+    addMustNotHaveFile("QCafter/read2/extractAdapters/contaminations.list")
+  }
+  if (adapterClippingRuns) {
+    mustHaveFastqcDir(
+      s"QCafter/read1/fastqc/${"cutadapt_" + fastqcName(read1.getName)}")
+    read2.foreach(
+      file =>
+        mustHaveFastqcDir(
+          s"QCafter/read2/fastqc/${"cutadapt_" + fastqcName(file.getName)}"))
   }
 }

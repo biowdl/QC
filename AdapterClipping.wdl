@@ -22,7 +22,7 @@ workflow AdapterClipping {
             read2output = read2outputPath,
             adapter = adapterListRead1,
             adapterRead2 = adapterListRead2,
-            reportPath = outputDir + "/report.txt"
+            reportPath = outputDir + "/cutadaptReport.txt"
     }
     output {
         File read1afterClipping = cutadapt.cutRead1
