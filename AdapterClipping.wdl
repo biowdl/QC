@@ -2,14 +2,13 @@
 
 import "tasks/cutadapt.wdl" as cutadapt
 
-workflow QualityTrim {
+workflow AdapterClipping {
     File read1
     File? read2
     String? outputDir
-    Array[String]+? end3adapterListRead1
-    Array[String]+? end3adapterListRead2
-    Array[String]+? end5adapterListRead1
-    Array[String]+? end5adapterListRead2
+    Array[String]+? adapterListRead1
+    Array[String]+? adapterListRead2
+
 
     if (defined(read2)) {
         String read2outputPath = outputDir + "/cutadapt_" + basename(select_first([read2]))
@@ -21,10 +20,8 @@ workflow QualityTrim {
             read2 = read2,
             read1output = outputDir + "/cutadapt_" + basename(read1),
             read2output = read2outputPath,
-            adapter = end3adapterListRead1,
-            adapterRead2 = end3adapterListRead2,
-            front = end5adapterListRead1,
-            frontRead2 = end5adapterListRead2,
+            adapter = adapterListRead1,
+            adapterRead2 = adapterListRead2,
             reportPath = outputDir + "/report.txt"
     }
     output {
