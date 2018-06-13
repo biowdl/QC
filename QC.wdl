@@ -20,7 +20,7 @@ workflow QC {
     if (defined(read2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
-                read = read2,
+                read = select_first([read2]),
                 outputDir = outputDir + "/QC/read2",
                 extractAdapters = true
         }
@@ -31,32 +31,34 @@ workflow QC {
     Boolean runAdapterClipping = defined(qualityReportRead1.adapters) || defined(qualityReportRead2.adapters) || alwaysRunAdapterClipping
 
     if (runAdapterClipping) {
-        call QT.AdapterClipping as AdapterClipping {
+        call AC.AdapterClipping as AdapterClipping {
             input:
                 read1 = read1,
                 read2 = read2,
                 outputDir = outputDir + "/AdapterClipping",
-                end3adapterListRead1 = qualityReportRead1.adapters,
-                end3adapterListRead2 = qualityReportRead2.adapters
+                adapterListRead1 = qualityReportRead1.adapters,
+                adapterListRead2 = qualityReportRead2.adapters
         }
 
         call QR.QualityReport as qualityReportRead1after {
             input:
-                read = AdapterClipping.read1afterTrim,
+                read = AdapterClipping.read1afterClipping,
                 outputDir = outputDir + "/QCafter/read1",
                 extractAdapters = false
         }
-        call QR.QualityReport as qualityReportRead2after {
-            input:
-                read = AdapterClipping.read2afterTrim,
-                outputDir = outputDir + "/QCafter/read2",
-                extractAdapters = false
+        if (defined(read2)) {
+            call QR.QualityReport as qualityReportRead2after {
+                input:
+                    read = select_first([AdapterClipping.read2afterClipping]),
+                    outputDir = outputDir + "/QCafter/read2",
+                    extractAdapters = false
+            }
         }
     }
 
     output {
-        File read1afterQC = if runAdapterClipping then select_first([AdapterClipping.read1afterTrim]) else read1
-        File? read2afterQC = if runAdapterClipping then AdapterClipping.read2afterTrim else read2
+        File read1afterQC = if runAdapterClipping then select_first([AdapterClipping.read1afterClipping]) else read1
+        File? read2afterQC = if runAdapterClipping then AdapterClipping.read2afterClipping else read2
     }
 }
 

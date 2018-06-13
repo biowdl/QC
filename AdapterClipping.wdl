@@ -25,8 +25,8 @@ workflow AdapterClipping {
             reportPath = outputDir + "/report.txt"
     }
     output {
-        file read1afterTrim = cutadapt.cutread1
-        file read2afterTrim = cutadapt.cutRead2
-        file cutadaptReport = cutadapt.report
+        File read1afterClipping = cutadapt.cutRead1
+        File? read2afterClipping = cutadapt.cutRead2
+        File cutadaptReport = cutadapt.report
     }
 }

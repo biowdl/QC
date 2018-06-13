@@ -18,10 +18,10 @@ workflow QualityReport {
     }
 
     # Extract adapter sequences from the fastqc report.
-    if (extractAdapters) {
+    if (select_first([extractAdapters])) {
         call fastqc.getConfiguration as getFastqcConfiguration {}
 
-        call biopet.extractAdaptersFastqc as extractAdapters {
+        call biopet.extractAdaptersFastqc as extractAdaptersTask {
             input:
                 inputFile = fastqc.rawReport,
                 outputDir = select_first([extractAdaptersOutput]),
@@ -32,11 +32,11 @@ workflow QualityReport {
         # If more are found adapterList will be an array that contains at
         # least one item.
         # This is because cutadapt requires an array of at least one item.
-        if (length(extractAdapters.adapterList) > 0) {
-            Array[String]+ adapterList = extractAdapters.adapterList
+        if (length(extractAdaptersTask.adapterList) > 0) {
+            Array[String]+ adapterList = extractAdaptersTask.adapterList
         }
-        if (length(extractAdapters.contamsList) > 0) {
-            Array[String]+ contaminationsList = extractAdapters.contamsList
+        if (length(extractAdaptersTask.contamsList) > 0) {
+            Array[String]+ contaminationsList = extractAdaptersTask.contamsList
         }
     }
 
@@ -46,6 +46,6 @@ workflow QualityReport {
         File fastqcRawReport = fastqc.rawReport
         File fastqcSummary = fastqc.summary
         File fastqcHtmlReport = fastqc.htmlReport
-        File fastqcImages = fastqc.images
+        Array[File] fastqcImages = fastqc.images
     }
 }
