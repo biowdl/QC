@@ -25,7 +25,7 @@ workflow QC {
     }
 
     # Extract adapter sequences from the fastqc report.
-    call biopet.extractAdaptersFastqc as extractAdaptersRead1 {
+    call biopet.ExtractAdaptersFastqc as extractAdaptersRead1 {
         input:
             toolJar = extractAdaptersFastqcJar,
             inputFile = fastqcRead1.rawReport,
@@ -50,7 +50,7 @@ workflow QC {
                  outdirPath = outputDir + "/fastqc/R2",
                  seqFile = select_first([read2])
         }
-        call biopet.extractAdaptersFastqc as extractAdaptersRead2 {
+        call biopet.ExtractAdaptersFastqc as extractAdaptersRead2 {
             input:
                 toolJar = extractAdaptersFastqcJar,
                 inputFile = fastqcRead2.rawReport,
