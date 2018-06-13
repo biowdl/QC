@@ -8,7 +8,7 @@ workflow QualityReport {
     String outputDir
     String? extractAdaptersOutput = outputDir + "/extractAdapters"
     String? fastqcOutput = outputDir + "/fastqc"
-    Boolean extractAdapters
+    Boolean? extractAdapters = false
 
     # FastQC on read
     call fastqc.fastqc as fastqc {
@@ -35,10 +35,14 @@ workflow QualityReport {
         if (length(extractAdapters.adapterList) > 0) {
             Array[String]+ adapterList = extractAdapters.adapterList
         }
+        if (length(extractAdapters.contamsList) > 0) {
+            Array[String]+ contaminationsList = extractAdapters.contamsList
+        }
     }
 
     output {
         Array[String]+? adapters = adapterList
+        Array[String]+? contaminations = contaminationsList
         File fastqcRawReport = fastqc.rawReport
         File fastqcSummary = fastqc.summary
         File fastqcHtmlReport = fastqc.htmlReport
