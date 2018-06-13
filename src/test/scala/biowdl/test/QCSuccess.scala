@@ -54,14 +54,19 @@ trait QCSuccess extends QC with PipelineSuccess {
   addMustHaveFile("QC/read1/extractAdapters/adapter.list")
   addMustHaveFile("QC/read1/extractAdapters/contaminations.list")
   addConditionalFile(read2.isDefined, "QC/read2/extractAdapters/adapter.list")
-  addConditionalFile(read2.isDefined, "QC/read2/extractAdapters/contaminations.list")
+  addConditionalFile(read2.isDefined,
+                     "QC/read2/extractAdapters/contaminations.list")
 
   addConditionalFile(adapterClippingRuns, "AdapterClipping/cutadapt/report.txt")
 
-  addConditionalFile(adapterClippingRuns, "QCafter/read1/extractAdapters/adapter.list")
-  addConditionalFile(adapterClippingRuns, "QCafter/read1/extractAdapters/contimatinations.list")
-  addConditionalFile(adapterClippingRuns && read2.isDefined, "QCafter/read2/extractAdapters/adapter.list")
-  addConditionalFile(adapterClippingRuns && read2.isDefined, "QCafter/read2/extractAdapters/contimatinations.list")
+  addConditionalFile(adapterClippingRuns,
+                     "QCafter/read1/extractAdapters/adapter.list")
+  addConditionalFile(adapterClippingRuns,
+                     "QCafter/read1/extractAdapters/contimatinations.list")
+  addConditionalFile(adapterClippingRuns && read2.isDefined,
+                     "QCafter/read2/extractAdapters/adapter.list")
+  addConditionalFile(adapterClippingRuns && read2.isDefined,
+                     "QCafter/read2/extractAdapters/contimatinations.list")
   if (adapterClippingRuns) {
     mustHaveFastqcDir(s"QCafter/read1/fastqc/${fastqcName(read1.getName)}")
     read2.foreach(file =>
