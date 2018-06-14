@@ -25,7 +25,7 @@ import java.io.File
 
 import nl.biopet.utils.biowdl.fixtureFile
 
-class QCSingleRead extends QCSuccess {
+class QCSingleRead extends QCFilesPresent {
   def read1: File = fixtureFile("flexiprep/ct_r1.fq")
   def read2: Option[File] = None
 }
