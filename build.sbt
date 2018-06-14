@@ -8,8 +8,7 @@ startYear := Some(2018)
 
 biopetIsTool := false
 
-concurrentRestrictions += Tags.limit(
-  Tags.Test,
+concurrentRestrictions += Tags.limitAll(
   Option(System.getProperty("biowdl.threads")).map(_.toInt).getOrElse(1))
 
 developers ++= List(
