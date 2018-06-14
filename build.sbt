@@ -8,6 +8,8 @@ startYear := Some(2018)
 
 biopetIsTool := false
 
+concurrentRestrictions += Tags.limit(Tags.Test, Option(System.getProperty("biowdl.threads")).map(_.toInt).getOrElse(1))
+
 developers ++= List(
   Developer(id = "ffinfo",
             name = "Peter van 't Hof",
