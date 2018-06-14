@@ -49,6 +49,9 @@ trait QCSuccess extends QC with PipelineSuccess {
   read2.foreach(file =>
     mustHaveFastqcDir(s"QC/read2/fastqc/${fastqcName(file.getName)}"))
 
+  addMustHaveFile("QC/read1/seqstat.json")
+  addConditionalFile(read2.isDefined, "QC/read2/seqstat.json")
+
   // Files from the extract adapters task
   addMustHaveFile("QC/read1/extractAdapters")
   addMustHaveFile("QC/read1/extractAdapters/adapter.list")
@@ -64,6 +67,9 @@ trait QCSuccess extends QC with PipelineSuccess {
     adapterClippingRuns && read2.isDefined,
     "AdapterClipping/cutadapt_" + read2.map(_.getName).getOrElse("read2"))
 
+  addConditionalFile(adapterClippingRuns, "QCafter/read1/seqstat.json")
+  addConditionalFile(adapterClippingRuns && read2.isDefined,
+                     "QCafter/read2/seqstat.json")
   if (adapterClippingRuns) {
     addMustNotHaveFile("QCafter/read1/extractAdapters/adapter.list")
     addMustNotHaveFile("QCafter/read1/extractAdapters/contaminations.list")
