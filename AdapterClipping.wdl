@@ -5,7 +5,7 @@ import "tasks/cutadapt.wdl" as cutadapt
 workflow AdapterClipping {
     File read1
     File? read2
-    String? outputDir
+    String outputDir
     Array[String]+? adapterListRead1
     Array[String]+? adapterListRead2
 
