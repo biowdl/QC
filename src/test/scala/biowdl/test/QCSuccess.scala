@@ -1,6 +1,8 @@
 package biowdl.test
 
 import nl.biopet.utils.biowdl.PipelineSuccess
+import nl.biopet.utils.conversions.fileToJson
+import play.api.libs.json._
 import java.io.File
 
 trait QCSuccess extends QCFilesPresent {
@@ -22,4 +24,11 @@ trait QCSuccess extends QCFilesPresent {
   val fastqcRead2AfterClipping: Option[File] = if (read2.isDefined && adapterClippingRuns) Some(new File (outputDir, s"QC/read2/fastqc/${fastqcName(read2.map(_.getName).getOrElse(""))}/fastqc_data.txt")) else None
 }
 
-trait QCvalues extends QCSuccess
+trait QCvalues extends QCSuccess {
+  def testSeqStatsRead1 : Unit ={
+    val seqstatJson = fileToJson(seqstatRead1)
+    seqstatJson
+
+  }
+
+}
