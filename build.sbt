@@ -10,7 +10,9 @@ biopetIsTool := false
 
 concurrentRestrictions := Seq(
   Tags.limitAll(
-    Option(System.getProperty("biowdl.threads")).map(_.toInt).getOrElse(1)))
+    Option(System.getProperty("biowdl.threads")).map(_.toInt).getOrElse(1)),
+  Tags.limit(Tags.Compile, java.lang.Runtime.getRuntime.availableProcessors())
+)
 
 developers ++= List(
   Developer(id = "ffinfo",
