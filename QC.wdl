@@ -7,7 +7,6 @@ workflow QC {
     File read1
     String outputDir
     File? read2
-    String cutadaptOutput = outputDir + "/cutadapt"
     Boolean? alwaysRunAdapterClipping = false
 
     call QR.QualityReport as qualityReportRead1 {
