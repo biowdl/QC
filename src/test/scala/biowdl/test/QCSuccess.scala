@@ -21,3 +21,5 @@ trait QCSuccess extends QCFilesPresent {
   val fastqcRead1AfterClipping: Option[File] = if (adapterClippingRuns) Some(new File (outputDir, s"QCafter/read1/fastqc/${fastqcName(read1.getName)}/fastqc_data.txt")) else None
   val fastqcRead2AfterClipping: Option[File] = if (read2.isDefined && adapterClippingRuns) Some(new File (outputDir, s"QC/read2/fastqc/${fastqcName(read2.map(_.getName).getOrElse(""))}/fastqc_data.txt")) else None
 }
+
+trait QCvalues extends QCSuccess
