@@ -1,94 +1,63 @@
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
-import "tasks/fastqc.wdl" as fastqc
-import "tasks/cutadapt.wdl" as cutadapt
-import "tasks/biopet.wdl" as biopet
+import "QualityReport.wdl" as QR
+import "AdapterClipping.wdl" as AC
 
 workflow QC {
     File read1
     String outputDir
-    File? extractAdaptersFastqcJar
     File? read2
-    String cutadaptOutput = outputDir + "/cutadapt"
-    String? extractAdaptersOutput = outputDir + "/extractAdapters"
-    Boolean? alwaysRunCutadapt = false
+    Boolean? alwaysRunAdapterClipping = false
 
-    # Run this step to get the known adapter and contaminant list to extract
-    # the adapters later.
-    call fastqc.getConfiguration as getFastqcConfiguration {}
-
-    # FastQC on Read1
-    call fastqc.fastqc as fastqcRead1 {
+    call QR.QualityReport as qualityReportRead1 {
         input:
-            seqFile = read1,
-            outdirPath = outputDir + "/fastqc/R1"
+            read = read1,
+            outputDir = outputDir + "/QC/read1",
+            extractAdapters = true
     }
 
-    # Extract adapter sequences from the fastqc report.
-    call biopet.ExtractAdaptersFastqc as extractAdaptersRead1 {
-        input:
-            toolJar = extractAdaptersFastqcJar,
-            inputFile = fastqcRead1.rawReport,
-            outputDir = select_first([extractAdaptersOutput]) + "/R1",
-            knownAdapterFile = getFastqcConfiguration.adapterList,
-            knownContamFile = getFastqcConfiguration.contaminantList
-    }
-
-
-    # Logic step. If no adapters are found adapterListRead1 will be null.
-    # If more are found adapterListRead1 will be an array that contains at
-    # least one item.
-    # This is because cutadapt requires an array of at least one item.
-    if (length(extractAdaptersRead1.adapterList) > 0) {
-        Array[String]+ adapterListRead1 = extractAdaptersRead1.adapterList
-    }
-
-    # For paired-end also perform fastqc on read2. Steps are the same as on read 1.
     if (defined(read2)) {
-        call fastqc.fastqc as fastqcRead2 {
+        call QR.QualityReport as qualityReportRead2 {
             input:
-                 outdirPath = outputDir + "/fastqc/R2",
-                 seqFile = select_first([read2])
+                read = select_first([read2]),
+                outputDir = outputDir + "/QC/read2",
+                extractAdapters = true
         }
-        call biopet.ExtractAdaptersFastqc as extractAdaptersRead2 {
-            input:
-                toolJar = extractAdaptersFastqcJar,
-                inputFile = fastqcRead2.rawReport,
-                outputDir = select_first([extractAdaptersOutput]) + "/R2",
-                knownAdapterFile = getFastqcConfiguration.adapterList,
-                knownContamFile = getFastqcConfiguration.contaminantList
-        }
-        if (length(extractAdaptersRead2.adapterList) > 0) {
-            Array[String]+ adapterListRead2 = extractAdaptersRead2.adapterList
-        }
-
-        # Because it is placed inside the if block read2outputPath is optional. It
-        # will default to null if read2 is not used. This is necessary to run
-        # cutadapt without a read2 output if there is no read2.
-        String read2outputPath = cutadaptOutput + "/cutadapt_" + basename(select_first([read2]))
     }
 
     # if no adapters are found, why run cutadapt? Unless cutadapt is used for quality trimming.
     # In which case alwaysRunCutadapt can be set to true by the user.
-    Boolean runCutadapt = defined(adapterListRead1) || defined(adapterListRead2) || alwaysRunCutadapt
+    Boolean runAdapterClipping = defined(qualityReportRead1.adapters) || defined(qualityReportRead2.adapters) || alwaysRunAdapterClipping
 
-    if (runCutadapt) {
-        call cutadapt.cutadapt {
+    if (runAdapterClipping) {
+        call AC.AdapterClipping as AdapterClipping {
             input:
                 read1 = read1,
                 read2 = read2,
-                read1output = cutadaptOutput + "/cutadapt_" + basename(read1),
-                read2output = read2outputPath,
-                adapter = adapterListRead1,
-                adapterRead2 = adapterListRead2,
-                reportPath = cutadaptOutput + "/report.txt"
+                outputDir = outputDir + "/AdapterClipping",
+                adapterListRead1 = qualityReportRead1.adapters,
+                adapterListRead2 = qualityReportRead2.adapters
+        }
+
+        call QR.QualityReport as qualityReportRead1after {
+            input:
+                read = AdapterClipping.read1afterClipping,
+                outputDir = outputDir + "/QCafter/read1",
+                extractAdapters = false
+        }
+        if (defined(read2)) {
+            call QR.QualityReport as qualityReportRead2after {
+                input:
+                    read = select_first([AdapterClipping.read2afterClipping]),
+                    outputDir = outputDir + "/QCafter/read2",
+                    extractAdapters = false
+            }
         }
     }
 
     output {
-        File read1afterQC = if runCutadapt then select_first([cutadapt.cutRead1]) else read1
-        File? read2afterQC = if runCutadapt then cutadapt.cutRead2 else read2
-        File? cutadaptReport = cutadapt.report
+        File read1afterQC = if runAdapterClipping then select_first([AdapterClipping.read1afterClipping]) else read1
+        File? read2afterQC = if runAdapterClipping then AdapterClipping.read2afterClipping else read2
     }
 }
 
