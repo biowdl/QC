@@ -2,7 +2,7 @@
 
 import "tasks/biopet.wdl" as biopet
 
-workflow ValidateFastq {
+workflow ValidateFastqFiles {
     File read1
     File? read2
 

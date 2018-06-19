@@ -2,6 +2,7 @@
 
 import "QualityReport.wdl" as QR
 import "AdapterClipping.wdl" as AC
+import "ValidateFastq.wdl" as validate
 
 workflow QC {
     File read1
@@ -9,9 +10,16 @@ workflow QC {
     File? read2
     Boolean? alwaysRunAdapterClipping = false
 
+    call validate.ValidateFastqFiles as validated {
+        input:
+            read1 = read1,
+            read2 = read2
+
+    }
+
     call QR.QualityReport as qualityReportRead1 {
         input:
-            read = read1,
+            read = validated.validatedRead1,
             outputDir = outputDir + "/QC/read1",
             extractAdapters = true
     }
@@ -19,7 +27,7 @@ workflow QC {
     if (defined(read2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
-                read = select_first([read2]),
+                read = select_first([validated.validatedRead2]),
                 outputDir = outputDir + "/QC/read2",
                 extractAdapters = true
         }
@@ -32,8 +40,8 @@ workflow QC {
     if (runAdapterClipping) {
         call AC.AdapterClipping as AdapterClipping {
             input:
-                read1 = read1,
-                read2 = read2,
+                read1 = validated.validatedRead1,
+                read2 = validated.validatedRead2,
                 outputDir = outputDir + "/AdapterClipping",
                 adapterListRead1 = qualityReportRead1.adapters,
                 adapterListRead2 = qualityReportRead2.adapters
@@ -56,8 +64,8 @@ workflow QC {
     }
 
     output {
-        File read1afterQC = if runAdapterClipping then select_first([AdapterClipping.read1afterClipping]) else read1
-        File? read2afterQC = if runAdapterClipping then AdapterClipping.read2afterClipping else read2
+        File read1afterQC = if runAdapterClipping then select_first([AdapterClipping.read1afterClipping]) else validated.validatedRead1
+        File? read2afterQC = if runAdapterClipping then AdapterClipping.read2afterClipping else validated.validateRead2
     }
 }
 
