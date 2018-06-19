@@ -1,6 +1,7 @@
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "tasks/cutadapt.wdl" as cutadapt
+import "tasks/biopet.wdl" as biopet
 
 workflow AdapterClipping {
     File read1
@@ -24,9 +25,16 @@ workflow AdapterClipping {
             adapterRead2 = adapterListRead2,
             reportPath = outputDir + "/cutadaptReport.txt"
     }
+
+    call biopet.ValidateFastq as ValidateFastq {
+      input:
+        fastq1 = cutadapt.cutRead1,
+        fastq2 = cutadapt.cutRead2
+    }
     output {
         File read1afterClipping = cutadapt.cutRead1
         File? read2afterClipping = cutadapt.cutRead2
         File cutadaptReport = cutadapt.report
+        File validated = ValidateFastq.stderr()
     }
 }
