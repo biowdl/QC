@@ -2,7 +2,7 @@
 
 import "QualityReport.wdl" as QR
 import "AdapterClipping.wdl" as AC
-import "ValidateFastq.wdl" as validate
+import "ValidateFastqFiles.wdl" as validate
 
 workflow QC {
     File read1

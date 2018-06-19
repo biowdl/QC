@@ -35,6 +35,6 @@ workflow AdapterClipping {
         File read1afterClipping = cutadapt.cutRead1
         File? read2afterClipping = cutadapt.cutRead2
         File cutadaptReport = cutadapt.report
-        File validated = ValidateFastq.stderr()
+        File validationReport = ValidateFastq.stderr
     }
 }
