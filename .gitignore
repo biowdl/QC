@@ -2,3 +2,4 @@
 cromwell-*
 test-output/
 target/
+.idea/
