@@ -65,7 +65,7 @@ workflow QC {
 
     output {
         File read1afterQC = if runAdapterClipping then select_first([AdapterClipping.read1afterClipping]) else validated.validatedRead1
-        File? read2afterQC = if runAdapterClipping then AdapterClipping.read2afterClipping else validated.validateRead2
+        File? read2afterQC = if runAdapterClipping then AdapterClipping.read2afterClipping else validated.validatedRead2
     }
 }
 
