@@ -15,5 +15,6 @@ workflow ValidateFastqFiles {
     output {
         File validatedRead1 = read1
         File? validatedRead2 = read2
+        File validationReport = ValidateFastq.validationReport
     }
 }
