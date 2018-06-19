@@ -17,6 +17,13 @@ workflow QualityReport {
             outdirPath = select_first([fastqcOutput])
     }
 
+    # Seqstat on read
+    call biopet.Seqstat as seqstat {
+        input:
+            fastq = read,
+            outputFile = outputDir + "/seqstat.json"
+    }
+
     # Extract adapter sequences from the fastqc report.
     if (select_first([extractAdapters])) {
         call fastqc.getConfiguration as getFastqcConfiguration {}
@@ -47,5 +54,6 @@ workflow QualityReport {
         File fastqcSummary = fastqc.summary
         File fastqcHtmlReport = fastqc.htmlReport
         Array[File] fastqcImages = fastqc.images
+        File seqstatJson = seqstat.json
     }
 }
