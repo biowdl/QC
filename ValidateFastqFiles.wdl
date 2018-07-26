@@ -1,10 +1,14 @@
+version 1.0
+
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "tasks/biopet.wdl" as biopet
 
 workflow ValidateFastqFiles {
-    File read1
-    File? read2
+    input {
+        File read1
+        File? read2
+    }
 
     call biopet.ValidateFastq {
         input:

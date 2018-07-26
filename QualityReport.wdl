@@ -1,20 +1,24 @@
+version 1.0
+
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "tasks/fastqc.wdl" as fastqc
 import "tasks/biopet.wdl" as biopet
 
 workflow QualityReport {
-    File read
-    String outputDir
-    String? extractAdaptersOutput = outputDir + "/extractAdapters"
-    String? fastqcOutput = outputDir + "/fastqc"
-    Boolean? extractAdapters = false
+    input {
+        File read
+        String outputDir
+        String extractAdaptersOutput = outputDir + "/extractAdapters"
+        String fastqcOutput = outputDir + "/fastqc"
+        Boolean extractAdapters = false
+    }
 
     # FastQC on read
-    call fastqc.fastqc as fastqc {
+    call fastqc.Fastqc as fastqc {
         input:
             seqFile = read,
-            outdirPath = select_first([fastqcOutput])
+            outdirPath = fastqcOutput
     }
 
     # Seqstat on read
@@ -25,13 +29,15 @@ workflow QualityReport {
     }
 
     # Extract adapter sequences from the fastqc report.
-    if (select_first([extractAdapters])) {
-        call fastqc.getConfiguration as getFastqcConfiguration {}
+    if (extractAdapters) {
+        call fastqc.GetConfiguration as getFastqcConfiguration {
+            input:
+        }
 
         call biopet.ExtractAdaptersFastqc as extractAdaptersTask {
             input:
                 inputFile = fastqc.rawReport,
-                outputDir = select_first([extractAdaptersOutput]),
+                outputDir = extractAdaptersOutput,
                 knownAdapterFile = getFastqcConfiguration.adapterList,
                 knownContamFile = getFastqcConfiguration.contaminantList
         }
