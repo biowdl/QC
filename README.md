@@ -1,4 +1,4 @@
-# germline-DNA
+# QC
 
 This repository contains the [Biowdl](https://github.com/biowdl) 
 workflows usable for performing quality control preprocessing and
