@@ -56,8 +56,7 @@ The primary inputs are described below, additional inputs (such as precommands)
 are available. Please use the above mentioned WOMtools command to see all
 available inputs.
 
-| fi  "QualityReport.fastqc.extract": "Boolean (optional, default = true)",
-eld | type | |
+| field | type | |
 |-|-|-|
 | read1 | `File` | Input R1 FASTQ file. |
 | read2 | `File?` | Input R2 FASTQ file. |
