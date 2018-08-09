@@ -1,15 +1,17 @@
+version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "tasks/cutadapt.wdl" as cutadapt
 import "tasks/biopet.wdl" as biopet
 
 workflow AdapterClipping {
-    File read1
-    File? read2
-    String outputDir
-    Array[String]+? adapterListRead1
-    Array[String]+? adapterListRead2
-
+    input {
+        File read1
+        File? read2
+        String outputDir
+        Array[String]+? adapterListRead1
+        Array[String]+? adapterListRead2
+    }
 
     if (defined(read2)) {
         String read2outputPath = outputDir + "/cutadapt_" + basename(select_first([read2]))

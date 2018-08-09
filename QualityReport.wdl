@@ -1,15 +1,17 @@
+version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "tasks/fastqc.wdl" as fastqc
 import "tasks/biopet.wdl" as biopet
 
 workflow QualityReport {
-    File read
-    String outputDir
-    String? extractAdaptersOutput = outputDir + "/extractAdapters"
-    String? fastqcOutput = outputDir + "/fastqc"
-    Boolean? extractAdapters = false
-
+    input {
+        File read
+        String outputDir
+        String? extractAdaptersOutput = outputDir + "/extractAdapters"
+        String? fastqcOutput = outputDir + "/fastqc"
+        Boolean? extractAdapters = false
+    }
     # FastQC on read
     call fastqc.fastqc as fastqc {
         input:

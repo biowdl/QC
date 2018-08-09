@@ -1,3 +1,4 @@
+version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "QualityReport.wdl" as QR
@@ -5,11 +6,12 @@ import "AdapterClipping.wdl" as AC
 import "ValidateFastqFiles.wdl" as validate
 
 workflow QC {
-    File read1
-    String outputDir
-    File? read2
-    Boolean? alwaysRunAdapterClipping = false
-
+    input {
+        File read1
+        String outputDir
+        File? read2
+        Boolean? alwaysRunAdapterClipping = false
+    }
     call validate.ValidateFastqFiles as validated {
         input:
             read1 = read1,
