@@ -8,15 +8,15 @@ workflow QualityReport {
     input {
         File read
         String outputDir
-        String? extractAdaptersOutput = outputDir + "/extractAdapters"
-        String? fastqcOutput = outputDir + "/fastqc"
-        Boolean? extractAdapters = false
+        String extractAdaptersOutput = outputDir + "/extractAdapters"
+        String fastqcOutput = outputDir + "/fastqc"
+        Boolean extractAdapters = false
     }
     # FastQC on read
-    call fastqc.fastqc as fastqc {
+    call fastqc.Fastqc as Fastqc {
         input:
             seqFile = read,
-            outdirPath = select_first([fastqcOutput])
+            outdirPath = fastqcOutput
     }
 
     # Seqstat on read
@@ -27,13 +27,15 @@ workflow QualityReport {
     }
 
     # Extract adapter sequences from the fastqc report.
-    if (select_first([extractAdapters])) {
-        call fastqc.getConfiguration as getFastqcConfiguration {}
+    if (extractAdapters) {
+        call fastqc.GetConfiguration as getFastqcConfiguration {
+            input:
+        }
 
         call biopet.ExtractAdaptersFastqc as extractAdaptersTask {
             input:
-                inputFile = fastqc.rawReport,
-                outputDir = select_first([extractAdaptersOutput]),
+                inputFile = Fastqc.rawReport,
+                outputDir = extractAdaptersOutput,
                 knownAdapterFile = getFastqcConfiguration.adapterList,
                 knownContamFile = getFastqcConfiguration.contaminantList
         }
@@ -52,10 +54,10 @@ workflow QualityReport {
     output {
         Array[String]+? adapters = adapterList
         Array[String]+? contaminations = contaminationsList
-        File fastqcRawReport = fastqc.rawReport
-        File fastqcSummary = fastqc.summary
-        File fastqcHtmlReport = fastqc.htmlReport
-        Array[File] fastqcImages = fastqc.images
+        File fastqcRawReport = Fastqc.rawReport
+        File fastqcSummary = Fastqc.summary
+        File fastqcHtmlReport = Fastqc.htmlReport
+        Array[File] fastqcImages = Fastqc.images
         File seqstatJson = seqstat.json
     }
 }
