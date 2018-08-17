@@ -12,6 +12,12 @@ workflow QC {
         File? read2
         Boolean? alwaysRunAdapterClipping = false
     }
+
+    String read1outputDir = outputDir + "/QC/read1"
+    String read2outputDir = outputDir + "/QC/read2"
+    String read1outputDirAfterQC = outputDir + "/QCafter/read1"
+    String read2outputDirAfterQC = outputDir + "/QCafter/read2"
+    String adapterClippingOutputDir = outputDir + "/AdapterClipping"
     call validate.ValidateFastqFiles as validated {
         input:
             read1 = read1,
@@ -22,7 +28,7 @@ workflow QC {
     call QR.QualityReport as qualityReportRead1 {
         input:
             read = validated.validatedRead1,
-            outputDir = outputDir + "/QC/read1",
+            outputDir = read1outputDir,
             extractAdapters = true
     }
 
@@ -30,7 +36,7 @@ workflow QC {
         call QR.QualityReport as qualityReportRead2 {
             input:
                 read = select_first([validated.validatedRead2]),
-                outputDir = outputDir + "/QC/read2",
+                outputDir = read2outputDir,
                 extractAdapters = true
         }
     }
@@ -44,7 +50,7 @@ workflow QC {
             input:
                 read1 = validated.validatedRead1,
                 read2 = validated.validatedRead2,
-                outputDir = outputDir + "/AdapterClipping",
+                outputDir = adapterClippingOutputDir,
                 adapterListRead1 = qualityReportRead1.adapters,
                 adapterListRead2 = qualityReportRead2.adapters
         }
@@ -52,14 +58,14 @@ workflow QC {
         call QR.QualityReport as qualityReportRead1after {
             input:
                 read = AdapterClipping.read1afterClipping,
-                outputDir = outputDir + "/QCafter/read1",
+                outputDir = read1outputDirAfterQC,
                 extractAdapters = false
         }
         if (defined(read2)) {
             call QR.QualityReport as qualityReportRead2after {
                 input:
                     read = select_first([AdapterClipping.read2afterClipping]),
-                    outputDir = outputDir + "/QCafter/read2",
+                    outputDir = read2outputDirAfterQC,
                     extractAdapters = false
             }
         }
