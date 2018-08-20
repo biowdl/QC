@@ -20,13 +20,6 @@ workflow QualityReport {
             outdirPath = fastqcOutput
     }
 
-    # Seqstat on read
-    call biopet.Seqstat as seqstat {
-        input:
-            fastq = read,
-            outputFile = outputDir + "/seqstat.json"
-    }
-
     # Extract adapter sequences from the fastqc report.
     if (extractAdapters) {
         call fastqc.GetConfiguration as getFastqcConfiguration {
@@ -59,6 +52,5 @@ workflow QualityReport {
         File fastqcSummary = Fastqc.summary
         File fastqcHtmlReport = Fastqc.htmlReport
         Array[File] fastqcImages = Fastqc.images
-        File seqstatJson = seqstat.json
     }
 }

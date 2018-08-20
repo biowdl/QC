@@ -42,6 +42,15 @@ workflow QC {
         }
     }
 
+    # Seqstat on reads
+    call biopet.Seqstat as seqstat {
+        input:
+            fastqR1 = read1,
+            fastqR2 = read2,
+            outputFile = outputDir + "QC/seqstat.json"
+    }
+
+
     # if no adapters are found, why run cutadapt? Unless cutadapt is used for quality trimming.
     # In which case alwaysRunCutadapt can be set to true by the user.
     Boolean runAdapterClipping = defined(qualityReportRead1.adapters) || defined(qualityReportRead2.adapters) || alwaysRunAdapterClipping
@@ -62,6 +71,7 @@ workflow QC {
                 outputDir = read1outputDirAfterQC,
                 extractAdapters = false
         }
+
         if (defined(read2)) {
             call QR.QualityReport as qualityReportRead2after {
                 input:
@@ -69,6 +79,12 @@ workflow QC {
                     outputDir = read2outputDirAfterQC,
                     extractAdapters = false
             }
+        }
+        call biopet.Seqstat as seqstat {
+            input:
+                fastqR1 = read1,
+                fastqR2 = read2,
+                outputFile = outputDir + "QCafter/seqstat.json"
         }
     }
 
