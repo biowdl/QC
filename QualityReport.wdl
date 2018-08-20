@@ -12,6 +12,7 @@ workflow QualityReport {
         String fastqcOutput = outputDir + "/fastqc"
         Boolean extractAdapters = false
     }
+
     # FastQC on read
     call fastqc.Fastqc as Fastqc {
         input:

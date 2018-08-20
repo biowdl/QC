@@ -4,10 +4,12 @@ version 1.0
 import "tasks/biopet.wdl" as biopet
 
 workflow ValidateFastqFiles {
+
     input {
         File read1
         File? read2
     }
+
     call biopet.ValidateFastq {
         input:
             fastq1 = read1,

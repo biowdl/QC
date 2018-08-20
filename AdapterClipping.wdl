@@ -33,6 +33,7 @@ workflow AdapterClipping {
         fastq1 = Cutadapt.cutRead1,
         fastq2 = Cutadapt.cutRead2
     }
+
     output {
         File read1afterClipping = Cutadapt.cutRead1
         File? read2afterClipping = Cutadapt.cutRead2

@@ -10,7 +10,7 @@ workflow QC {
         File read1
         String outputDir
         File? read2
-        Boolean? alwaysRunAdapterClipping = false
+        Boolean alwaysRunAdapterClipping = false
     }
 
     String read1outputDir = outputDir + "/QC/read1"
@@ -18,6 +18,7 @@ workflow QC {
     String read1outputDirAfterQC = outputDir + "/QCafter/read1"
     String read2outputDirAfterQC = outputDir + "/QCafter/read2"
     String adapterClippingOutputDir = outputDir + "/AdapterClipping"
+
     call validate.ValidateFastqFiles as validated {
         input:
             read1 = read1,
@@ -72,8 +73,12 @@ workflow QC {
     }
 
     output {
-        File read1afterQC = if runAdapterClipping then select_first([AdapterClipping.read1afterClipping]) else validated.validatedRead1
-        File? read2afterQC = if runAdapterClipping then AdapterClipping.read2afterClipping else validated.validatedRead2
+        File read1afterQC = if runAdapterClipping
+            then select_first([AdapterClipping.read1afterClipping])
+            else validated.validatedRead1
+        File? read2afterQC = if runAdapterClipping
+            then AdapterClipping.read2afterClipping
+            else validated.validatedRead2
     }
 }
 
