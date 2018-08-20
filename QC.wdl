@@ -48,8 +48,8 @@ workflow QC {
     # Seqstat on reads
     call seqstat.Generate as seqstat {
         input:
-            fastqR1 = read1,
-            fastqR2 = read2,
+            fastqR1 = validated.validatedRead1,
+            fastqR2 = validated.validatedRead2,
             outputFile = seqstatBeforeFile
     }
 
@@ -85,8 +85,8 @@ workflow QC {
         }
         call seqstat.Generate as seqstatAfter {
             input:
-                fastqR1 = read1,
-                fastqR2 = read2,
+                fastqR1 = AdapterClipping.read1afterClipping,
+                fastqR2 = AdapterClipping.read2afterClipping,
                 outputFile = seqstatAfterFile
         }
     }
