@@ -46,8 +46,6 @@ trait QCFilesPresent extends QC with PipelineSuccess {
     addMustHaveFile(fastqcBase, "Images")
   }
 
-
-
   val seqstatBefore: File = new File(outputDir, "QC/seqstat.json")
   val seqstatAfterClipping: Option[File] =
     if (adapterClippingRuns)
@@ -107,11 +105,11 @@ trait QCFilesPresent extends QC with PipelineSuccess {
   addMustHaveFile("QC/read1/extractAdapters/contaminations.list")
   addConditionalFile(read2.isDefined, "QC/read2/extractAdapters/adapter.list")
   addConditionalFile(read2.isDefined,
-    "QC/read2/extractAdapters/contaminations.list")
+                     "QC/read2/extractAdapters/contaminations.list")
 
   addConditionalFile(adapterClippingRuns, "AdapterClipping/cutadaptReport.txt")
   addConditionalFile(adapterClippingRuns,
-    "AdapterClipping/cutadapt_" + read1.getName)
+                     "AdapterClipping/cutadapt_" + read1.getName)
   addConditionalFile(
     adapterClippingRuns && read2.isDefined,
     "AdapterClipping/cutadapt_" + read2.map(_.getName).getOrElse("read2"))

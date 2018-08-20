@@ -21,24 +21,35 @@
 
 package biowdl.test
 
-import nl.biopet.tools.seqstat.schema.Root
-
+import nl.biopet.tools.seqstat.schema.{Aggregation, Data, Readgroup, Root}
 import nl.biopet.test.BiopetTest
+import nl.biopet.tools.seqstat.GroupStats
 import org.testng.annotations.Test
 
 trait QCSuccess extends QCFilesPresent with BiopetTest {
 
   @Test
-  def testSeqStatsRead: Unit = {
+  def testSeqStatsReadBefore: Unit = {
     val seqstats: Root = Root.fromFile(seqstatBefore)
-    print(seqstats)
-    seqstats.seqstat.foreach(x => {
-      val reads = x.r1
-      reads.readsTotal shouldBe 1000
-      reads.minLength shouldBe 1001
-      reads.maxLength shouldBe 100
-      reads.qualityEncoding shouldBe List("sanger")
-    })
+    println(seqstats)
+
+    println()
+    println(seqstats.samples)
+    println(seqstats.samples.keys)
+    val seqstat: Data = seqstats
+      .samples("sample")
+      .libraries("library")
+      .readgroups("readgroup")
+      .seqstat
+    seqstat.r1.aggregation.maxLength shouldBe 100
+    seqstat.r1.aggregation.minLength shouldBe 100
+    seqstat.r1.aggregation.readsTotal shouldBe 1000
+
+    seqstat.r2.foreach { read =>
+      read.aggregation.minLength shouldBe 100
+      read.aggregation.maxLength shouldBe 100
+      read.aggregation.readsTotal shouldBe 1000
+    }
   }
 
 }
