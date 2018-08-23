@@ -31,6 +31,15 @@ import util.Properties.lineSeparator
 
 trait QCSuccess extends QCFilesPresent with BiopetTest {
 
+  // Defining values for the test set.
+  val read1MaxLength = 100
+  val read2MaxLength = 100
+  val read1MinLength = 100
+  val read2MinLength = 100
+  val totalReads = 1000
+  val totalBases = 100000
+  val encodings = List("Illumina 1.8+")
+
   @Test
   def testSeqStatsReadBefore(): Unit = {
     val seqstats: Root = Root.fromFile(seqstatBefore)
@@ -39,21 +48,21 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
       .libraries("library")
       .readgroups("readgroup")
       .seqstat
-    seqstat.r1.aggregation.maxLength shouldBe 100
-    seqstat.r1.aggregation.minLength shouldBe 100
-    seqstat.r1.aggregation.readsTotal shouldBe 1000
-    seqstat.r1.aggregation.qualityEncoding shouldBe List("Illumina 1.8+")
+    seqstat.r1.aggregation.maxLength shouldBe read1MaxLength
+    seqstat.r1.aggregation.minLength shouldBe read1MinLength
+    seqstat.r1.aggregation.readsTotal shouldBe totalReads
+    seqstat.r1.aggregation.qualityEncoding shouldBe encodings
 
     seqstat.r2.foreach { read =>
-      read.aggregation.minLength shouldBe 100
-      read.aggregation.maxLength shouldBe 100
-      read.aggregation.readsTotal shouldBe 1000
-      read.aggregation.qualityEncoding shouldBe List("Illumina 1.8+")
+      read.aggregation.minLength shouldBe read2MinLength
+      read.aggregation.maxLength shouldBe read2MaxLength
+      read.aggregation.readsTotal shouldBe totalReads
+      read.aggregation.qualityEncoding shouldBe encodings
     }
 
     val groupStats = seqstat.asGroupStats
-    groupStats.r1qual.totalBases shouldBe 100000
-    groupStats.r2qual.foreach(_.totalBases shouldBe 100000)
+    groupStats.r1qual.totalBases shouldBe totalBases
+    groupStats.r2qual.foreach(_.totalBases shouldBe totalBases)
     groupStats.isPaired shouldBe this.read2.isDefined
   }
 
@@ -67,19 +76,19 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
         .libraries("library")
         .readgroups("readgroup")
         .seqstat
-      seqstat.r1.aggregation.readsTotal shouldNot be(1000)
-      seqstat.r1.aggregation.maxLength shouldBe 100
-      seqstat.r1.aggregation.minLength shouldNot be(100)
-      seqstat.r1.aggregation.basesTotal shouldNot be(100000)
+      seqstat.r1.aggregation.readsTotal shouldNot be(totalReads) // Some reads should be dropped after clipping
+      seqstat.r1.aggregation.maxLength shouldBe read1MaxLength // Assuming some reads are not cut
+      seqstat.r1.aggregation.minLength shouldNot be(read1MinLength) // some reads should be cut
+      seqstat.r1.aggregation.basesTotal shouldNot be(totalBases) // Definitely some bases will have been gone.
       seqstat.r2.foreach { read =>
-        read.aggregation.readsTotal shouldNot be(1000)
-        read.aggregation.maxLength shouldBe 100
-        read.aggregation.minLength shouldNot be(100)
-        read.aggregation.basesTotal shouldNot be(100000)
+        read.aggregation.readsTotal shouldNot be(totalReads)
+        read.aggregation.maxLength shouldBe read2MaxLength
+        read.aggregation.minLength shouldNot be(read2MinLength)
+        read.aggregation.basesTotal shouldNot be(totalBases)
       }
       val groupStats: GroupStats = seqstat.asGroupStats
-      groupStats.r1qual.totalBases shouldNot be(100000)
-      groupStats.r2qual.foreach(_.totalBases shouldNot be(100000))
+      groupStats.r1qual.totalBases shouldNot be(totalBases)
+      groupStats.r2qual.foreach(_.totalBases shouldNot be(totalBases))
       groupStats.isPaired shouldBe this.read2.isDefined
     }
   }
