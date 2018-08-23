@@ -26,6 +26,9 @@ import nl.biopet.tools.seqstat.GroupStats
 import nl.biopet.tools.seqstat.schema.{Data, Root}
 import org.testng.annotations.Test
 
+import scala.io.Source
+import util.Properties.lineSeparator
+
 trait QCSuccess extends QCFilesPresent with BiopetTest {
 
   @Test
@@ -79,5 +82,20 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
       groupStats.r2qual.foreach(_.totalBases shouldNot be(100000))
       groupStats.isPaired shouldBe this.read2.isDefined
     }
+  }
+
+  @Test
+  def testAdaptersContaminations(): Unit = {
+    val adaptersFromRead1: Set[String] = Source.fromFile(adaptersRead1).mkString.split(lineSeparator).toSet
+    val adaptersFromRead2: Option[Set[String]] = adaptersRead2.map(Source.fromFile(_).mkString.split(lineSeparator).toSet)
+    val contaminationsFromRead1: Set[String] = Source.fromFile(contaminationsRead1).mkString.split(lineSeparator).toSet
+    val contaminationsFromRead2: Option[Set[String]] = contaminationsRead2.map(Source.fromFile(_).mkString.split(lineSeparator).toSet)
+    adaptersFromRead1 shouldBe Set("AGATCGGAAGAG")
+    adaptersFromRead2.foreach(_ shouldBe Set("AGATCGGAAGAG"))
+    contaminationsFromRead1 shouldBe Set(
+      "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG", // TruSeq Adapter, Index 18
+      "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG" // TruSeq Adapter, Index 1
+    )
+    contaminationsFromRead2.foreach(_ shouldBe Set())
   }
 }
