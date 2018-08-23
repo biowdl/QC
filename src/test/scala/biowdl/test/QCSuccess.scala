@@ -31,11 +31,6 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
   @Test
   def testSeqStatsReadBefore: Unit = {
     val seqstats: Root = Root.fromFile(seqstatBefore)
-    println(seqstats)
-
-    println()
-    println(seqstats.samples)
-    println(seqstats.samples.keys)
     val seqstat: Data = seqstats
       .samples("sample")
       .libraries("library")
@@ -44,11 +39,30 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
     seqstat.r1.aggregation.maxLength shouldBe 100
     seqstat.r1.aggregation.minLength shouldBe 100
     seqstat.r1.aggregation.readsTotal shouldBe 1000
+    seqstat.r1.aggregation.qualityEncoding shouldBe List("Illumina 1.8+")
 
     seqstat.r2.foreach { read =>
       read.aggregation.minLength shouldBe 100
       read.aggregation.maxLength shouldBe 100
       read.aggregation.readsTotal shouldBe 1000
+      read.aggregation.qualityEncoding shouldBe List("Illumina 1.8+")
+    }
+
+    val groupStats = seqstat.asGroupStats
+    groupStats.r1qual.totalBases shouldBe 100000
+    groupStats.r2qual.foreach(_.totalBases shouldBe 100000)
+    groupStats.isPaired shouldBe this.read2.isDefined
+  }
+
+  @Test
+  def testSeqStatsReadAfter: Unit = {
+    val seqstats: Option[Root] = seqstatAfterClipping.map(Root.fromFile(_))
+    seqstats.isDefined shouldBe adapterClippingRuns
+    seqstats.foreach { stats =>
+      val seqstat: Data = stats.samples("sample").libraries("library").readgroups("readgroup").seqstat
+      seqstat.r1.aggregation.readsTotal shouldNot be(100000)
+      seqstat.r1.aggregation.maxLength shouldBe 100
+      seqstat.r1.aggregation.minLength shouldBe 12
     }
   }
 
