@@ -12,6 +12,9 @@ workflow QC {
         String outputDir
         File? read2
         Boolean alwaysRunAdapterClipping = false
+        String sample
+        String library
+        String readgroup
     }
 
     String read1outputDir = outputDir + "/QC/read1"
@@ -26,7 +29,6 @@ workflow QC {
         input:
             fastq1 = read1,
             fastq2 = read2
-
     }
 
     call QR.QualityReport as qualityReportRead1 {
@@ -50,7 +52,10 @@ workflow QC {
         input:
             fastqR1 = ValidateFastq.validatedFastq1,
             fastqR2 = ValidateFastq.validatedFastq2,
-            outputFile = seqstatBeforeFile
+            outputFile = seqstatBeforeFile,
+            sample = sample,
+            library = library,
+            readgroup = readgroup
     }
 
 
@@ -87,7 +92,10 @@ workflow QC {
             input:
                 fastqR1 = AdapterClipping.read1afterClipping,
                 fastqR2 = AdapterClipping.read2afterClipping,
-                outputFile = seqstatAfterFile
+                outputFile = seqstatAfterFile,
+                sample = sample,
+                library = library,
+                readgroup = readgroup
         }
     }
 
