@@ -3,8 +3,8 @@ version 1.0
 
 import "QualityReport.wdl" as QR
 import "AdapterClipping.wdl" as AC
-import "ValidateFastqFiles.wdl" as validate
 import "tasks/biopet/seqstat.wdl" as seqstat
+import "tasks/biopet.wdl" as biopet
 
 workflow QC {
     input {
@@ -22,16 +22,16 @@ workflow QC {
     String seqstatBeforeFile = outputDir + "/QC/seqstat.json"
     String seqstatAfterFile = outputDir + "/QCafter/seqstat.json"
 
-    call validate.ValidateFastqFiles as validated {
+    call biopet.ValidateFastq as ValidateFastq {
         input:
-            read1 = read1,
-            read2 = read2
+            fastq1 = read1,
+            fastq2 = read2
 
     }
 
     call QR.QualityReport as qualityReportRead1 {
         input:
-            read = validated.validatedRead1,
+            read = ValidateFastq.validatedFastq1 ,
             outputDir = read1outputDir,
             extractAdapters = true
     }
@@ -39,7 +39,7 @@ workflow QC {
     if (defined(read2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
-                read = select_first([validated.validatedRead2]),
+                read = select_first([ValidateFastq.validatedFastq2]),
                 outputDir = read2outputDir,
                 extractAdapters = true
         }
@@ -48,8 +48,8 @@ workflow QC {
     # Seqstat on reads
     call seqstat.Generate as seqstat {
         input:
-            fastqR1 = validated.validatedRead1,
-            fastqR2 = validated.validatedRead2,
+            fastqR1 = ValidateFastq.validatedFastq1,
+            fastqR2 = ValidateFastq.validatedFastq2,
             outputFile = seqstatBeforeFile
     }
 
@@ -61,8 +61,8 @@ workflow QC {
     if (runAdapterClipping) {
         call AC.AdapterClipping as AdapterClipping {
             input:
-                read1 = validated.validatedRead1,
-                read2 = validated.validatedRead2,
+                read1 = ValidateFastq.validatedFastq1,
+                read2 = ValidateFastq.validatedFastq2,
                 outputDir = adapterClippingOutputDir,
                 adapterListRead1 = qualityReportRead1.adapters,
                 adapterListRead2 = qualityReportRead2.adapters
@@ -94,10 +94,10 @@ workflow QC {
     output {
         File read1afterQC = if runAdapterClipping
             then select_first([AdapterClipping.read1afterClipping])
-            else validated.validatedRead1
+            else ValidateFastq.validatedFastq1
         File? read2afterQC = if runAdapterClipping
             then AdapterClipping.read2afterClipping
-            else validated.validatedRead2
+            else ValidateFastq.validatedFastq2
     }
 }
 
