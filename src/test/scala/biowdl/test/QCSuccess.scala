@@ -24,10 +24,12 @@ package biowdl.test
 import nl.biopet.test.BiopetTest
 import nl.biopet.tools.seqstat.GroupStats
 import nl.biopet.tools.seqstat.schema.{Data, Root}
+import nl.biopet.tools.extractadaptersfastqc.ExtractAdaptersFastqc.{foundAdapters, foundOverrepresented, FastQCModule, qcModules, AdapterSequence}
 import org.testng.annotations.Test
 
 import scala.io.Source
 import util.Properties.lineSeparator
+
 
 trait QCSuccess extends QCFilesPresent with BiopetTest {
 
@@ -85,7 +87,7 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
   }
 
   @Test
-  def testAdaptersContaminations(): Unit = {
+  def testAdaptersContaminationsFiles(): Unit = {
     val adaptersFromRead1: Set[String] =
       Source.fromFile(adaptersRead1).mkString.split(lineSeparator).toSet
     val adaptersFromRead2: Option[Set[String]] =
@@ -102,4 +104,7 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
     )
     contaminationsFromRead2.foreach(_ shouldBe Set())
   }
+
+  @Test
+  def testAdapters(): Unit = {}
 }
