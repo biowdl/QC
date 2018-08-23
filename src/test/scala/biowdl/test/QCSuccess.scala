@@ -24,12 +24,19 @@ package biowdl.test
 import nl.biopet.test.BiopetTest
 import nl.biopet.tools.seqstat.GroupStats
 import nl.biopet.tools.seqstat.schema.{Data, Root}
-import nl.biopet.tools.extractadaptersfastqc.ExtractAdaptersFastqc.{foundAdapters, foundOverrepresented, FastQCModule, qcModules, AdapterSequence}
-import org.testng.annotations.Test
+import nl.biopet.tools.extractadaptersfastqc.ExtractAdaptersFastqc.{
+  AdapterSequence,
+  FastQCModule,
+  foundAdapters,
+  foundOverrepresented,
+  getFastqcSeqs,
+  qcModules
+}
+import org.testng.annotations.{DataProvider, Test}
+import java.io.File
 
 import scala.io.Source
 import util.Properties.lineSeparator
-
 
 trait QCSuccess extends QCFilesPresent with BiopetTest {
 
@@ -105,6 +112,45 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
     contaminationsFromRead2.foreach(_ shouldBe Set())
   }
 
-  @Test
-  def testAdapters(): Unit = {}
+  def fastQCtoAdapters(fastqcFile: File): Set[AdapterSequence] = {
+    val knownAdapters = getFastqcSeqs(resourceFile("/adapter_list.txt"))
+    foundAdapters(qcModules(fastqcFile), 0.0001, knownAdapters)
+  }
+
+  def fastQCtoContaminations(fastqcFile: File): Set[AdapterSequence] = {
+    val knownContaminations = getFastqcSeqs(resourceFile("/contaminant_list"))
+    foundOverrepresented(qcModules(fastqcFile), knownContaminations)
+  }
+
+  @DataProvider(name = "fastqQCFiles")
+  def provider: Array[Array[Any]] = {
+    val adaptersInTest: Set[AdapterSequence] = Set(
+      AdapterSequence("Illumina universal adapter", "AGATCGGAAGAG")
+    )
+    val contaminationsInTest: Set[AdapterSequence] = Set(
+      AdapterSequence(
+        "TruSeq Adapter, Index 18",
+        "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"),
+      AdapterSequence(
+        "TruSeq Adapter, Index 1",
+        "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG")
+    )
+
+    Array(
+      Array(Some(fastqcRead1), adaptersInTest, contaminationsInTest),
+      Array(fastqcRead2, adaptersInTest, Set()),
+      Array(fastqcRead1AfterClipping, Set(), Set()),
+      Array(fastqcRead2AfterClipping, Set(), Set())
+    )
+  }
+
+  @Test(dataProvider = "fastQCfiles")
+  def testAdaptersContaminations(fastqcFile: Option[File],
+                                 adapterSet: Set[AdapterSequence],
+                                 contamSet: Set[AdapterSequence]): Unit = {
+    fastqcFile.foreach { file =>
+      fastQCtoAdapters(file) shouldBe adapterSet
+      fastQCtoContaminations(file) shouldBe contamSet
+    }
+  }
 }
