@@ -22,6 +22,7 @@
 package biowdl.test
 
 import nl.biopet.test.BiopetTest
+import nl.biopet.tools.seqstat.GroupStats
 import nl.biopet.tools.seqstat.schema.{Data, Root}
 import org.testng.annotations.Test
 
@@ -58,11 +59,25 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
     val seqstats: Option[Root] = seqstatAfterClipping.map(Root.fromFile)
     seqstats.isDefined shouldBe adapterClippingRuns
     seqstats.foreach { stats =>
-      val seqstat: Data = stats.samples("sample").libraries("library").readgroups("readgroup").seqstat
-      seqstat.r1.aggregation.readsTotal shouldNot be(100000)
+      val seqstat: Data = stats
+        .samples("sample")
+        .libraries("library")
+        .readgroups("readgroup")
+        .seqstat
+      seqstat.r1.aggregation.readsTotal shouldNot be(1000)
       seqstat.r1.aggregation.maxLength shouldBe 100
-      seqstat.r1.aggregation.minLength shouldBe 12
+      seqstat.r1.aggregation.minLength shouldNot be(100)
+      seqstat.r1.aggregation.basesTotal shouldNot be(100000)
+      seqstat.r2.foreach { read =>
+        read.aggregation.readsTotal shouldNot be(1000)
+        read.aggregation.maxLength shouldBe 100
+        read.aggregation.minLength shouldNot be(100)
+        read.aggregation.basesTotal shouldNot be(100000)
+      }
+      val groupStats: GroupStats = seqstat.asGroupStats
+      groupStats.r1qual.totalBases shouldNot be(100000)
+      groupStats.r2qual.foreach(_.totalBases shouldNot be(100000))
+      groupStats.isPaired shouldBe this.read2.isDefined
     }
   }
-
 }
