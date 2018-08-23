@@ -122,7 +122,7 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
     foundOverrepresented(qcModules(fastqcFile), knownContaminations)
   }
 
-  @DataProvider(name = "fastqQCFiles")
+  @DataProvider(name = "fastQCFiles")
   def provider: Array[Array[Any]] = {
     val adaptersInTest: Set[AdapterSequence] = Set(
       AdapterSequence("Illumina universal adapter", "AGATCGGAAGAG")
@@ -144,7 +144,7 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
     )
   }
 
-  @Test(dataProvider = "fastQCfiles")
+  @Test(dataProvider = "fastQCFiles")
   def testAdaptersContaminations(fastqcFile: Option[File],
                                  adapterSet: Set[AdapterSequence],
                                  contamSet: Set[AdapterSequence]): Unit = {
