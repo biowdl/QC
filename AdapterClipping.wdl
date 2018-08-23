@@ -13,6 +13,7 @@ workflow AdapterClipping {
         Array[String]+? adapterListRead2
         Array[String]+? contaminationsListRead1
         Array[String]+? contaminationsListRead2
+        Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
     }
 
     if (defined(read2)) {
@@ -29,7 +30,8 @@ workflow AdapterClipping {
             anywhere = contaminationsListRead1,
             adapterRead2 = adapterListRead2,
             anywhereRead2 = contaminationsListRead2,
-            reportPath = outputDir + "/cutadaptReport.txt"
+            reportPath = outputDir + "/cutadaptReport.txt",
+            minimumLength = minimumReadLength
     }
 
     call biopet.ValidateFastq as ValidateFastq {
