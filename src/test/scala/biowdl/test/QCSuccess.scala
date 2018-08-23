@@ -35,9 +35,9 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
   def testSeqStatsReadBefore(): Unit = {
     val seqstats: Root = Root.fromFile(seqstatBefore)
     val seqstat: Data = seqstats
-      .samples("sample")
-      .libraries("library")
-      .readgroups("readgroup")
+      .samples(sample)
+      .libraries(library)
+      .readgroups(readgroup)
       .seqstat
     seqstat.r1.aggregation.maxLength shouldBe 100
     seqstat.r1.aggregation.minLength shouldBe 100
@@ -63,9 +63,9 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
     seqstats.isDefined shouldBe adapterClippingRuns
     seqstats.foreach { stats =>
       val seqstat: Data = stats
-        .samples("sample")
-        .libraries("library")
-        .readgroups("readgroup")
+        .samples(sample)
+        .libraries(library)
+        .readgroups(readgroup)
         .seqstat
       seqstat.r1.aggregation.readsTotal shouldNot be(1000)
       seqstat.r1.aggregation.maxLength shouldBe 100
