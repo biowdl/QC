@@ -11,6 +11,8 @@ workflow AdapterClipping {
         String outputDir
         Array[String]+? adapterListRead1
         Array[String]+? adapterListRead2
+        Array[String]+? contaminationsListRead1
+        Array[String]+? contaminationsListRead2
     }
 
     if (defined(read2)) {
@@ -24,7 +26,9 @@ workflow AdapterClipping {
             read1output = outputDir + "/cutadapt_" + basename(read1),
             read2output = read2outputPath,
             adapter = adapterListRead1,
+            anywhere = contaminationsListRead1,
             adapterRead2 = adapterListRead2,
+            anywhereRead2 = contaminationsListRead2,
             reportPath = outputDir + "/cutadaptReport.txt"
     }
 

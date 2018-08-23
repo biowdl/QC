@@ -70,7 +70,9 @@ workflow QC {
                 read2 = ValidateFastq.validatedFastq2,
                 outputDir = adapterClippingOutputDir,
                 adapterListRead1 = qualityReportRead1.adapters,
-                adapterListRead2 = qualityReportRead2.adapters
+                adapterListRead2 = qualityReportRead2.adapters,
+                contaminationsListRead1 = qualityReportRead1.contaminations,
+                contaminationsListRead2 = qualityReportRead2.contaminations
         }
 
         call QR.QualityReport as qualityReportRead1after {
