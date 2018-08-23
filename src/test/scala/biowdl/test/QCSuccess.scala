@@ -21,15 +21,14 @@
 
 package biowdl.test
 
-import nl.biopet.tools.seqstat.schema.{Aggregation, Data, Readgroup, Root}
 import nl.biopet.test.BiopetTest
-import nl.biopet.tools.seqstat.GroupStats
+import nl.biopet.tools.seqstat.schema.{Data, Root}
 import org.testng.annotations.Test
 
 trait QCSuccess extends QCFilesPresent with BiopetTest {
 
   @Test
-  def testSeqStatsReadBefore: Unit = {
+  def testSeqStatsReadBefore(): Unit = {
     val seqstats: Root = Root.fromFile(seqstatBefore)
     val seqstat: Data = seqstats
       .samples("sample")
@@ -55,8 +54,8 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
   }
 
   @Test
-  def testSeqStatsReadAfter: Unit = {
-    val seqstats: Option[Root] = seqstatAfterClipping.map(Root.fromFile(_))
+  def testSeqStatsReadAfter(): Unit = {
+    val seqstats: Option[Root] = seqstatAfterClipping.map(Root.fromFile)
     seqstats.isDefined shouldBe adapterClippingRuns
     seqstats.foreach { stats =>
       val seqstat: Data = stats.samples("sample").libraries("library").readgroups("readgroup").seqstat
