@@ -129,7 +129,8 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
   }
 
   def fastQCtoContaminations(fastqcFile: File): Set[AdapterSequence] = {
-    val knownContaminations = getFastqcSeqs(resourceFile("/contaminant_list.txt"))
+    val knownContaminations = getFastqcSeqs(
+      resourceFile("/contaminant_list.txt"))
     foundOverrepresented(qcModules(fastqcFile), knownContaminations)
   }
 
@@ -148,7 +149,7 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
 
   @Test(dataProvider = "fastQCFiles")
   def testAdapters(fastqcFile: Option[File],
-                                 adapterSet: Set[AdapterSequence]): Unit = {
+                   adapterSet: Set[AdapterSequence]): Unit = {
     fastqcFile.foreach { file =>
       fastQCtoAdapters(file) shouldBe adapterSet
     }
@@ -167,11 +168,11 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
     fastQCtoContaminations(fastqcRead1) shouldBe contaminationsInTest
     fastqcRead2.map(fastQCtoContaminations).foreach(_ shouldBe Set())
     // This tests whether all found contaminations where removed
-    fastqcRead1AfterClipping.foreach{ fastqcFile =>
+    fastqcRead1AfterClipping.foreach { fastqcFile =>
       val contaminationsAfterClipping = fastQCtoContaminations(fastqcFile)
-      contaminationsAfterClipping.foreach(contaminationsInTest shouldNot contain(_))
+      contaminationsAfterClipping.foreach(
+        contaminationsInTest shouldNot contain(_))
     }
   }
-
 
 }
