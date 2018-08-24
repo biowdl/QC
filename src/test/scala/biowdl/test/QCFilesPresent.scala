@@ -74,7 +74,7 @@ trait QCFilesPresent extends QC with PipelineSuccess {
       Some(
         new File(
           outputDir,
-          s"QC/read1/fastqc/${fastqcName(read2.map(_.getName).getOrElse(""))}/fastqc_data.txt"))
+          s"QC/read2/fastqc/${fastqcName(read2.map(_.getName).getOrElse(""))}/fastqc_data.txt"))
     else None
   val fastqcRead1AfterClipping: Option[File] =
     if (adapterClippingRuns)
@@ -88,7 +88,7 @@ trait QCFilesPresent extends QC with PipelineSuccess {
       Some(
         new File(
           outputDir,
-          s"QC/read2/fastqc/cutadapt_${fastqcName(read2.map(_.getName).getOrElse(""))}/fastqc_data.txt"))
+          s"QCafter/read2/fastqc/cutadapt_${fastqcName(read2.map(_.getName).getOrElse(""))}/fastqc_data.txt"))
     else None
 
   // Files from the fastqc task

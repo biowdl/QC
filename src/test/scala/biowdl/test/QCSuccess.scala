@@ -129,15 +129,33 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
   }
 
   def fastQCtoContaminations(fastqcFile: File): Set[AdapterSequence] = {
-    val knownContaminations = getFastqcSeqs(resourceFile("/contaminant_list"))
+    val knownContaminations = getFastqcSeqs(resourceFile("/contaminant_list.txt"))
     foundOverrepresented(qcModules(fastqcFile), knownContaminations)
   }
 
   @DataProvider(name = "fastQCFiles")
   def provider: Array[Array[Any]] = {
     val adaptersInTest: Set[AdapterSequence] = Set(
-      AdapterSequence("Illumina universal adapter", "AGATCGGAAGAG")
+      AdapterSequence("Illumina Universal Adapter", "AGATCGGAAGAG")
     )
+    Array(
+      Array(Some(fastqcRead1), adaptersInTest),
+      Array(fastqcRead2, adaptersInTest),
+      Array(fastqcRead1AfterClipping, Set()),
+      Array(fastqcRead2AfterClipping, Set())
+    )
+  }
+
+  @Test(dataProvider = "fastQCFiles")
+  def testAdapters(fastqcFile: Option[File],
+                                 adapterSet: Set[AdapterSequence]): Unit = {
+    fastqcFile.foreach { file =>
+      fastQCtoAdapters(file) shouldBe adapterSet
+    }
+  }
+
+  @Test
+  def testContaminations(): Unit = {
     val contaminationsInTest: Set[AdapterSequence] = Set(
       AdapterSequence(
         "TruSeq Adapter, Index 18",
@@ -146,22 +164,14 @@ trait QCSuccess extends QCFilesPresent with BiopetTest {
         "TruSeq Adapter, Index 1",
         "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG")
     )
-
-    Array(
-      Array(Some(fastqcRead1), adaptersInTest, contaminationsInTest),
-      Array(fastqcRead2, adaptersInTest, Set()),
-      Array(fastqcRead1AfterClipping, Set(), Set()),
-      Array(fastqcRead2AfterClipping, Set(), Set())
-    )
-  }
-
-  @Test(dataProvider = "fastQCFiles")
-  def testAdaptersContaminations(fastqcFile: Option[File],
-                                 adapterSet: Set[AdapterSequence],
-                                 contamSet: Set[AdapterSequence]): Unit = {
-    fastqcFile.foreach { file =>
-      fastQCtoAdapters(file) shouldBe adapterSet
-      fastQCtoContaminations(file) shouldBe contamSet
+    fastQCtoContaminations(fastqcRead1) shouldBe contaminationsInTest
+    fastqcRead2.map(fastQCtoContaminations).foreach(_ shouldBe Set())
+    // This tests whether all found contaminations where removed
+    fastqcRead1AfterClipping.foreach{ fastqcFile =>
+      val contaminationsAfterClipping = fastQCtoContaminations(fastqcFile)
+      contaminationsAfterClipping.foreach(contaminationsInTest shouldNot contain(_))
     }
   }
+
+
 }
