@@ -21,12 +21,10 @@
 
 package biowdl.test
 
-import nl.biopet.test.BiopetTest
 import nl.biopet.tools.seqstat.GroupStats
-import nl.biopet.tools.seqstat.schema.{Data, Root}
+import nl.biopet.tools.seqstat.schema.{Data => SeqstatData, Root}
 import nl.biopet.tools.extractadaptersfastqc.ExtractAdaptersFastqc.{
   AdapterSequence,
-  FastQCModule,
   foundAdapters,
   foundOverrepresented,
   getFastqcSeqs,
@@ -51,14 +49,20 @@ trait QcTestCase extends QCSuccess {
   val read2TotalBases = 100000
   val encodings = List("Illumina 1.8+")
 
-  @Test
-  def testSeqStatsReadBefore(): Unit = {
-    val seqstats: Root = Root.fromFile(seqstatBefore)
-    val seqstat: Data = seqstats
+  def seqstatData(file: File): SeqstatData = {
+    Root.fromFile(file)
       .samples(sample)
       .libraries(library)
       .readgroups(readgroup)
       .seqstat
+  }
+
+  def seqstatBefore: SeqstatData = seqstatData(seqstatBeforeFile)
+  def seqstatAfter: Option[SeqstatData] = seqstatAfterFile.map(seqstatData)
+
+  @Test
+  def testSeqStatsReadBefore(): Unit = {
+    val seqstat: SeqstatData = seqstatBefore
     seqstat.r1.aggregation.maxLength shouldBe read1MaxLength
     seqstat.r1.aggregation.minLength shouldBe read1MinLength
     seqstat.r1.aggregation.readsTotal shouldBe read1TotalReads
@@ -79,10 +83,10 @@ trait QcTestCase extends QCSuccess {
 
   @Test
   def testSeqStatsReadAfter(): Unit = {
-    val seqstats: Option[Root] = seqstatAfterClipping.map(Root.fromFile)
+    val seqstats: Option[Root] = seqstatAfterFile.map(Root.fromFile)
     seqstats.isDefined shouldBe adapterClippingRuns
     seqstats.foreach { stats =>
-      val seqstat: Data = stats
+      val seqstat: SeqstatData = stats
         .samples(sample)
         .libraries(library)
         .readgroups(readgroup)
@@ -140,10 +144,10 @@ trait QcTestCase extends QCSuccess {
       AdapterSequence("Illumina Universal Adapter", "AGATCGGAAGAG")
     )
     Array(
-      Array(Some(fastqcRead1), adaptersInTest),
-      Array(fastqcRead2, adaptersInTest),
-      Array(fastqcRead1AfterClipping, Set()),
-      Array(fastqcRead2AfterClipping, Set())
+      Array(Some(fastqcRead1DataFile), adaptersInTest),
+      Array(fastqcRead2DataFile, adaptersInTest),
+      Array(fastqcRead1AfterDataFile, Set()),
+      Array(fastqcRead2AfterDataFile, Set())
     )
   }
 
@@ -165,10 +169,10 @@ trait QcTestCase extends QCSuccess {
         "TruSeq Adapter, Index 1",
         "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG")
     )
-    fastQCtoContaminations(fastqcRead1) shouldBe contaminationsInTest
-    fastqcRead2.map(fastQCtoContaminations).foreach(_ shouldBe Set())
+    fastQCtoContaminations(fastqcRead1DataFile) shouldBe contaminationsInTest
+    fastqcRead2DataFile.map(fastQCtoContaminations).foreach(_ shouldBe Set())
     // This tests whether all found contaminations where removed
-    fastqcRead1AfterClipping.foreach { fastqcFile =>
+    fastqcRead1AfterDataFile.foreach { fastqcFile =>
       val contaminationsAfterClipping = fastQCtoContaminations(fastqcFile)
       contaminationsAfterClipping.foreach(
         contaminationsInTest shouldNot contain(_))
