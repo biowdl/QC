@@ -73,7 +73,7 @@ trait QCSuccess extends QC with PipelineSuccess {
 
   // Files from the fastqc task
   val fastqcRead1Dir: File = new File(outputDir, s"QC/read1/fastqc/${QCSuccess.fastqcName(read1.getName)}")
-  val fastqcRead2Dir: Option[File] = read2.map(f => new File(outputDir, s"QC/read1/fastqc/${QCSuccess.fastqcName(f.getName)}"))
+  val fastqcRead2Dir: Option[File] = read2.map(f => new File(outputDir, s"QC/read2/fastqc/${QCSuccess.fastqcName(f.getName)}"))
 
   val fastqcRead1DataFile: File = new File(fastqcRead1Dir, "fastqc_data.txt")
   val fastqcRead2DataFile: Option[File] = fastqcRead2Dir.map(new File(_, "fastqc_data.txt"))
