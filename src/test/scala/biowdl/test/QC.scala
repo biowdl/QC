@@ -35,11 +35,18 @@ trait QC extends Pipeline {
 
   def startFile: File = new File("QC.wdl")
 
+  def sample: String = "sample"
+  def library: String = "library"
+  def readgroup: String = "readgroup"
+
   override def inputs: Map[String, Any] =
     super.inputs ++
       Map(
         "QC.read1" -> read1.getAbsolutePath,
-        "QC.outputDir" -> outputDir.getAbsolutePath
+        "QC.outputDir" -> outputDir.getAbsolutePath,
+        "QC.sample" -> sample,
+        "QC.library" -> library,
+        "QC.readgroup" -> readgroup
       ) ++ alwaysRunCutadapt.map("QC.alwaysRunCutAdapt" -> _) ++
       read2.map("QC.read2" -> _.getAbsolutePath)
 

@@ -23,7 +23,7 @@ package biowdl.test
 import java.io.File
 import nl.biopet.utils.biowdl.fixtureFile
 
-class QCBothReadsZipped extends QCFilesPresent {
+class QCBothReadsZipped extends QcTestCase {
   def read1: File = fixtureFile("flexiprep/ct_r1.fq.gz")
   def read2: Option[File] = Some(fixtureFile("flexiprep/ct_r2.fq.gz"))
 

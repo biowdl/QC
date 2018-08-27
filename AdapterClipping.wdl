@@ -11,6 +11,9 @@ workflow AdapterClipping {
         String outputDir
         Array[String]+? adapterListRead1
         Array[String]+? adapterListRead2
+        Array[String]+? contaminationsListRead1
+        Array[String]+? contaminationsListRead2
+        Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
     }
 
     if (defined(read2)) {
@@ -24,8 +27,11 @@ workflow AdapterClipping {
             read1output = outputDir + "/cutadapt_" + basename(read1),
             read2output = read2outputPath,
             adapter = adapterListRead1,
+            anywhere = contaminationsListRead1,
             adapterRead2 = adapterListRead2,
-            reportPath = outputDir + "/cutadaptReport.txt"
+            anywhereRead2 = contaminationsListRead2,
+            reportPath = outputDir + "/cutadaptReport.txt",
+            minimumLength = minimumReadLength
     }
 
     call biopet.ValidateFastq as ValidateFastq {
@@ -35,8 +41,9 @@ workflow AdapterClipping {
     }
 
     output {
-        File read1afterClipping = Cutadapt.cutRead1
-        File? read2afterClipping = Cutadapt.cutRead2
+        # Make sure reads are valid before passing them.
+        File read1afterClipping = ValidateFastq.validatedFastq1
+        File? read2afterClipping = ValidateFastq.validatedFastq2
         File cutadaptReport = Cutadapt.report
         File validationReport = ValidateFastq.stderr
     }

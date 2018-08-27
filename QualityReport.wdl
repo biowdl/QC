@@ -10,7 +10,7 @@ workflow QualityReport {
         String outputDir
         String extractAdaptersOutput = outputDir + "/extractAdapters"
         String fastqcOutput = outputDir + "/fastqc"
-        Boolean extractAdapters = false
+        Boolean extractAdapters = true
     }
 
     # FastQC on read
@@ -18,13 +18,6 @@ workflow QualityReport {
         input:
             seqFile = read,
             outdirPath = fastqcOutput
-    }
-
-    # Seqstat on read
-    call biopet.Seqstat as seqstat {
-        input:
-            fastq = read,
-            outputFile = outputDir + "/seqstat.json"
     }
 
     # Extract adapter sequences from the fastqc report.
@@ -59,6 +52,5 @@ workflow QualityReport {
         File fastqcSummary = Fastqc.summary
         File fastqcHtmlReport = Fastqc.htmlReport
         Array[File] fastqcImages = Fastqc.images
-        File seqstatJson = seqstat.json
     }
 }
