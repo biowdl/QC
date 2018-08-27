@@ -50,7 +50,8 @@ trait QcTestCase extends QCSuccess {
   val encodings = List("Illumina 1.8+")
 
   def seqstatData(file: File): SeqstatData = {
-    Root.fromFile(file)
+    Root
+      .fromFile(file)
       .samples(sample)
       .libraries(library)
       .readgroups(readgroup)
