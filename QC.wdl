@@ -34,16 +34,14 @@ workflow QC {
     call QR.QualityReport as qualityReportRead1 {
         input:
             read = ValidateFastq.validatedFastq1 ,
-            outputDir = read1outputDir,
-            extractAdapters = true
+            outputDir = read1outputDir
     }
 
     if (defined(read2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
                 read = select_first([ValidateFastq.validatedFastq2]),
-                outputDir = read2outputDir,
-                extractAdapters = true
+                outputDir = read2outputDir
         }
     }
 
@@ -78,18 +76,17 @@ workflow QC {
         call QR.QualityReport as qualityReportRead1after {
             input:
                 read = AdapterClipping.read1afterClipping,
-                outputDir = read1outputDirAfterQC,
-                extractAdapters = false
+                outputDir = read1outputDirAfterQC
         }
 
         if (defined(read2)) {
             call QR.QualityReport as qualityReportRead2after {
                 input:
                     read = select_first([AdapterClipping.read2afterClipping]),
-                    outputDir = read2outputDirAfterQC,
-                    extractAdapters = false
+                    outputDir = read2outputDirAfterQC
             }
         }
+
         call seqstat.Generate as seqstatAfter {
             input:
                 fastqR1 = AdapterClipping.read1afterClipping,

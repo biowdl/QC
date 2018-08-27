@@ -10,7 +10,7 @@ workflow QualityReport {
         String outputDir
         String extractAdaptersOutput = outputDir + "/extractAdapters"
         String fastqcOutput = outputDir + "/fastqc"
-        Boolean extractAdapters = false
+        Boolean extractAdapters = true
     }
 
     # FastQC on read

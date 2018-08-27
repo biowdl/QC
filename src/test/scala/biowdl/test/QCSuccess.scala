@@ -21,158 +21,112 @@
 
 package biowdl.test
 
-import nl.biopet.test.BiopetTest
-import nl.biopet.tools.seqstat.GroupStats
-import nl.biopet.tools.seqstat.schema.{Data, Root}
-import nl.biopet.tools.extractadaptersfastqc.ExtractAdaptersFastqc.{
-  AdapterSequence,
-  FastQCModule,
-  foundAdapters,
-  foundOverrepresented,
-  getFastqcSeqs,
-  qcModules
-}
-import org.testng.annotations.{DataProvider, Test}
 import java.io.File
 
-import scala.io.Source
-import util.Properties.lineSeparator
+import nl.biopet.utils.biowdl.PipelineSuccess
 
-trait QCSuccess extends QCFilesPresent with BiopetTest {
+import scala.util.matching.Regex
 
-  // Defining values for the test set.
-  val read1MaxLength = 100
-  val read2MaxLength = 100
-  val read1MinLength = 100
-  val read2MinLength = 100
-  val read1TotalReads = 1000
-  val read1TotalBases = 100000
-  val read2TotalReads = 1000
-  val read2TotalBases = 100000
-  val encodings = List("Illumina 1.8+")
+trait QCSuccess extends QC with PipelineSuccess {
+  // When run on clean reads, cutadapt should not be run
+  def adapterClippingRuns: Boolean = true
 
-  @Test
-  def testSeqStatsReadBefore(): Unit = {
-    val seqstats: Root = Root.fromFile(seqstatBefore)
-    val seqstat: Data = seqstats
-      .samples(sample)
-      .libraries(library)
-      .readgroups(readgroup)
-      .seqstat
-    seqstat.r1.aggregation.maxLength shouldBe read1MaxLength
-    seqstat.r1.aggregation.minLength shouldBe read1MinLength
-    seqstat.r1.aggregation.readsTotal shouldBe read1TotalReads
-    seqstat.r1.aggregation.qualityEncoding shouldBe encodings
-
-    seqstat.r2.foreach { read =>
-      read.aggregation.minLength shouldBe read2MinLength
-      read.aggregation.maxLength shouldBe read2MaxLength
-      read.aggregation.readsTotal shouldBe read2TotalReads
-      read.aggregation.qualityEncoding shouldBe encodings
-    }
-
-    val groupStats = seqstat.asGroupStats
-    groupStats.r1qual.totalBases shouldBe read1TotalBases
-    groupStats.r2qual.foreach(_.totalBases shouldBe read2TotalBases)
-    groupStats.isPaired shouldBe this.read2.isDefined
+  def mustHaveFastqcDir(fastqcBase: String): Unit = {
+    addMustHaveFile(fastqcBase)
+    addMustHaveFile(fastqcBase + ".zip")
+    addMustHaveFile(fastqcBase + ".html")
+    addMustHaveFile(fastqcBase, "fastqc_data.txt")
+    addMustHaveFile(fastqcBase, "fastqc_report.html")
+    addMustHaveFile(fastqcBase, "summary.txt")
+    addMustHaveFile(fastqcBase, "Images")
   }
 
-  @Test
-  def testSeqStatsReadAfter(): Unit = {
-    val seqstats: Option[Root] = seqstatAfterClipping.map(Root.fromFile)
-    seqstats.isDefined shouldBe adapterClippingRuns
-    seqstats.foreach { stats =>
-      val seqstat: Data = stats
-        .samples(sample)
-        .libraries(library)
-        .readgroups(readgroup)
-        .seqstat
-      seqstat.r1.aggregation.readsTotal shouldNot be(read1TotalReads) // Some reads should be dropped after clipping
-      seqstat.r1.aggregation.maxLength shouldBe read1MaxLength // Assuming some reads are not cut
-      seqstat.r1.aggregation.minLength shouldNot be(read1MinLength) // some reads should be cut
-      seqstat.r1.aggregation.basesTotal shouldNot be(read1TotalBases) // Definitely some bases will have been gone.
-      seqstat.r2.foreach { read =>
-        read.aggregation.readsTotal shouldNot be(read2TotalReads)
-        read.aggregation.maxLength shouldBe read2MaxLength
-        read.aggregation.minLength shouldNot be(read2MinLength)
-        read.aggregation.basesTotal shouldNot be(read2TotalBases)
-      }
-      val groupStats: GroupStats = seqstat.asGroupStats
-      groupStats.r1qual.totalBases shouldNot be(read1TotalBases)
-      groupStats.r2qual.foreach(_.totalBases shouldNot be(read1TotalBases))
-      groupStats.isPaired shouldBe this.read2.isDefined
-    }
+  // Files from the seqstat task
+  val seqstatBeforeFile: File = createFile("QC/seqstat.json")
+  val seqstatAfterFile: Option[File] =
+    createOptionalFile(adapterClippingRuns, "QCafter/seqstat.json")
+
+  // Files from the extract adapters task
+  val adaptersRead1: File = createFile("QC/read1/extractAdapters/adapter.list")
+  val adaptersRead2: Option[File] =
+    createOptionalFile(read2.isDefined, "QC/read2/extractAdapters/adapter.list")
+  val adaptersRead1After: Option[File] = createOptionalFile(
+    adapterClippingRuns,
+    "QCafter/read1/extractAdapters/adapter.list")
+  val adaptersRead2After: Option[File] = createOptionalFile(
+    read2.isDefined && adapterClippingRuns,
+    "QCafter/read2/extractAdapters/adapter.list")
+
+  val contaminationsRead1: File = createFile(
+    "QC/read1/extractAdapters/contaminations.list")
+  val contaminationsRead2: Option[File] = createOptionalFile(
+    read2.isDefined,
+    "QC/read2/extractAdapters/contaminations.list")
+  val contaminationsRead1After: Option[File] = createOptionalFile(
+    adapterClippingRuns,
+    "QC/read1/extractAdapters/contaminations.list")
+  val contaminationsRead2After: Option[File] = createOptionalFile(
+    adapterClippingRuns && read2.isDefined,
+    "QC/read2/extractAdapters/contaminations.list")
+
+  // Files from the fastqc task
+  val fastqcRead1Dir: File = new File(
+    outputDir,
+    s"QC/read1/fastqc/${QCSuccess.fastqcName(read1.getName)}")
+  val fastqcRead2Dir: Option[File] = read2.map(f =>
+    new File(outputDir, s"QC/read2/fastqc/${QCSuccess.fastqcName(f.getName)}"))
+
+  val fastqcRead1DataFile: File = new File(fastqcRead1Dir, "fastqc_data.txt")
+  val fastqcRead2DataFile: Option[File] =
+    fastqcRead2Dir.map(new File(_, "fastqc_data.txt"))
+
+  val fastqcRead1AfterDir: Option[File] = createOptionalFile(
+    adapterClippingRuns,
+    s"QCafter/read1/fastqc/cutadapt_${QCSuccess.fastqcName(read1.getName)}")
+
+  val fastqcRead2AfterDir: Option[File] = read2
+    .filter(_ => adapterClippingRuns)
+    .map(
+      f =>
+        new File(
+          outputDir,
+          s"QCafter/read2/fastqc/cutadapt_${QCSuccess.fastqcName(f.getName)}"))
+
+  val fastqcRead1AfterDataFile: Option[File] =
+    fastqcRead1AfterDir.map(new File(_, "fastqc_data.txt"))
+  val fastqcRead2AfterDataFile: Option[File] =
+    fastqcRead2AfterDir.map(new File(_, "fastqc_data.txt"))
+
+  mustHaveFastqcDir(s"QC/read1/fastqc/${QCSuccess.fastqcName(read1.getName)}")
+  addConditionalFile(read2.isDefined, s"QC/read2/fastqc/")
+  read2.foreach(file =>
+    mustHaveFastqcDir(s"QC/read2/fastqc/${QCSuccess.fastqcName(file.getName)}"))
+
+  if (adapterClippingRuns) {
+    mustHaveFastqcDir(
+      s"QCafter/read1/fastqc/${"cutadapt_" + QCSuccess.fastqcName(read1.getName)}")
+    read2.foreach(file =>
+      mustHaveFastqcDir(
+        s"QCafter/read2/fastqc/${"cutadapt_" + QCSuccess.fastqcName(file.getName)}"))
   }
 
-  @Test
-  def testAdaptersContaminationsFiles(): Unit = {
-    val adaptersFromRead1: Set[String] =
-      Source.fromFile(adaptersRead1).mkString.split(lineSeparator).toSet
-    val adaptersFromRead2: Option[Set[String]] =
-      adaptersRead2.map(Source.fromFile(_).mkString.split(lineSeparator).toSet)
-    val contaminationsFromRead1: Set[String] =
-      Source.fromFile(contaminationsRead1).mkString.split(lineSeparator).toSet
-    val contaminationsFromRead2: Option[Set[String]] = contaminationsRead2.map(
-      Source.fromFile(_).mkString.split(lineSeparator).toSet)
-    adaptersFromRead1 shouldBe Set("AGATCGGAAGAG")
-    adaptersFromRead2.foreach(_ shouldBe Set("AGATCGGAAGAG"))
-    contaminationsFromRead1 shouldBe Set(
-      "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG", // TruSeq Adapter, Index 18
-      "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG" // TruSeq Adapter, Index 1
-    )
-    contaminationsFromRead2.foreach(_ shouldBe Set())
-  }
+  // Cutadapt report
+  val cutadaptReport: Option[File] = createOptionalFile(
+    adapterClippingRuns,
+    "AdapterClipping/cutadaptReport.txt")
 
-  def fastQCtoAdapters(fastqcFile: File): Set[AdapterSequence] = {
-    val knownAdapters = getFastqcSeqs(resourceFile("/adapter_list.txt"))
-    foundAdapters(qcModules(fastqcFile), 0.0001, knownAdapters)
-  }
+  // Output fastq files
+  val fastqRead1FileAfter: Option[File] = createOptionalFile(
+    adapterClippingRuns,
+    "AdapterClipping/cutadapt_" + read1.getName)
+  val fastqRead2FileAfter: Option[File] = read2
+    .filter(_ => adapterClippingRuns)
+    .map(f => createFile("AdapterClipping/cutadapt_" + f.getName))
+}
 
-  def fastQCtoContaminations(fastqcFile: File): Set[AdapterSequence] = {
-    val knownContaminations = getFastqcSeqs(
-      resourceFile("/contaminant_list.txt"))
-    foundOverrepresented(qcModules(fastqcFile), knownContaminations)
-  }
-
-  @DataProvider(name = "fastQCFiles")
-  def provider: Array[Array[Any]] = {
-    val adaptersInTest: Set[AdapterSequence] = Set(
-      AdapterSequence("Illumina Universal Adapter", "AGATCGGAAGAG")
-    )
-    Array(
-      Array(Some(fastqcRead1), adaptersInTest),
-      Array(fastqcRead2, adaptersInTest),
-      Array(fastqcRead1AfterClipping, Set()),
-      Array(fastqcRead2AfterClipping, Set())
-    )
-  }
-
-  @Test(dataProvider = "fastQCFiles")
-  def testAdapters(fastqcFile: Option[File],
-                   adapterSet: Set[AdapterSequence]): Unit = {
-    fastqcFile.foreach { file =>
-      fastQCtoAdapters(file) shouldBe adapterSet
-    }
-  }
-
-  @Test
-  def testContaminations(): Unit = {
-    val contaminationsInTest: Set[AdapterSequence] = Set(
-      AdapterSequence(
-        "TruSeq Adapter, Index 18",
-        "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"),
-      AdapterSequence(
-        "TruSeq Adapter, Index 1",
-        "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG")
-    )
-    fastQCtoContaminations(fastqcRead1) shouldBe contaminationsInTest
-    fastqcRead2.map(fastQCtoContaminations).foreach(_ shouldBe Set())
-    // This tests whether all found contaminations where removed
-    fastqcRead1AfterClipping.foreach { fastqcFile =>
-      val contaminationsAfterClipping = fastQCtoContaminations(fastqcFile)
-      contaminationsAfterClipping.foreach(
-        contaminationsInTest shouldNot contain(_))
-    }
-  }
-
+object QCSuccess {
+  val gzip: Regex = "\\.gz$".r
+  val extension: Regex = "\\.[^\\.]*$".r
+  def fastqcName(name: String): String =
+    extension.replaceFirstIn(gzip.replaceFirstIn(name, ""), "_fastqc")
 }
