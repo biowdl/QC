@@ -34,16 +34,14 @@ workflow QC {
     call QR.QualityReport as qualityReportRead1 {
         input:
             read = ValidateFastq.validatedFastq1 ,
-            outputDir = read1outputDir,
-            extractAdapters = true
+            outputDir = read1outputDir
     }
 
     if (defined(read2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
                 read = select_first([ValidateFastq.validatedFastq2]),
-                outputDir = read2outputDir,
-                extractAdapters = true
+                outputDir = read2outputDir
         }
     }
 
