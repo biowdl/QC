@@ -8,5 +8,5 @@ dependencies:
   - cutadapt==1.16
   - fastqc==0.11.7
   - biopet-extractadaptersfastqc==0.2
-  - biopet-seqstat==0.1
+  - biopet-seqstat==1.0.1
   - biopet-validatefastq==0.1.1
