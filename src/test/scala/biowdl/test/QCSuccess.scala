@@ -31,21 +31,6 @@ trait QCSuccess extends QC with PipelineSuccess {
   // When run on clean reads, cutadapt should not be run
   def adapterClippingRuns: Boolean = true
 
-  //TODO: move to utils
-  def createOptionalFile(condition: Boolean, path: String*): Option[File] = {
-    val p = path.mkString(File.separator)
-    addConditionalFile(condition, p)
-    if (condition) Some(new File(outputDir, p))
-    else None
-  }
-
-  //TODO: move to utils
-  def createFile(path: String*): File = {
-    val p = path.mkString(File.separator)
-    addMustHaveFile(p)
-    new File(outputDir, p)
-  }
-
   def mustHaveFastqcDir(fastqcBase: String): Unit = {
     addMustHaveFile(fastqcBase)
     addMustHaveFile(fastqcBase + ".zip")
