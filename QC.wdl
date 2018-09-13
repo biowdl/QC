@@ -30,6 +30,22 @@ workflow QC {
             inputFastq = reads
     }
 
+    if (defined(reads.R1_md5)) {
+        call common.CheckFileMD5 as md5CheckR1 {
+            input:
+                file = reads.R1,
+                md5 = select_first([reads.R1_md5])
+        }
+    }
+
+    if (defined(reads.R2_md5) && defined(reads.R2)) {
+        call common.CheckFileMD5 as md5CheckR2 {
+            input:
+                file = select_first([reads.R2]),
+                md5 = select_first([reads.R2_md5])
+        }
+    }
+
     call QR.QualityReport as qualityReportRead1 {
         input:
             read = ValidateFastq.validatedFastq.R1 ,
@@ -95,7 +111,7 @@ workflow QC {
     }
 
     output {
-        FastqPair read1afterQC = if runAdapterClipping
+        FastqPair readsAfterQC = if runAdapterClipping
             then select_first([AdapterClipping.afterClipping])
             else ValidateFastq.validatedFastq
     }
