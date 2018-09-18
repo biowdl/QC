@@ -42,12 +42,12 @@ trait QC extends Pipeline {
   override def inputs: Map[String, Any] =
     super.inputs ++
       Map(
-        "QC.read1" -> read1.getAbsolutePath,
+        "QC.reads" -> (Map("R1" -> read1.getAbsolutePath) ++ read2.map(
+          "R2" -> _.getAbsolutePath)),
         "QC.outputDir" -> outputDir.getAbsolutePath,
         "QC.sample" -> sample,
         "QC.library" -> library,
         "QC.readgroup" -> readgroup
-      ) ++ alwaysRunCutadapt.map("QC.alwaysRunCutAdapt" -> _) ++
-      read2.map("QC.read2" -> _.getAbsolutePath)
+      ) ++ alwaysRunCutadapt.map("QC.alwaysRunCutAdapt" -> _)
 
 }

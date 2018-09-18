@@ -2,7 +2,7 @@ version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "tasks/fastqc.wdl" as fastqc
-import "tasks/biopet.wdl" as biopet
+import "tasks/biopet/biopet.wdl" as biopet
 
 workflow QualityReport {
     input {
