@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home
-version: develop
+version: 0.1
 latest: true
 ---
 
@@ -11,36 +11,8 @@ sequencing data. The following workflows are available:
 - AdapterClipping.wdl: Uses cutadapt to perform adapter clipping.
 - QC.wdl: Combines the other workflows in this repository.
 - QualityReport.wdl: Uses a number of tools to produce quality reports.
-- ValidateFastqFiles.wdl: Validates FASTQ files.
 
 ## Usage
-
-### `AdapterClipping.wdl`
-`AdapterClipping.wdl` can be run using
-[Cromwell](http://cromwell.readthedocs.io/en/stable/):
-```
-java -jar cromwell-<version>.jar run -i inputs.json AdapterClipping.wdl
-```
-
-The inputs JSON can be generated using WOMtools as described in the [WOMtools
-documentation](http://cromwell.readthedocs.io/en/stable/WOMtool/).
-
-The primary inputs are described below, additional inputs (such as precommands)
-are available. Please use the above mentioned WOMtools command to see all
-available inputs.
-
-| field | type | |
-|-|-|-|
-| read1 | `File` | Input R1 FASTQ file. |
-| read2 | `File?` | Input R2 FASTQ file. |
-| outputDir | `String` | The output directory. |
-| adapterListRead1 | `Array[String]+?` | A list of adapter sequences to be cut from R1. |
-| adapterListRead2 | `Array[String]+?` | A list of adapter sequences to be cut from R2. |
-
->All inputs have to be preceded by `AdapterClipping.`.
-Type is indicated according to the WDL data types: `File` should be indicators
-of file location (a string in JSON). Types ending in `?` indicate the input is
-optional, types ending in `+` indicate they require at least one element.
 
 ### `QC.wdl`
 `QC.wdl` can be run using
@@ -48,73 +20,45 @@ optional, types ending in `+` indicate they require at least one element.
 ```
 java -jar cromwell-<version>.jar run -i inputs.json QC.wdl
 ```
+Inputs are provided through a JSON file. The minimally required inputs are
+described below, but additional inputs are available.
+A template containing all possible inputs can be generated using
+Womtool as described in the
+[WOMtool documentation](http://cromwell.readthedocs.io/en/stable/WOMtool/).
+See [this page](/inputs.html) for some additional general notes and information
+about pipeline inputs.
 
-The inputs JSON can be generated using WOMtools as described in the [WOMtools
-documentation](http://cromwell.readthedocs.io/en/stable/WOMtool/).
-
-The primary inputs are described below, additional inputs (such as precommands)
-are available. Please use the above mentioned WOMtools command to see all
-available inputs.
-
-| field | type | |
-|-|-|-|
-| read1 | `File` | Input R1 FASTQ file. |
-| read2 | `File?` | Input R2 FASTQ file. |
-| outputDir | `String` | The output directory. |
-
->All inputs have to be preceded by `QC.`.
-Type is indicated according to the WDL data types: `File` should be indicators
-of file location (a string in JSON). Types ending in `?` indicate the input is
-optional, types ending in `+` indicate they require at least one element.
-
-### `QualityReport.wdl`
-`QualityReport.wdl` can be run using
-[Cromwell](http://cromwell.readthedocs.io/en/stable/):
-```
-java -jar cromwell-<version>.jar run -i inputs.json QualityReport.wdl
+```JSON
+{
+  "QC.reads": {
+    "R1":"Path to read1",
+    "R1_md5": "(Optional) path to read1.md5",
+    "R2":"Path to read2",
+    "R2_md5": "(Optional) path to read1.md5"
+  },
+  "QC.outputDir":"Where the results should be output to",
+  "QC.alwaysRunAdapterClipping": "Boolean (Optional) Whether adapter clipping should always run. Use this if you want to add custom paramaters for read preprocessing. Defaults to 'false'",
+  "QC.sample": "Sample name that will be used in the Seqstat output",
+  "QC.library": "Library name that will be used in the Seqstat output",
+  "QC.readgroup": "Readgroup that can be used in the Seqstat output"
+}
 ```
 
-The inputs JSON can be generated using WOMtools as described in the [WOMtools
-documentation](http://cromwell.readthedocs.io/en/stable/WOMtool/).
+### Example
 
-The primary inputs are described below, additional inputs (such as precommands)
-are available. Please use the above mentioned WOMtools command to see all
-available inputs.
-
-| field | type | default | |
-|-|-|-|-|
-| outputDir | `String` | | The output directory. |
-| extractAdapters | `Boolean` | `false` | Whether or not to extract a list of detected adapters from the FastQC output. |
-| read | `File` | | The input FASTQ file. |
-
->All inputs have to be preceded by `QualityReport.`.
-Type is indicated according to the WDL data types: `File` should be indicators
-of file location (a string in JSON). Types ending in `?` indicate the input is
-optional, types ending in `+` indicate they require at least one element.
-
-### `ValidateFastqFiles.wdl`
-`ValidateFastqFiles.wdl` can be run using
-[Cromwell](http://cromwell.readthedocs.io/en/stable/):
+An example of an inputs.json might look like this:
+```JSON
+{
+  "QC.reads": {
+    "R1":"/home/user/samples/sample_1/lib_1/rg_1/R1.fq.gz",
+    "R2":"/home/user/samples/sample_1/lib_1/rg_1/R2.fq.gz"
+  },
+  "QC.outputDir":"/home/user/analysis/QCed_reads/",
+  "QC.sample": "sample_1",
+  "QC.library": "lib_1",
+  "QC.readgroup": "rg_1"
+}
 ```
-java -jar cromwell-<version>.jar run -i inputs.json ValidateFastqFiles.wdl
-```
-
-The inputs JSON can be generated using WOMtools as described in the [WOMtools
-documentation](http://cromwell.readthedocs.io/en/stable/WOMtool/).
-
-The primary inputs are described below, additional inputs (such as precommands)
-are available. Please use the above mentioned WOMtools command to see all
-available inputs.
-
-| field | type | |
-|-|-|-|
-| read1 | `File` | The first-end FASTQ file. |
-| read2 | `File?` | The second-end FASTQ file. |
-
->All inputs have to be preceded by `ValidateFastqFiles.`.
-Type is indicated according to the WDL data types: `File` should be indicators
-of file location (a string in JSON). Types ending in `?` indicate the input is
-optional, types ending in `+` indicate they require at least one element.
 
 ## Tool versions
 Included in the repository is an `environment.yml` file. This file includes
@@ -131,9 +75,6 @@ set of quality reports.
 
 ### `QualityReport.wdl`
 A number of quality reports.
-
-### `ValidateFastqFiles.wdl`
-This workflow doesn't produce any output, but fails if validation fails.
 
 ## About
 These workflows are part of [BioWDL](https://biowdl.github.io/)
