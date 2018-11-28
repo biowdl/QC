@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home
-version: 0.1
+version: develop
 latest: true
 ---
 
@@ -11,6 +11,10 @@ sequencing data. The following workflows are available:
 - AdapterClipping.wdl: Uses cutadapt to perform adapter clipping.
 - QC.wdl: Combines the other workflows in this repository.
 - QualityReport.wdl: Uses a number of tools to produce quality reports.
+
+## About
+These workflows are part of [BioWDL](https://biowdl.github.io/)
+developed by [the SASC team](http://sasc.lumc.nl/).
 
 ## Usage
 
@@ -71,11 +75,6 @@ set of quality reports.
 Included in the repository is an `environment.yml` file. This file includes
 all the tool version on which the workflow was tested. You can use conda and
 this file to create an environment with all the correct tools.
-
-
-## About
-These workflows are part of [BioWDL](https://biowdl.github.io/)
-developed by [the SASC team](http://sasc.lumc.nl/).
 
 ## Contact
 <p>
