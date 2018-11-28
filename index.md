@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home
-version: 0.1
+version: develop
 latest: true
 ---
 
@@ -14,12 +14,14 @@ sequencing data. The following workflows are available:
 
 ## Usage
 
-### `QC.wdl`
 `QC.wdl` can be run using
 [Cromwell](http://cromwell.readthedocs.io/en/stable/):
 ```
 java -jar cromwell-<version>.jar run -i inputs.json QC.wdl
 ```
+
+### Input
+
 Inputs are provided through a JSON file. The minimally required inputs are
 described below, but additional inputs are available.
 A template containing all possible inputs can be generated using
@@ -44,7 +46,7 @@ about pipeline inputs.
 }
 ```
 
-### Example
+#### Example
 
 An example of an inputs.json might look like this:
 ```JSON
@@ -60,21 +62,16 @@ An example of an inputs.json might look like this:
 }
 ```
 
-## Tool versions
+### Output
+
+A new set of FASTQ files from which detected adapters have been clipped and a
+set of quality reports.
+
+## Dependency requirements and tool versions
 Included in the repository is an `environment.yml` file. This file includes
 all the tool version on which the workflow was tested. You can use conda and
 this file to create an environment with all the correct tools.
 
-## Output
-### `AdapterClipping.wdl`
-A new set of FASTQ files from which the given adapters have been clipped.
-
-### `QC.wdl`
-A new set of FASTQ files from which detected adapters have been clipped and a
-set of quality reports.
-
-### `QualityReport.wdl`
-A number of quality reports.
 
 ## About
 These workflows are part of [BioWDL](https://biowdl.github.io/)
