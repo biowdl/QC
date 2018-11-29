@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home
-version: 0.1
+version: develop
 latest: true
 ---
 
@@ -71,6 +71,7 @@ all the tool version on which the workflow was tested. You can use conda and
 this file to create an environment with all the correct tools.
 
 ### Output
+
 A new set of FASTQ files from which detected adapters have been clipped and a
 set of quality reports.
 
