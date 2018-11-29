@@ -12,7 +12,6 @@ sequencing data. The following workflows are available:
 - QC.wdl: Combines the other workflows in this repository.
 - QualityReport.wdl: Uses a number of tools to produce quality reports.
 
-## About
 These workflows are part of [BioWDL](https://biowdl.github.io/)
 developed by [the SASC team](http://sasc.lumc.nl/).
 
@@ -66,15 +65,14 @@ An example of an inputs.json might look like this:
 }
 ```
 
-### Output
-
-A new set of FASTQ files from which detected adapters have been clipped and a
-set of quality reports.
-
-## Dependency requirements and tool versions
+### Dependency requirements and tool versions
 Included in the repository is an `environment.yml` file. This file includes
 all the tool version on which the workflow was tested. You can use conda and
 this file to create an environment with all the correct tools.
+
+### Output
+A new set of FASTQ files from which detected adapters have been clipped and a
+set of quality reports.
 
 ## Contact
 <p>
