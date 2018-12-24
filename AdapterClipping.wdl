@@ -40,7 +40,7 @@ workflow AdapterClipping {
 
     output {
         # Make sure reads are valid before passing them.
-        FastqPair afterClipping = ValidateFastq.validatedFastq
+        FastqPair afterClipping = Cutadapt.cutOutput
         File cutadaptReport = Cutadapt.report
         File validationReport = ValidateFastq.stderr
     }
