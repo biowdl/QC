@@ -48,14 +48,14 @@ workflow QC {
 
     call QR.QualityReport as qualityReportRead1 {
         input:
-            read = ValidateFastq.validatedFastq.R1 ,
+            read = reads.R1 ,
             outputDir = read1outputDir
     }
 
     if (defined(reads.R2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
-                read = select_first([ValidateFastq.validatedFastq.R2]),
+                read = select_first([reads.R2]),
                 outputDir = read2outputDir
         }
     }
@@ -63,7 +63,7 @@ workflow QC {
     # Seqstat on reads
     call seqstat.Generate as seqstat {
         input:
-            fastq = ValidateFastq.validatedFastq,
+            fastq = reads,
             outputFile = seqstatBeforeFile,
             sample = sample,
             library = library,
@@ -78,7 +78,7 @@ workflow QC {
     if (runAdapterClipping) {
         call AC.AdapterClipping as AdapterClipping {
             input:
-                reads = ValidateFastq.validatedFastq,
+                reads = reads,
                 outputDir = adapterClippingOutputDir,
                 adapterListRead1 = qualityReportRead1.adapters,
                 adapterListRead2 = qualityReportRead2.adapters,
@@ -113,7 +113,7 @@ workflow QC {
     output {
         FastqPair readsAfterQC = if runAdapterClipping
             then select_first([AdapterClipping.afterClipping])
-            else ValidateFastq.validatedFastq
+            else reads
     }
 }
 
