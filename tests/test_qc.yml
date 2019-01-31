@@ -1,26 +1,42 @@
-- name: paired end zipped
+- name: paired_end_zipped
   tags:
     - integration
-  command: ""
+  command: >-
+    bash -c '
+    TEST_JSON=tests/integration/paired_end_zipped.json ;
+    sed -i "2i\"pipeline.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
+    cromwell run -i $TEST_JSON pipeline.wdl'
 
-- name: paired end
+- name: paired_end
   tags:
     - integration
-  command: ""
+  command: >-
+    bash -c '
+    TEST_JSON=tests/integration/paired_end.json ;
+    sed -i "2i\"pipeline.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
+    cromwell run -i $TEST_JSON pipeline.wdl'
 
-- name: single end zipped
+- name: single_end_zipped
   tags:
     - integration
-  command: ""
+  command: >-
+    bash -c '
+    TEST_JSON=tests/integration/single_end_zipped.json ;
+    sed -i "2i\"pipeline.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
+    cromwell run -i $TEST_JSON pipeline.wdl'
 
-- name: single end
+- name: single_end
   tags:
     - integration
-  command: ""
+  command: >-
+    bash -c '
+    TEST_JSON=tests/integration/single_end.json ;
+    sed -i "2i\"pipeline.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
+    cromwell run -i $TEST_JSON pipeline.wdl'
 
 # paired end zipped is probably > 99% of the use cases. So we only
 # test this one functionally.
-- name: functional paired end zipped
+- name: functional_paired_end_zipped
   tags:
     - functional
-  command: ""
+  command: "echo moo"
