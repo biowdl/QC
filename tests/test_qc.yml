@@ -4,8 +4,8 @@
   command: >-
     bash -c '
     TEST_JSON=tests/integration/paired_end_zipped.json ;
-    sed -i "2i\"pipeline.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON pipeline.wdl'
+    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
+    cromwell run -i $TEST_JSON QC.wdl'
 
 - name: paired_end
   tags:
@@ -13,8 +13,8 @@
   command: >-
     bash -c '
     TEST_JSON=tests/integration/paired_end.json ;
-    sed -i "2i\"pipeline.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON pipeline.wdl'
+    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
+    cromwell run -i $TEST_JSON QC.wdl'
 
 - name: single_end_zipped
   tags:
@@ -22,8 +22,8 @@
   command: >-
     bash -c '
     TEST_JSON=tests/integration/single_end_zipped.json ;
-    sed -i "2i\"pipeline.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON pipeline.wdl'
+    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
+    cromwell run -i $TEST_JSON QC.wdl'
 
 - name: single_end
   tags:
@@ -31,8 +31,8 @@
   command: >-
     bash -c '
     TEST_JSON=tests/integration/single_end.json ;
-    sed -i "2i\"pipeline.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON pipeline.wdl'
+    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
+    cromwell run -i $TEST_JSON QC.wdl'
 
 # paired end zipped is probably > 99% of the use cases. So we only
 # test this one functionally.
