@@ -29,10 +29,10 @@ script:
 
 matrix:
   include:
-    - env: TEST=Rna3PairedEndVariantCalling
-    - env: TEST=Rna3SingleEndVariantCalling
-    - env: TEST=Rna3PairedEndLncRna
-    - env: TEST=Rna3SingleEndLncRna
+    - env: TEST="'paired end zipped'"
+    - env: TEST="'paired end'"
+    - env: TEST="'single end zipped'"
+    - env: TEST="'single end'"
     # Below is for testing if all files are valid and if all submodules are up to date.
     - env: TEST=Womtool validate and submodule up to date
       install:

@@ -1,0 +1,26 @@
+- name: paired end zipped
+  tags:
+    - integration
+  command: ""
+
+- name: paired end
+  tags:
+    - integration
+  command: ""
+
+- name: single end zipped
+  tags:
+    - integration
+  command: ""
+
+- name: single end
+  tags:
+    - integration
+  command: ""
+
+# paired end zipped is probably > 99% of the use cases. So we only
+# test this one functionally.
+- name: functional paired end zipped
+  tags:
+    - functional
+  command: ""
