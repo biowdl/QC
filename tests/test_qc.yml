@@ -9,6 +9,19 @@
   stdout:
     contains: "WorkflowSucceededState"
   files:
+    - path: "test-output/QC/seqstat.json"
+    - path: "test-output/QCafter/seqstat.json"
+    - path: "QC/read1/extractAdapters/adapter.list"
+    - path: "QC/read2/extractAdapters/adapter.list"
+    - path: "QC/read1/extractAdapters/contaminations.list"
+    - path: "QC/read2/extractAdapters/contaminations.list"
+    - path: "QC/read1/ct_r1_fastqc/fastqc_data.txt"
+    - path: "QC/read2/ct_r2_fastqc/fastqc_data.txt"
+    - path: "QCafter/read1/fastqc/cutadat_ct_r1_fastqc"
+    - path: "QCafter/read2/fastqc/cutadat_ct_r2_fastqc"
+    - path: "AdapterClipping/cutadaptReport.txt"
+    - path: "AdapterClipping/cutadapt_ct_r1.fq.gz"
+    - path: "AdapterClipping/cutadapt_ct_r2.fq.gz"
 
 - name: paired_end
   tags:
