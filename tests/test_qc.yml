@@ -6,6 +6,9 @@
     TEST_JSON=tests/integration/paired_end_zipped.json ;
     sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
     cromwell run -i $TEST_JSON QC.wdl'
+  stdout:
+    contains: "WorkflowSucceededState"
+  files:
 
 - name: paired_end
   tags:
@@ -15,6 +18,8 @@
     TEST_JSON=tests/integration/paired_end.json ;
     sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
     cromwell run -i $TEST_JSON QC.wdl'
+  stdout:
+    contains: "WorkflowSucceededState"
 
 - name: single_end_zipped
   tags:
@@ -24,6 +29,8 @@
     TEST_JSON=tests/integration/single_end_zipped.json ;
     sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
     cromwell run -i $TEST_JSON QC.wdl'
+  stdout:
+    contains: "WorkflowSucceededState"
 
 - name: single_end
   tags:
@@ -33,6 +40,8 @@
     TEST_JSON=tests/integration/single_end.json ;
     sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
     cromwell run -i $TEST_JSON QC.wdl'
+  stdout:
+    contains: "WorkflowSucceededState"
 
 # paired end zipped is probably > 99% of the use cases. So we only
 # test this one functionally.
@@ -40,3 +49,5 @@
   tags:
     - functional
   command: "echo moo"
+  stdout:
+    contains: "WorkflowSucceededState"
