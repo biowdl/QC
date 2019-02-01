@@ -2,7 +2,7 @@ version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "QualityReport.wdl" as QR
-import "AdapterClipping.wdl" as AC
+import "tasks/cutadapt.wdl" as cutadapt
 import "tasks/common.wdl" as common
 
 workflow QC {
@@ -13,6 +13,7 @@ workflow QC {
         String sample
         String library
         String readgroup
+        Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
     }
 
     String read1outputDir = outputDir + "/QC/read1"
@@ -59,26 +60,33 @@ workflow QC {
     Boolean runAdapterClipping = defined(qualityReportRead1.adapters) || defined(qualityReportRead2.adapters) || alwaysRunAdapterClipping
 
     if (runAdapterClipping) {
-        call AC.AdapterClipping as AdapterClipping {
+        if (defined(reads.R2)) {
+                String read2outputPath = outputDir + "/cutadapt_" + basename(select_first([reads.R2]))
+           }
+
+        call cutadapt.Cutadapt {
             input:
-                reads = reads,
-                outputDir = adapterClippingOutputDir,
-                adapterListRead1 = qualityReportRead1.adapters,
-                adapterListRead2 = qualityReportRead2.adapters,
-                contaminationsListRead1 = qualityReportRead1.contaminations,
-                contaminationsListRead2 = qualityReportRead2.contaminations
+                inputFastq = reads,
+                read1output = outputDir + "/cutadapt_" + basename(reads.R1),
+                read2output = read2outputPath,
+                adapter = qualityReportRead1.adapters,
+                anywhere = qualityReportRead1.contaminations,
+                adapterRead2 = qualityReportRead2.adapters,
+                anywhereRead2 = qualityReportRead2.contaminations,
+                reportPath = outputDir + "/cutadaptReport.txt",
+                minimumLength = minimumReadLength
         }
 
         call QR.QualityReport as qualityReportRead1after {
             input:
-                read = AdapterClipping.afterClipping.R1,
+                read = Cutadapt.cutOutput.R1,
                 outputDir = read1outputDirAfterQC
         }
 
         if (defined(reads.R2)) {
             call QR.QualityReport as qualityReportRead2after {
                 input:
-                    read = select_first([AdapterClipping.afterClipping.R2]),
+                    read = select_first([Cutadapt.cutOutput.R2]),
                     outputDir = read2outputDirAfterQC
             }
         }
@@ -87,7 +95,7 @@ workflow QC {
 
     output {
         FastqPair readsAfterQC = if runAdapterClipping
-            then select_first([AdapterClipping.afterClipping])
+            then select_first([Cutadapt.cutOutput])
             else reads
     }
 }
