@@ -10,9 +10,6 @@ workflow QC {
         FastqPair reads
         String outputDir
         Boolean alwaysRunAdapterClipping = false
-        String sample
-        String library
-        String readgroup
         Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
     }
 
