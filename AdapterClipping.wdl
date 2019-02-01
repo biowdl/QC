@@ -2,7 +2,6 @@ version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "tasks/cutadapt.wdl" as cutadapt
-import "tasks/biopet/biopet.wdl" as biopet
 import "tasks/common.wdl" as common
 
 workflow AdapterClipping {
@@ -33,15 +32,9 @@ workflow AdapterClipping {
             minimumLength = minimumReadLength
     }
 
-    call biopet.ValidateFastq as ValidateFastq {
-      input:
-        inputFastq = Cutadapt.cutOutput
-    }
-
     output {
         # Make sure reads are valid before passing them.
         FastqPair afterClipping = Cutadapt.cutOutput
         File cutadaptReport = Cutadapt.report
-        File validationReport = ValidateFastq.stderr
     }
 }

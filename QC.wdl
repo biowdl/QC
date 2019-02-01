@@ -3,8 +3,6 @@ version 1.0
 
 import "QualityReport.wdl" as QR
 import "AdapterClipping.wdl" as AC
-import "tasks/biopet/seqstat.wdl" as seqstat
-import "tasks/biopet/biopet.wdl" as biopet
 import "tasks/common.wdl" as common
 
 workflow QC {
@@ -24,11 +22,6 @@ workflow QC {
     String adapterClippingOutputDir = outputDir + "/AdapterClipping"
     String seqstatBeforeFile = outputDir + "/QC/seqstat.json"
     String seqstatAfterFile = outputDir + "/QCafter/seqstat.json"
-
-    call biopet.ValidateFastq as ValidateFastq {
-        input:
-            inputFastq = reads
-    }
 
     if (defined(reads.R1_md5)) {
         call common.CheckFileMD5 as md5CheckR1 {
@@ -58,16 +51,6 @@ workflow QC {
                 read = select_first([reads.R2]),
                 outputDir = read2outputDir
         }
-    }
-
-    # Seqstat on reads
-    call seqstat.Generate as seqstat {
-        input:
-            fastq = reads,
-            outputFile = seqstatBeforeFile,
-            sample = sample,
-            library = library,
-            readgroup = readgroup
     }
 
 
@@ -100,14 +83,6 @@ workflow QC {
             }
         }
 
-        call seqstat.Generate as seqstatAfter {
-            input:
-                fastq = AdapterClipping.afterClipping,
-                outputFile = seqstatAfterFile,
-                sample = sample,
-                library = library,
-                readgroup = readgroup
-        }
     }
 
     output {
