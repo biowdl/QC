@@ -96,7 +96,7 @@ workflow QC {
 
     output {
         FastqPair readsAfterQC = if runAdapterClipping
-            then object {R1: select_first([Cutadapt]).cutRead1, R2: select_first([Cutadapt]).cutRead2}
+            then object {R1: select_first([Cutadapt.cutRead1]), R2: Cutadapt.cutRead2 }
             else reads
     }
 }
