@@ -1,11 +1,4 @@
 {
-  "QC.reads": {
-    "R1": "/exports/sasc-testing/fixtures/samples/NA12878/Sample_U0a/U0a_CGATGT_L001_R1.fastq.gz",
-    "R1_md5": "/exports/sasc-testing/fixtures/samples/NA12878/Sample_U0a/U0a_CGATGT_L001_R1.fastq.gz.md5" ,
-    "R2": "/exports/sasc-testing/fixtures/samples/NA12878/Sample_U0a/U0a_CGATGT_L001_R2.fastq.gz",
-    "R2_md5": "/exports/sasc-testing/fixtures/samples/NA12878/Sample_U0a/U0a_CGATGT_L001_R2.fastq.gz.md5"
-  },
-  "QC.sample": "U0a",
-  "QC.library": "lib1",
-  "QC.readgroup": "L001"
+  "QC.read1": "/exports/sasc-testing/fixtures/samples/NA12878/Sample_U0a/U0a_CGATGT_L001_R1.fastq.gz",
+  "QC.read2": "/exports/sasc-testing/fixtures/samples/NA12878/Sample_U0a/U0a_CGATGT_L001_R2.fastq.gz",
 }

@@ -8,6 +8,8 @@ import "tasks/common.wdl" as common
 workflow QC {
     input {
         FastqPair reads
+        File read1
+        File? read2
         String outputDir
         Boolean alwaysRunAdapterClipping = false
         Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
@@ -21,50 +23,33 @@ workflow QC {
     String seqstatBeforeFile = outputDir + "/QC/seqstat.json"
     String seqstatAfterFile = outputDir + "/QCafter/seqstat.json"
 
-    if (defined(reads.R1_md5)) {
-        call common.CheckFileMD5 as md5CheckR1 {
-            input:
-                file = reads.R1,
-                md5 = select_first([reads.R1_md5])
-        }
-    }
-
-    if (defined(reads.R2_md5) && defined(reads.R2)) {
-        call common.CheckFileMD5 as md5CheckR2 {
-            input:
-                file = select_first([reads.R2]),
-                md5 = select_first([reads.R2_md5])
-        }
-    }
-
     call QR.QualityReport as qualityReportRead1 {
         input:
-            read = reads.R1 ,
+            read = read1 ,
             outputDir = read1outputDir
     }
 
-    if (defined(reads.R2)) {
+    if (defined(read2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
-                read = select_first([reads.R2]),
+                read = select_first([read2]),
                 outputDir = read2outputDir
         }
     }
-
 
     # if no adapters are found, why run cutadapt? Unless cutadapt is used for quality trimming.
     # In which case alwaysRunCutadapt can be set to true by the user.
     Boolean runAdapterClipping = defined(qualityReportRead1.adapters) || defined(qualityReportRead2.adapters) || alwaysRunAdapterClipping
 
     if (runAdapterClipping) {
-        if (defined(reads.R2)) {
+        if (defined(read2)) {
                 String read2outputPath = outputDir + "/AdapterClipping/cutadapt_" + basename(select_first([reads.R2]))
            }
 
         call cutadapt.Cutadapt {
             input:
-                read1 = reads.R1,
-                read2 = reads.R2,
+                read1 = read1,
+                read2 = read2,
                 read1output = outputDir + "/AdapterClipping/cutadapt_" + basename(reads.R1),
                 read2output = read2outputPath,
                 adapter = qualityReportRead1.adapters,
@@ -81,7 +66,7 @@ workflow QC {
                 outputDir = read1outputDirAfterQC
         }
 
-        if (defined(reads.R2)) {
+        if (defined(read2)) {
             call QR.QualityReport as qualityReportRead2after {
                 input:
                     read = select_first([Cutadapt.cutRead2]),
@@ -92,11 +77,10 @@ workflow QC {
     }
 
     output {
-        FastqPair readsAfterQC = if runAdapterClipping
-            then object {R1: select_first([Cutadapt.cutRead1]), R2: Cutadapt.cutRead2 }
-            else reads
+        File qcRead1 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read1
+        File? qcRead2 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read2
     }
-}
+ }
 
 
 
