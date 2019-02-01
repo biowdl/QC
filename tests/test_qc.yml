@@ -10,9 +10,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
-
     # Test adapters detected
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
       contains:
@@ -66,8 +63,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
 
     # Test adapters detected
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
@@ -122,9 +117,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
-
     # Test adapters detected
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
       contains:
@@ -158,9 +150,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
-
     # Test adapters detected
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
       contains:
@@ -196,9 +185,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
-
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
       contains:
         - "AGATCGGAAGAG"
