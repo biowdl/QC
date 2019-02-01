@@ -61,19 +61,19 @@ workflow QC {
 
     if (runAdapterClipping) {
         if (defined(reads.R2)) {
-                String read2outputPath = outputDir + "/cutadapt_" + basename(select_first([reads.R2]))
+                String read2outputPath = outputDir + "/AdapterClipping/cutadapt_" + basename(select_first([reads.R2]))
            }
 
         call cutadapt.Cutadapt {
             input:
                 inputFastq = reads,
-                read1output = outputDir + "/cutadapt_" + basename(reads.R1),
+                read1output = outputDir + "/AdapterClipping/cutadapt_" + basename(reads.R1),
                 read2output = read2outputPath,
                 adapter = qualityReportRead1.adapters,
                 anywhere = qualityReportRead1.contaminations,
                 adapterRead2 = qualityReportRead2.adapters,
                 anywhereRead2 = qualityReportRead2.contaminations,
-                reportPath = outputDir + "/cutadaptReport.txt",
+                reportPath = outputDir + "/AdapterClipping/cutadaptReport.txt",
                 minimumLength = minimumReadLength
         }
 
