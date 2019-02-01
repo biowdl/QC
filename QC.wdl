@@ -66,7 +66,8 @@ workflow QC {
 
         call cutadapt.Cutadapt {
             input:
-                inputFastq = reads,
+                read1 = reads.R1,
+                read2 = reads.R2,
                 read1output = outputDir + "/AdapterClipping/cutadapt_" + basename(reads.R1),
                 read2output = read2outputPath,
                 adapter = qualityReportRead1.adapters,
@@ -79,14 +80,14 @@ workflow QC {
 
         call QR.QualityReport as qualityReportRead1after {
             input:
-                read = Cutadapt.cutOutput.R1,
+                read = Cutadapt.cutRead1,
                 outputDir = read1outputDirAfterQC
         }
 
         if (defined(reads.R2)) {
             call QR.QualityReport as qualityReportRead2after {
                 input:
-                    read = select_first([Cutadapt.cutOutput.R2]),
+                    read = select_first([Cutadapt.cutRead2]),
                     outputDir = read2outputDirAfterQC
             }
         }
@@ -95,7 +96,7 @@ workflow QC {
 
     output {
         FastqPair readsAfterQC = if runAdapterClipping
-            then select_first([Cutadapt.cutOutput])
+            then object {R1: select_first([Cutadapt]).cutRead1, R2: select_first([Cutadapt]).cutRead2}
             else reads
     }
 }
