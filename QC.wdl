@@ -24,7 +24,7 @@ workflow QC {
 
     call QR.QualityReport as qualityReportRead1 {
         input:
-            read = read1 ,
+            read = read1,
             outputDir = read1outputDir
     }
 
@@ -43,9 +43,9 @@ workflow QC {
     if (runAdapterClipping) {
         if (defined(read2)) {
                 String read2outputPath = outputDir + "/AdapterClipping/cutadapt_" + basename(select_first([read2]))
-           }
+        }
 
-        call cutadapt.Cutadapt {
+        call cutadapt.Cutadapt as Cutadapt {
             input:
                 read1 = read1,
                 read2 = read2,

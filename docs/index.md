@@ -9,7 +9,7 @@ This repository contains a collection of [BioWDL](https://github.com/biowdl)
 workflows which can be used for quality control preprocessing and reporting of
 sequencing data. The following workflows are available:
 - QC.wdl: Cuts reads using cutadapt on the basis of the quality reports produced by `QualityReport.wdl`.
-- QualityReport.wdl: Uses fastqc of tools to produce quality reports.
+- QualityReport.wdl: Uses fastqc to produce quality reports.
 
 These workflows are part of [BioWDL](https://biowdl.github.io/)
 developed by [the SASC team](http://sasc.lumc.nl/).
