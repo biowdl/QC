@@ -212,5 +212,5 @@
     - path: "test-output/QCafter/read1/fastqc/cutadapt_U0a_CGATGT_L001_R1_fastqc"
     - path: "test-output/QCafter/read2/fastqc/cutadapt_U0a_CGATGT_L001_R2_fastqc"
     - path: "test-output/AdapterClipping/cutadaptReport.txt"
-    - path: "test-output/AdapterClipping/cutadapt_U0a_CGATGT_L001_R1.fq.gz"
-    - path: "test-output/AdapterClipping/cutadapt_U0a_CGATGT_L001_R2.fq.gz"
+    - path: "test-output/AdapterClipping/cutadapt_U0a_CGATGT_L001_R1.fastq.gz"
+    - path: "test-output/AdapterClipping/cutadapt_U0a_CGATGT_L001_R2.fastq.gz"
