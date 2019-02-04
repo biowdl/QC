@@ -10,9 +10,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
-
     # Test adapters detected
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
       contains:
@@ -66,8 +63,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
 
     # Test adapters detected
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
@@ -122,9 +117,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
-
     # Test adapters detected
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
       contains:
@@ -158,9 +150,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
-
     # Test adapters detected
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
       contains:
@@ -196,9 +185,6 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/QC/seqstat.json"
-    - path: "test-output/QCafter/seqstat.json"
-
     - path: "test-output/QC/read1/extractAdapters/adapter.list"
       contains:
         - "AGATCGGAAGAG"
@@ -226,5 +212,5 @@
     - path: "test-output/QCafter/read1/fastqc/cutadapt_U0a_CGATGT_L001_R1_fastqc"
     - path: "test-output/QCafter/read2/fastqc/cutadapt_U0a_CGATGT_L001_R2_fastqc"
     - path: "test-output/AdapterClipping/cutadaptReport.txt"
-    - path: "test-output/AdapterClipping/cutadapt_U0a_CGATGT_L001_R1.fq.gz"
-    - path: "test-output/AdapterClipping/cutadapt_U0a_CGATGT_L001_R2.fq.gz"
+    - path: "test-output/AdapterClipping/cutadapt_U0a_CGATGT_L001_R1.fastq.gz"
+    - path: "test-output/AdapterClipping/cutadapt_U0a_CGATGT_L001_R2.fastq.gz"

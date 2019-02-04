@@ -2,19 +2,16 @@ version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "QualityReport.wdl" as QR
-import "AdapterClipping.wdl" as AC
-import "tasks/biopet/seqstat.wdl" as seqstat
-import "tasks/biopet/biopet.wdl" as biopet
+import "tasks/cutadapt.wdl" as cutadapt
 import "tasks/common.wdl" as common
 
 workflow QC {
     input {
-        FastqPair reads
+        File read1
+        File? read2
         String outputDir
         Boolean alwaysRunAdapterClipping = false
-        String sample
-        String library
-        String readgroup
+        Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
     }
 
     String read1outputDir = outputDir + "/QC/read1"
@@ -25,97 +22,64 @@ workflow QC {
     String seqstatBeforeFile = outputDir + "/QC/seqstat.json"
     String seqstatAfterFile = outputDir + "/QCafter/seqstat.json"
 
-    call biopet.ValidateFastq as ValidateFastq {
-        input:
-            inputFastq = reads
-    }
-
-    if (defined(reads.R1_md5)) {
-        call common.CheckFileMD5 as md5CheckR1 {
-            input:
-                file = reads.R1,
-                md5 = select_first([reads.R1_md5])
-        }
-    }
-
-    if (defined(reads.R2_md5) && defined(reads.R2)) {
-        call common.CheckFileMD5 as md5CheckR2 {
-            input:
-                file = select_first([reads.R2]),
-                md5 = select_first([reads.R2_md5])
-        }
-    }
-
     call QR.QualityReport as qualityReportRead1 {
         input:
-            read = reads.R1 ,
+            read = read1,
             outputDir = read1outputDir
     }
 
-    if (defined(reads.R2)) {
+    if (defined(read2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
-                read = select_first([reads.R2]),
+                read = select_first([read2]),
                 outputDir = read2outputDir
         }
     }
-
-    # Seqstat on reads
-    call seqstat.Generate as seqstat {
-        input:
-            fastq = reads,
-            outputFile = seqstatBeforeFile,
-            sample = sample,
-            library = library,
-            readgroup = readgroup
-    }
-
 
     # if no adapters are found, why run cutadapt? Unless cutadapt is used for quality trimming.
     # In which case alwaysRunCutadapt can be set to true by the user.
     Boolean runAdapterClipping = defined(qualityReportRead1.adapters) || defined(qualityReportRead2.adapters) || alwaysRunAdapterClipping
 
     if (runAdapterClipping) {
-        call AC.AdapterClipping as AdapterClipping {
+        if (defined(read2)) {
+                String read2outputPath = outputDir + "/AdapterClipping/cutadapt_" + basename(select_first([read2]))
+        }
+
+        call cutadapt.Cutadapt as Cutadapt {
             input:
-                reads = reads,
-                outputDir = adapterClippingOutputDir,
-                adapterListRead1 = qualityReportRead1.adapters,
-                adapterListRead2 = qualityReportRead2.adapters,
-                contaminationsListRead1 = qualityReportRead1.contaminations,
-                contaminationsListRead2 = qualityReportRead2.contaminations
+                read1 = read1,
+                read2 = read2,
+                read1output = outputDir + "/AdapterClipping/cutadapt_" + basename(read1),
+                read2output = read2outputPath,
+                adapter = qualityReportRead1.adapters,
+                anywhere = qualityReportRead1.contaminations,
+                adapterRead2 = qualityReportRead2.adapters,
+                anywhereRead2 = qualityReportRead2.contaminations,
+                reportPath = outputDir + "/AdapterClipping/cutadaptReport.txt",
+                minimumLength = minimumReadLength
         }
 
         call QR.QualityReport as qualityReportRead1after {
             input:
-                read = AdapterClipping.afterClipping.R1,
+                read = Cutadapt.cutRead1,
                 outputDir = read1outputDirAfterQC
         }
 
-        if (defined(reads.R2)) {
+        if (defined(read2)) {
             call QR.QualityReport as qualityReportRead2after {
                 input:
-                    read = select_first([AdapterClipping.afterClipping.R2]),
+                    read = select_first([Cutadapt.cutRead2]),
                     outputDir = read2outputDirAfterQC
             }
         }
 
-        call seqstat.Generate as seqstatAfter {
-            input:
-                fastq = AdapterClipping.afterClipping,
-                outputFile = seqstatAfterFile,
-                sample = sample,
-                library = library,
-                readgroup = readgroup
-        }
     }
 
     output {
-        FastqPair readsAfterQC = if runAdapterClipping
-            then select_first([AdapterClipping.afterClipping])
-            else reads
+        File qcRead1 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read1
+        File? qcRead2 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read2
     }
-}
+ }
 
 
 

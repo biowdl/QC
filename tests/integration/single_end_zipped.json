@@ -1,8 +1,3 @@
 {
-  "QC.reads": {
-    "R1": "tests/data/ct_r1.fq.gz"
-  },
-  "QC.sample": "sample1",
-  "QC.library": "lib1",
-  "QC.readgroup": "rg1"
+  "QC.read1": "tests/data/ct_r1.fq.gz"
 }
