@@ -7,7 +7,6 @@ import "tasks/common.wdl" as common
 
 workflow QC {
     input {
-        FastqPair reads
         File read1
         File? read2
         String outputDir
