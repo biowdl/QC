@@ -8,9 +8,8 @@ latest: true
 This repository contains a collection of [BioWDL](https://github.com/biowdl)
 workflows which can be used for quality control preprocessing and reporting of
 sequencing data. The following workflows are available:
-- AdapterClipping.wdl: Uses cutadapt to perform adapter clipping.
-- QC.wdl: Combines the other workflows in this repository.
-- QualityReport.wdl: Uses a number of tools to produce quality reports.
+- QC.wdl: Cuts reads using cutadapt on the basis of the quality reports produced by `QualityReport.wdl`.
+- QualityReport.wdl: Uses fastqc of tools to produce quality reports.
 
 These workflows are part of [BioWDL](https://biowdl.github.io/)
 developed by [the SASC team](http://sasc.lumc.nl/).
@@ -35,17 +34,10 @@ about pipeline inputs.
 
 ```JSON
 {
-  "QC.reads": {
-    "R1":"Path to read1",
-    "R1_md5": "(Optional) path to read1.md5",
-    "R2":"Path to read2",
-    "R2_md5": "(Optional) path to read1.md5"
-  },
+  "QC.read1": "Path to read1",
+  "QC.read2": "Path to read2",
   "QC.outputDir":"Where the results should be output to",
   "QC.alwaysRunAdapterClipping": "Boolean (Optional) Whether adapter clipping should always run. Use this if you want to add custom paramaters for read preprocessing. Defaults to 'false'",
-  "QC.sample": "Sample name that will be used in the Seqstat output",
-  "QC.library": "Library name that will be used in the Seqstat output",
-  "QC.readgroup": "Readgroup that can be used in the Seqstat output"
 }
 ```
 
@@ -54,14 +46,9 @@ about pipeline inputs.
 An example of an inputs.json might look like this:
 ```JSON
 {
-  "QC.reads": {
-    "R1":"/home/user/samples/sample_1/lib_1/rg_1/R1.fq.gz",
-    "R2":"/home/user/samples/sample_1/lib_1/rg_1/R2.fq.gz"
-  },
+  "QC.read1":"/home/user/samples/sample_1/lib_1/rg_1/R1.fq.gz",
+  "QC.read2":"/home/user/samples/sample_1/lib_1/rg_1/R2.fq.gz",
   "QC.outputDir":"/home/user/analysis/QCed_reads/",
-  "QC.sample": "sample_1",
-  "QC.library": "lib_1",
-  "QC.readgroup": "rg_1"
 }
 ```
 
