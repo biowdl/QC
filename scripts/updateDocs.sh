@@ -19,7 +19,7 @@ if [ "${TAG}" == '' ]
   else
     VERSION="${TAG}"
 fi
-echo "Updating documention for version ${VERSION}"
+echo "Updating documentation for version ${VERSION}"
 
 # Checkout gh-pages and pull the docs over from the original branch
 git checkout gh-pages

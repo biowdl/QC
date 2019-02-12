@@ -11,19 +11,24 @@ workflow QualityReport {
         String extractAdaptersOutput = outputDir + "/extractAdapters"
         String fastqcOutput = outputDir + "/fastqc"
         Boolean extractAdapters = true
+
+        Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
+            "biopet-extractadaptersfastqc": "0.2--1"}
     }
 
     # FastQC on read
     call fastqc.Fastqc as Fastqc {
         input:
             seqFile = read,
-            outdirPath = fastqcOutput
+            outdirPath = fastqcOutput,
+            dockerTag = dockerTags["fastqc"]
     }
 
     # Extract adapter sequences from the fastqc report.
     if (extractAdapters) {
         call fastqc.GetConfiguration as getFastqcConfiguration {
             input:
+                dockerTag = dockerTags["fastqc"]
         }
 
         call biopet.ExtractAdaptersFastqc as extractAdaptersTask {
@@ -31,7 +36,8 @@ workflow QualityReport {
                 inputFile = Fastqc.rawReport,
                 outputDir = extractAdaptersOutput,
                 knownAdapterFile = getFastqcConfiguration.adapterList,
-                knownContamFile = getFastqcConfiguration.contaminantList
+                knownContamFile = getFastqcConfiguration.contaminantList,
+                dockerTag = dockerTags["biopet-extractadaptersfastqc"]
         }
         # Logic step. If no adapters are found adapterList will be null.
         # If more are found adapterList will be an array that contains at
