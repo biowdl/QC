@@ -77,7 +77,7 @@ workflow QC {
 
     output {
         File qcRead1 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read1
-        File? qcRead2 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read2
+        File? qcRead2 = if runAdapterClipping then select_first([Cutadapt.cutRead2]) else read2
     }
  }
 
