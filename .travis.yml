@@ -5,10 +5,14 @@ language: python
 python:
   - 3.6
 
+services:
+  - docker
+
 before_install:
   # Install conda
   - export MINICONDA=${HOME}/miniconda
   - export PATH=${MINICONDA}/bin:${PATH}
+  - export _JAVA_OPTIONS="-Dconfig.file=tests/cromwell_config/docker.conf"
   - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
   - bash miniconda.sh -b -f -p ${MINICONDA}
   - conda config --set always_yes yes
@@ -19,13 +23,13 @@ before_install:
   - conda update -n base -c defaults conda
 
 install:
-  - conda env create -n my_env -f environment.yml
+  - conda env create -n my_env
   - source activate my_env
   - conda install cromwell
   - python3 -m pip install pytest-workflow
 
 script:
-  - python3 -m pytest --tag $TEST
+  - python3 -m pytest --basetemp ~/biowdl-test --tag $TEST
 
 matrix:
   include:

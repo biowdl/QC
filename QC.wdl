@@ -12,6 +12,9 @@ workflow QC {
         String outputDir
         Boolean alwaysRunAdapterClipping = false
         Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
+
+        Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
+            "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "1.16--py36_2"}
     }
 
     String read1outputDir = outputDir + "/QC/read1"
@@ -25,14 +28,16 @@ workflow QC {
     call QR.QualityReport as qualityReportRead1 {
         input:
             read = read1,
-            outputDir = read1outputDir
+            outputDir = read1outputDir,
+            dockerTags = dockerTags
     }
 
     if (defined(read2)) {
         call QR.QualityReport as qualityReportRead2 {
             input:
                 read = select_first([read2]),
-                outputDir = read2outputDir
+                outputDir = read2outputDir,
+                dockerTags = dockerTags
         }
     }
 
@@ -56,20 +61,23 @@ workflow QC {
                 adapterRead2 = qualityReportRead2.adapters,
                 anywhereRead2 = qualityReportRead2.contaminations,
                 reportPath = outputDir + "/AdapterClipping/cutadaptReport.txt",
-                minimumLength = minimumReadLength
+                minimumLength = minimumReadLength,
+                dockerTag = dockerTags["cutadapt"]
         }
 
         call QR.QualityReport as qualityReportRead1after {
             input:
                 read = Cutadapt.cutRead1,
-                outputDir = read1outputDirAfterQC
+                outputDir = read1outputDirAfterQC,
+                dockerTags = dockerTags
         }
 
         if (defined(read2)) {
             call QR.QualityReport as qualityReportRead2after {
                 input:
                     read = select_first([Cutadapt.cutRead2]),
-                    outputDir = read2outputDirAfterQC
+                    outputDir = read2outputDirAfterQC,
+                    dockerTags = dockerTags
             }
         }
 
