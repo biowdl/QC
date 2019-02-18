@@ -23,8 +23,6 @@ before_install:
   - conda update -n base -c defaults conda
 
 install:
-  - conda env create -n my_env
-  - source activate my_env
   - conda install cromwell
   - python3 -m pip install pytest-workflow
 
