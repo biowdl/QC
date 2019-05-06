@@ -23,7 +23,7 @@ workflow QC {
     call fastqc.Fastqc as FastqcRead1 {
         input:
             seqFile = read1,
-            outdirPath = outputDir + "/FastqQC/read1",
+            outdirPath = outputDir + "/",
             dockerTag = dockerTags["fastqc"]
     }
 
@@ -31,10 +31,10 @@ workflow QC {
         call fastqc.Fastqc as FastqcRead2 {
             input:
                 seqFile = read2,
-                outdirPath = outputDir + "/FastqQC/read2",
+                outdirPath = outputDir + "/",
                 dockerTag = dockerTags["fastqc"]
         }
-        String read2outputPath = outputDir + "/AdapterClipping/cutadapt_" + basename(select_first([read2]))
+        String read2outputPath = outputDir + "/cutadapt_" + basename(select_first([read2]))
     }
 
     if (runAdapterClipping) {
@@ -42,11 +42,11 @@ workflow QC {
             input:
                 read1 = read1,
                 read2 = read2,
-                read1output = outputDir + "/AdapterClipping/cutadapt_" + basename(read1),
+                read1output = outputDir + "/cutadapt_" + basename(read1),
                 read2output = read2outputPath,
                 adapter = adapters,
                 adapterRead2 = adapters,
-                reportPath = outputDir + "/AdapterClipping/cutadaptReport.txt",
+                reportPath = outputDir + "/cutadaptReport.txt",
                 minimumLength = minimumReadLength,
                 dockerTag = dockerTags["cutadapt"]
         }
@@ -54,7 +54,7 @@ workflow QC {
         call fastqc.Fastqc as FastqcRead1After {
             input:
                 seqFile = Cutadapt.cutRead1,
-                outdirPath = outputDir + "/FastqQC/read1after",
+                outdirPath = outputDir + "/",
                 dockerTag = dockerTags["fastqc"]
         }
 
@@ -62,7 +62,7 @@ workflow QC {
             call fastqc.Fastqc as FastqcRead2After {
                 input:
                     seqFile = select_first([Cutadapt.cutRead2]),
-                    outdirPath = outputDir + "/FastqQC/read2after",
+                    outdirPath = outputDir + "/",
                     dockerTag = dockerTags["fastqc"]
             }
         }
