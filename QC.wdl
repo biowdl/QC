@@ -1,9 +1,9 @@
 version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
-import "QualityReport.wdl" as QR
 import "tasks/cutadapt.wdl" as cutadapt
 import "tasks/common.wdl" as common
+import "tasks/fastqc.wdl" as fastqc
 
 workflow QC {
     input {
@@ -30,7 +30,7 @@ workflow QC {
     if (defined(read2)) {
         call fastqc.Fastqc as FastqcRead2 {
             input:
-                seqFile = read2,
+                seqFile = select_first([read2]),
                 outdirPath = outputDir + "/",
                 dockerTag = dockerTags["fastqc"]
         }
