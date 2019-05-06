@@ -41,9 +41,28 @@ def get_fastqc_adapter_module(fastqc_data: Path) -> str:
 
 
 def adapters_present(fastqc_adapter_module: str) -> Dict[str, bool]:
+    lines = fastqc_adapter_module.splitlines()
+    # Line 0 is >>Adapter Content
+    # Line 1 is # Position etc.
+    # Get the adapters, remove position
+    adapters = lines[1].split('\t')[1:]
+    # Populate dict
+    contains_dict = {adapter: False for adapter in adapters}
+    for line in lines[2:]:
+        # First entry at position is not a float
+        floats = [float(column) for column in line.split('\t')[1:]]
+        for i, adapter in enumerate(adapters):
+            if floats[i] > 0.0:
+                contains_dict[adapter] = True
+    return contains_dict
 
-    pass
+
+def adapters_in_fastqc_data(fastqc_data: Path) -> Dict[str, bool]:
+    return adapters_present(get_fastqc_adapter_module(fastqc_data))
 
 
-def test_paired_end_zipped_before_adapters(name="paired_end_zipped"):
-    pass
+@pytest.mark.workflow(name="paired_end_zipped")
+def test_paired_end_zipped_before_adapters(workflow_dir):
+    fastqc_read_one_before = (
+            workflow_dir / Path("ct_r1_fastqc") / Path("fastqc_data.txt"))
+    assert adapters_in_fastqc_data(fastqc_read_one_before).get('Illumina Universal Adapter') is True
