@@ -11,45 +11,45 @@
       - "WorkflowSucceededState"
   files:
     # Test adapters detected
-    - path: "test-output/QC/read1/extractAdapters/adapter.list"
-      contains:
-        - "AGATCGGAAGAG"
-    - path: "test-output/QC/read2/extractAdapters/adapter.list"
-      contains:
-        - "AGATCGGAAGAG"
-    - path: "test-output/QC/read1/extractAdapters/contaminations.list"
-      contains:
-        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"
-        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
-    # Read2 contains no contaminations
-    - path: "test-output/QC/read2/extractAdapters/contaminations.list"
-      must_not_contain:
-        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"
-        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
+#    - path: "test-output/QC/read1/extractAdapters/adapter.list"
+#      contains:
+#        - "AGATCGGAAGAG"
+#    - path: "test-output/QC/read2/extractAdapters/adapter.list"
+#      contains:
+#        - "AGATCGGAAGAG"
+#    - path: "test-output/QC/read1/extractAdapters/contaminations.list"
+#      contains:
+#        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"
+#        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
+#    # Read2 contains no contaminations
+#    - path: "test-output/QC/read2/extractAdapters/contaminations.list"
+#      must_not_contain:
+#        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"
+#        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
+#
+#    # Check adapters removed
+#    - path: "test-output/QCafter/read1/extractAdapters/adapter.list"
+#      must_not_contain:
+#        - "AGATCGGAAGAG"
+#    - path: "test-output/QCafter/read2/extractAdapters/adapter.list"
+#      must_not_contain:
+#        - "AGATCGGAAGAG"
+#    - path: "test-output/QCafter/read1/extractAdapters/contaminations.list"
+#      must_not_contain:
+#        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"
+#        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
+#    - path: "test-output/QCafter/read2/extractAdapters/contaminations.list"
+#      must_not_contain:
+#        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"
+#        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
 
-    # Check adapters removed
-    - path: "test-output/QCafter/read1/extractAdapters/adapter.list"
-      must_not_contain:
-        - "AGATCGGAAGAG"
-    - path: "test-output/QCafter/read2/extractAdapters/adapter.list"
-      must_not_contain:
-        - "AGATCGGAAGAG"
-    - path: "test-output/QCafter/read1/extractAdapters/contaminations.list"
-      must_not_contain:
-        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"
-        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
-    - path: "test-output/QCafter/read2/extractAdapters/contaminations.list"
-      must_not_contain:
-        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG"
-        - "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
-
-    - path: "test-output/QC/read1/fastqc/ct_r1_fastqc/fastqc_data.txt"
-    - path: "test-output/QC/read2/fastqc/ct_r2_fastqc/fastqc_data.txt"
-    - path: "test-output/QCafter/read1/fastqc/cutadapt_ct_r1_fastqc"
-    - path: "test-output/QCafter/read2/fastqc/cutadapt_ct_r2_fastqc"
-    - path: "test-output/AdapterClipping/cutadaptReport.txt"
-    - path: "test-output/AdapterClipping/cutadapt_ct_r1.fq.gz"
-    - path: "test-output/AdapterClipping/cutadapt_ct_r2.fq.gz"
+    - path: "test-output/ct_r1_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/cutadapt_ct_r1_fastqc/fastqc_data.txt"
+    - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/cutadaptReport.txt"
+    - path: "test-output/cutadapt_ct_r1.fq.gz"
+    - path: "test-output/cutadapt_ct_r2.fq.gz"
 
 - name: paired_end
   tags:
