@@ -10,78 +10,64 @@ workflow QC {
         File read1
         File? read2
         String outputDir
-        Boolean alwaysRunAdapterClipping = false
+        # Illumina universal adapter
+        Array[String] adapters = ["AGATCGGAAGAG"]
         Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
 
         Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
             "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "1.16--py36_2"}
     }
 
-    String read1outputDir = outputDir + "/QC/read1"
-    String read2outputDir = outputDir + "/QC/read2"
-    String read1outputDirAfterQC = outputDir + "/QCafter/read1"
-    String read2outputDirAfterQC = outputDir + "/QCafter/read2"
-    String adapterClippingOutputDir = outputDir + "/AdapterClipping"
-    String seqstatBeforeFile = outputDir + "/QC/seqstat.json"
-    String seqstatAfterFile = outputDir + "/QCafter/seqstat.json"
+    Boolean runAdapterClipping = length(adapters) > 0
 
-    call QR.QualityReport as qualityReportRead1 {
+    call fastqc.Fastqc as FastqcRead1 {
         input:
-            read = read1,
-            outputDir = read1outputDir,
-            dockerTags = dockerTags
+            seqFile = read1,
+            outdirPath = outputDir + "/FastqQC/read1",
+            dockerTag = dockerTags["fastqc"]
     }
 
     if (defined(read2)) {
-        call QR.QualityReport as qualityReportRead2 {
+        call fastqc.Fastqc as FastqcRead2 {
             input:
-                read = select_first([read2]),
-                outputDir = read2outputDir,
-                dockerTags = dockerTags
+                seqFile = read2,
+                outdirPath = outputDir + "/FastqQC/read2",
+                dockerTag = dockerTags["fastqc"]
         }
+        String read2outputPath = outputDir + "/AdapterClipping/cutadapt_" + basename(select_first([read2]))
     }
 
-    # if no adapters are found, why run cutadapt? Unless cutadapt is used for quality trimming.
-    # In which case alwaysRunCutadapt can be set to true by the user.
-    Boolean runAdapterClipping = defined(qualityReportRead1.adapters) || defined(qualityReportRead2.adapters) || alwaysRunAdapterClipping
-
     if (runAdapterClipping) {
-        if (defined(read2)) {
-                String read2outputPath = outputDir + "/AdapterClipping/cutadapt_" + basename(select_first([read2]))
-        }
-
         call cutadapt.Cutadapt as Cutadapt {
             input:
                 read1 = read1,
                 read2 = read2,
                 read1output = outputDir + "/AdapterClipping/cutadapt_" + basename(read1),
                 read2output = read2outputPath,
-                adapter = qualityReportRead1.adapters,
-                anywhere = qualityReportRead1.contaminations,
-                adapterRead2 = qualityReportRead2.adapters,
-                anywhereRead2 = qualityReportRead2.contaminations,
+                adapter = adapters,
+                adapterRead2 = adapters,
                 reportPath = outputDir + "/AdapterClipping/cutadaptReport.txt",
                 minimumLength = minimumReadLength,
                 dockerTag = dockerTags["cutadapt"]
         }
 
-        call QR.QualityReport as qualityReportRead1after {
+        call fastqc.Fastqc as FastqcRead1After {
             input:
-                read = Cutadapt.cutRead1,
-                outputDir = read1outputDirAfterQC,
-                dockerTags = dockerTags
+                seqFile = Cutadapt.cutRead1,
+                outdirPath = outputDir + "/FastqQC/read1after",
+                dockerTag = dockerTags["fastqc"]
         }
 
         if (defined(read2)) {
-            call QR.QualityReport as qualityReportRead2after {
+            call fastqc.Fastqc as FastqcRead2After {
                 input:
-                    read = select_first([Cutadapt.cutRead2]),
-                    outputDir = read2outputDirAfterQC,
-                    dockerTags = dockerTags
+                    seqFile = select_first([Cutadapt.cutRead2]),
+                    outdirPath = outputDir + "/FastqQC/read2after",
+                    dockerTag = dockerTags["fastqc"]
             }
         }
-
     }
+
 
     output {
         File qcRead1 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read1
