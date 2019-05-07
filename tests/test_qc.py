@@ -26,12 +26,12 @@ from typing import Dict
 import pytest
 
 
-def get_fastqc_adapter_module(fastqc_data: Path) -> str:
+def get_fastqc_module(fastqc_data: Path, module_name: str) -> str:
     return_line = False
     text = ""
     with fastqc_data.open('rt') as fastqc_data_handler:
         for line in fastqc_data_handler.readlines():
-            if line.startswith(">>Adapter Content"):
+            if line.startswith(">>" + module_name):
                 return_line = True
             elif line.startswith(">>END_MODULE"):
                 return_line = False
@@ -58,11 +58,40 @@ def adapters_present(fastqc_adapter_module: str) -> Dict[str, bool]:
 
 
 def adapters_in_fastqc_data(fastqc_data: Path) -> Dict[str, bool]:
-    return adapters_present(get_fastqc_adapter_module(fastqc_data))
+    return adapters_present(get_fastqc_module(fastqc_data, "Adapter Content"))
 
 
 @pytest.mark.workflow(name="paired_end_zipped")
-def test_paired_end_zipped_before_adapters(workflow_dir):
+def test_paired_end_zipped_before_adapters_read_one(workflow_dir):
     fastqc_read_one_before = (
-            workflow_dir / Path("ct_r1_fastqc") / Path("fastqc_data.txt"))
-    assert adapters_in_fastqc_data(fastqc_read_one_before).get('Illumina Universal Adapter') is True
+            workflow_dir / Path("test-output") / Path("ct_r1_fastqc")
+            / Path("fastqc_data.txt"))
+    assert adapters_in_fastqc_data(
+        fastqc_read_one_before).get('Illumina Universal Adapter') is True
+
+
+@pytest.mark.workflow(name="paired_end_zipped")
+def test_paired_end_zipped_before_adapters_read_two(workflow_dir):
+    fastqc_read_one_before = (
+            workflow_dir / Path("test-output") / Path("ct_r2_fastqc")
+            / Path("fastqc_data.txt"))
+    assert adapters_in_fastqc_data(
+        fastqc_read_one_before).get('Illumina Universal Adapter') is True
+
+
+@pytest.mark.workflow(name="paired_end_zipped")
+def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
+    fastqc_read_one_before = (
+            workflow_dir / Path("test-output") / Path("cutadapt_ct_r1_fastqc")
+            / Path("fastqc_data.txt"))
+    assert adapters_in_fastqc_data(
+        fastqc_read_one_before).get('Illumina Universal Adapter') is False
+
+
+@pytest.mark.workflow(name="paired_end_zipped")
+def test_paired_end_zipped_after_no_adapters_read_two(workflow_dir):
+    fastqc_read_one_before = (
+            workflow_dir / Path("test-output") / Path("cutadapt_ct_r2_fastqc")
+            / Path("fastqc_data.txt"))
+    assert adapters_in_fastqc_data(
+        fastqc_read_one_before).get('Illumina Universal Adapter') is False
