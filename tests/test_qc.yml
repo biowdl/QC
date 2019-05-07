@@ -18,7 +18,7 @@
       contains:
         - "TruSeq Adapter, Index 18"
     - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
-    - path: "test-output/cutadaptReport.txt"
+    - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
     - path: "test-output/cutadapt_ct_r2.fq.gz"
 
@@ -44,7 +44,7 @@
         - "TruSeq Adapter, Index 18"
     - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
       should_exist: false
-    - path: "test-output/cutadaptReport.txt"
+    - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
     - path: "test-output/cutadapt_ct_r2.fq.gz"
       should_exist: false
@@ -69,7 +69,7 @@
       contains:
         - "TruSeq Adapter, Index 18"
     - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
-    - path: "test-output/cutadaptReport.txt"
+    - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq"
     - path: "test-output/cutadapt_ct_r2.fq"
 
@@ -96,7 +96,7 @@
         - "TruSeq Adapter, Index 18"
     - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
       should_exist: false
-    - path: "test-output/cutadaptReport.txt"
+    - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
     - path: "test-output/cutadapt_ct_r2.fq.gz"
       should_exist: false
@@ -123,7 +123,7 @@
         - "TruSeq Adapter, Index 18"
     - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
       should_exist: false
-    - path: "test-output/cutadaptReport.txt"
+    - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq"
     - path: "test-output/cutadapt_ct_r2.fq"
       should_exist: false
@@ -146,6 +146,6 @@
     - path: "test-output/U0a_CGATGT_L001_R2_fastqc/fastqc_data.txt"
     - path: "test-output/cutadapt_U0a_CGATGT_L001_R1_fastqc/fastqc_data.txt"
     - path: "test-output/cutadapt_U0a_CGATGT_L001_R2_fastqc/fastqc_data.txt"
-    - path: "test-output/cutadaptReport.txt"
+    - path: "test-output/U0a_CGATGT_L001_R1_cutadapt_report.txt"
     - path: "test-output/cutadapt_U0a_CGATGT_L001_R1.fastq.gz"
     - path: "test-output/cutadapt_U0a_CGATGT_L001_R2.fastq.gz"

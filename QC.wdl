@@ -15,7 +15,8 @@ workflow QC {
         Array[String]+? adapters = ["AGATCGGAAGAG"]  # Illumina universal adapter
         Array[String]+? contaminations
         Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
-
+        # A readgroupName so cutadapt creates a unique report name. This is useful if all the QC files are dumped in one folder.
+        String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
         Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
             "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "1.16--py36_2"}
 
@@ -52,7 +53,7 @@ workflow QC {
                 # Read2 is used here as `None` or JsNull. None will exist in WDL versions 1.1 and higher
                 adapterRead2 = if defined(read2) then adapters else read2,
                 anywhereRead2 = if defined(read2) then contaminations else read2,
-                reportPath = outputDir + "/cutadaptReport.txt",
+                reportPath = outputDir + "/" + readgroupName +  "_cutadapt_report.txt",
                 minimumLength = minimumReadLength,
                 dockerTag = dockerTags["cutadapt"]
         }
