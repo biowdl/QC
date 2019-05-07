@@ -10,16 +10,18 @@ workflow QC {
         File read1
         File? read2
         String outputDir
-        # Illumina universal adapter
-        Array[String] adapters = ["AGATCGGAAGAG"]
+        # Adapters and contaminations are optional and need at least one item if defined.
+        # This is necessary so no empty flags are used in cutadapt.
+        Array[String]+? adapters = ["AGATCGGAAGAG"]  # Illumina universal adapter
         Array[String]+? contaminations
         Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
 
         Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
             "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "1.16--py36_2"}
+
     }
 
-    Boolean runAdapterClipping = length(adapters) + length(select_first([contaminations, []])) > 0
+    Boolean runAdapterClipping = length(select_first([adapters, []])) + length(select_first([contaminations, []])) > 0
 
     call fastqc.Fastqc as FastqcRead1 {
         input:
@@ -47,8 +49,9 @@ workflow QC {
                 read2output = read2outputPath,
                 adapter = adapters,
                 anywhere = contaminations,
-                adapterRead2 = adapters,
-                anywhereRead2 = contaminations,
+                # Read2 is used here as `None` or JsNull. None will exist in WDL versions 1.1 and higher
+                adapterRead2 = if defined(read2) then adapters else read2,
+                anywhereRead2 = if defined(read2) then contaminations else read2,
                 reportPath = outputDir + "/cutadaptReport.txt",
                 minimumLength = minimumReadLength,
                 dockerTag = dockerTags["cutadapt"]
