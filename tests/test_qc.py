@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 
 import pytest
 
@@ -40,8 +40,9 @@ def get_fastqc_module(fastqc_data: Path, module_name: str) -> str:
     return text
 
 
-def adapters_present(fastqc_adapter_module: str) -> Dict[str, bool]:
-    lines = fastqc_adapter_module.splitlines()
+def adapters_present(fastqc_data: Path) -> Dict[str, bool]:
+    adapter_content = get_fastqc_module(fastqc_data, "Adapter Content")
+    lines = adapter_content.splitlines()
     # Line 0 is >>Adapter Content
     # Line 1 is # Position etc.
     # Get the adapters, remove position
@@ -57,8 +58,22 @@ def adapters_present(fastqc_adapter_module: str) -> Dict[str, bool]:
     return contains_dict
 
 
-def adapters_in_fastqc_data(fastqc_data: Path) -> Dict[str, bool]:
-    return adapters_present(get_fastqc_module(fastqc_data, "Adapter Content"))
+def contaminations_list(fastqc_data: Path, only_known = False) -> List[str]:
+    contaminations_module = get_fastqc_module(fastqc_data,
+                                              "Overrepresented sequences")
+
+    lines = contaminations_module.splitlines()
+    contaminations = []
+
+    # lines[0] is ">>Overrepresented sequences"
+    # lines[1] is "#Sequence       Count   Percentage      Possible Source"
+    for line in lines[2:]:
+        seq, _, _, pos_src = line.split('\t')
+        if only_known and pos_src != "No Hit":
+            contaminations.append(seq)
+        elif not only_known:
+            contaminations.append(seq)
+    return contaminations
 
 
 @pytest.mark.workflow(name="paired_end_zipped")
@@ -66,7 +81,7 @@ def test_paired_end_zipped_before_adapters_read_one(workflow_dir):
     fastqc_read_one_before = (
             workflow_dir / Path("test-output") / Path("ct_r1_fastqc")
             / Path("fastqc_data.txt"))
-    assert adapters_in_fastqc_data(
+    assert adapters_present(
         fastqc_read_one_before).get('Illumina Universal Adapter') is True
 
 
@@ -75,7 +90,7 @@ def test_paired_end_zipped_before_adapters_read_two(workflow_dir):
     fastqc_read_one_before = (
             workflow_dir / Path("test-output") / Path("ct_r2_fastqc")
             / Path("fastqc_data.txt"))
-    assert adapters_in_fastqc_data(
+    assert adapters_present(
         fastqc_read_one_before).get('Illumina Universal Adapter') is True
 
 
@@ -84,7 +99,7 @@ def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
     fastqc_read_one_before = (
             workflow_dir / Path("test-output") / Path("cutadapt_ct_r1_fastqc")
             / Path("fastqc_data.txt"))
-    assert adapters_in_fastqc_data(
+    assert adapters_present(
         fastqc_read_one_before).get('Illumina Universal Adapter') is False
 
 
@@ -93,5 +108,5 @@ def test_paired_end_zipped_after_no_adapters_read_two(workflow_dir):
     fastqc_read_one_before = (
             workflow_dir / Path("test-output") / Path("cutadapt_ct_r2_fastqc")
             / Path("fastqc_data.txt"))
-    assert adapters_in_fastqc_data(
+    assert adapters_present(
         fastqc_read_one_before).get('Illumina Universal Adapter') is False
