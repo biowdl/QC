@@ -24,24 +24,31 @@ from pathlib import Path
 from typing import Dict, List
 
 import pytest
+import zipfile
 
 
-def get_fastqc_module(fastqc_data: Path, module_name: str) -> str:
+def get_fastqc_module(fastqc_zip: Path, module_name: str) -> str:
     return_line = False
     text = ""
-    with fastqc_data.open('rt') as fastqc_data_handler:
-        for line in fastqc_data_handler.readlines():
-            if line.startswith(">>" + module_name):
-                return_line = True
-            elif line.startswith(">>END_MODULE"):
-                return_line = False
-            if return_line:
-                text += line
+    with zipfile.ZipFile(str(fastqc_zip)) as fastqc_zipfile:
+        # .stem method gives basename minus extension
+        fastqc_data_location_in_zip = str(
+            Path(fastqc_zip.stem) / Path("fastqc_data.txt"))
+        with fastqc_zipfile.open(fastqc_data_location_in_zip, 'r'
+                                 ) as fastqc_zip_handler:
+            for line_bytes in fastqc_zip_handler.readlines():
+                line = line_bytes.decode()
+                if line.startswith(">>" + module_name):
+                    return_line = True
+                elif line.startswith(">>END_MODULE"):
+                    return_line = False
+                if return_line:
+                    text += line
     return text
 
 
-def adapters_present(fastqc_data: Path) -> Dict[str, bool]:
-    adapter_content = get_fastqc_module(fastqc_data, "Adapter Content")
+def adapters_present(fastqc_zip: Path) -> Dict[str, bool]:
+    adapter_content = get_fastqc_module(fastqc_zip, "Adapter Content")
     lines = adapter_content.splitlines()
     # Line 0 is >>Adapter Content
     # Line 1 is # Position etc.
@@ -58,8 +65,8 @@ def adapters_present(fastqc_data: Path) -> Dict[str, bool]:
     return contains_dict
 
 
-def contaminations_list(fastqc_data: Path, only_known = False) -> List[str]:
-    contaminations_module = get_fastqc_module(fastqc_data,
+def contaminations_list(fastqc_zip: Path, only_known = False) -> List[str]:
+    contaminations_module = get_fastqc_module(fastqc_zip,
                                               "Overrepresented sequences")
 
     lines = contaminations_module.splitlines()
@@ -79,8 +86,7 @@ def contaminations_list(fastqc_data: Path, only_known = False) -> List[str]:
 @pytest.mark.workflow(name="paired_end_zipped")
 def test_paired_end_zipped_before_adapters_read_one(workflow_dir):
     fastqc_read_one_before = (
-            workflow_dir / Path("test-output") / Path("ct_r1_fastqc")
-            / Path("fastqc_data.txt"))
+            workflow_dir / Path("test-output") / Path("ct_r1_fastqc.zip"))
     assert adapters_present(
         fastqc_read_one_before).get('Illumina Universal Adapter') is True
 
@@ -88,8 +94,7 @@ def test_paired_end_zipped_before_adapters_read_one(workflow_dir):
 @pytest.mark.workflow(name="paired_end_zipped")
 def test_paired_end_zipped_before_adapters_read_two(workflow_dir):
     fastqc_read_one_before = (
-            workflow_dir / Path("test-output") / Path("ct_r2_fastqc")
-            / Path("fastqc_data.txt"))
+            workflow_dir / Path("test-output") / Path("ct_r2_fastqc.zip"))
     assert adapters_present(
         fastqc_read_one_before).get('Illumina Universal Adapter') is True
 
@@ -97,8 +102,7 @@ def test_paired_end_zipped_before_adapters_read_two(workflow_dir):
 @pytest.mark.workflow(name="paired_end_zipped")
 def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
     fastqc_read_one_before = (
-            workflow_dir / Path("test-output") / Path("cutadapt_ct_r1_fastqc")
-            / Path("fastqc_data.txt"))
+            workflow_dir / Path("test-output") / Path("cutadapt_ct_r1_fastqc.zip"))
     assert adapters_present(
         fastqc_read_one_before).get('Illumina Universal Adapter') is False
 
@@ -106,7 +110,6 @@ def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
 @pytest.mark.workflow(name="paired_end_zipped")
 def test_paired_end_zipped_after_no_adapters_read_two(workflow_dir):
     fastqc_read_one_before = (
-            workflow_dir / Path("test-output") / Path("cutadapt_ct_r2_fastqc")
-            / Path("fastqc_data.txt"))
+            workflow_dir / Path("test-output") / Path("cutadapt_ct_r2_fastqc.zip"))
     assert adapters_present(
         fastqc_read_one_before).get('Illumina Universal Adapter') is False
