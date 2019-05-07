@@ -19,7 +19,7 @@ workflow QC {
             "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "1.16--py36_2"}
     }
 
-    Boolean runAdapterClipping = length(adapters) + length(select_first(contaminations, [])) > 0
+    Boolean runAdapterClipping = length(adapters) + length(select_first([contaminations, []])) > 0
 
     call fastqc.Fastqc as FastqcRead1 {
         input:
