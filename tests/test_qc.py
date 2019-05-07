@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import zipfile
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 
 import pytest
-import zipfile
 
 
 def get_fastqc_module(fastqc_zip: Path, module_name: str) -> str:
@@ -65,51 +65,68 @@ def adapters_present(fastqc_zip: Path) -> Dict[str, bool]:
     return contains_dict
 
 
-def contaminations_list(fastqc_zip: Path, only_known = False) -> List[str]:
+def contaminations_list(fastqc_zip: Path, only_known=False) -> Dict[str, str]:
     contaminations_module = get_fastqc_module(fastqc_zip,
                                               "Overrepresented sequences")
-
     lines = contaminations_module.splitlines()
-    contaminations = []
+    contaminations = dict()
 
     # lines[0] is ">>Overrepresented sequences"
     # lines[1] is "#Sequence       Count   Percentage      Possible Source"
     for line in lines[2:]:
         seq, _, _, pos_src = line.split('\t')
-        if only_known and pos_src != "No Hit":
-            contaminations.append(seq)
-        elif not only_known:
-            contaminations.append(seq)
+        # If only_known is True pos_src may not be No Hit.
+        if not only_known or pos_src != "No Hit":
+            contaminations[seq] = pos_src
     return contaminations
 
 
 @pytest.mark.workflow(name="paired_end_zipped")
 def test_paired_end_zipped_before_adapters_read_one(workflow_dir):
-    fastqc_read_one_before = (
+    fastqc_data = (
             workflow_dir / Path("test-output") / Path("ct_r1_fastqc.zip"))
     assert adapters_present(
-        fastqc_read_one_before).get('Illumina Universal Adapter') is True
+        fastqc_data).get('Illumina Universal Adapter') is True
 
 
 @pytest.mark.workflow(name="paired_end_zipped")
 def test_paired_end_zipped_before_adapters_read_two(workflow_dir):
-    fastqc_read_one_before = (
+    fastqc_data = (
             workflow_dir / Path("test-output") / Path("ct_r2_fastqc.zip"))
     assert adapters_present(
-        fastqc_read_one_before).get('Illumina Universal Adapter') is True
+        fastqc_data).get('Illumina Universal Adapter') is True
 
 
 @pytest.mark.workflow(name="paired_end_zipped")
 def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
-    fastqc_read_one_before = (
-            workflow_dir / Path("test-output") / Path("cutadapt_ct_r1_fastqc.zip"))
+    fastqc_data = (
+            workflow_dir / Path("test-output") / Path(
+        "cutadapt_ct_r1_fastqc.zip"))
     assert adapters_present(
-        fastqc_read_one_before).get('Illumina Universal Adapter') is False
+        fastqc_data).get('Illumina Universal Adapter') is False
 
 
 @pytest.mark.workflow(name="paired_end_zipped")
 def test_paired_end_zipped_after_no_adapters_read_two(workflow_dir):
-    fastqc_read_one_before = (
-            workflow_dir / Path("test-output") / Path("cutadapt_ct_r2_fastqc.zip"))
+    fastqc_data = (
+            workflow_dir / Path("test-output") / Path(
+        "cutadapt_ct_r2_fastqc.zip"))
     assert adapters_present(
-        fastqc_read_one_before).get('Illumina Universal Adapter') is False
+        fastqc_data).get('Illumina Universal Adapter') is False
+
+
+@pytest.mark.workflow(name="single_end_zipped_contaminations")
+def test_single_end_zipped_contaminations_before(workflow_dir):
+    fastqc_data = (
+            workflow_dir / Path("test-output") / Path("ct_r1_fastqc.zip"))
+    assert "TruSeq Adapter, Index 18" in str(
+        contaminations_list(fastqc_data).values())
+
+
+@pytest.mark.workflow(name="single_end_zipped_contaminations")
+def test_single_end_zipped_contaminations_after(workflow_dir):
+    fastqc_data = (
+            workflow_dir / Path("test-output") / Path(
+        "cutadapt_ct_r1_fastqc.zip"))
+    assert "TruSeq Adapter, Index 18" not in str(
+        contaminations_list(fastqc_data).values())

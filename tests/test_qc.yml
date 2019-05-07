@@ -11,12 +11,8 @@
       - "WorkflowSucceededState"
   files:
     - path: "test-output/ct_r1_fastqc.zip"
-#      contains:
-#        - "TruSeq Adapter, Index 18"
     - path: "test-output/ct_r2_fastqc.zip"
     - path: "test-output/cutadapt_ct_r1_fastqc.zip"
-#      contains:
-#        - "TruSeq Adapter, Index 18"
     - path: "test-output/cutadapt_ct_r2_fastqc.zip"
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
@@ -34,15 +30,11 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/ct_r1_fastqc/fastqc_data.txt"
-      contains:
-        - "TruSeq Adapter, Index 18"
-    - path: "test-output/ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r1_fastqc.zip"
+    - path: "test-output/ct_r2_fastqc.zip"
       should_exist: false
-    - path: "test-output/cutadapt_ct_r1_fastqc/fastqc_data.txt"
-      must_not_contain:
-        - "TruSeq Adapter, Index 18"
-    - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/cutadapt_ct_r1_fastqc.zip"
+    - path: "test-output/cutadapt_ct_r2_fastqc.zip"
       should_exist: false
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
