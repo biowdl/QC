@@ -19,7 +19,6 @@ workflow QC {
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
         Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
             "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "1.16--py36_2"}
-
     }
 
     Boolean runAdapterClipping = length(select_first([adapters, []])) + length(select_first([contaminations, []])) > 0
@@ -50,7 +49,7 @@ workflow QC {
                 read2output = read2outputPath,
                 adapter = adapters,
                 anywhere = contaminations,
-                # Read2 is used here as `None` or JsNull. None will exist in WDL versions 1.1 and higher
+                # Fixme: Read2 is used here as `None` or JsNull. None will exist in WDL versions 1.1 and higher
                 adapterRead2 = if defined(read2) then adapters else read2,
                 anywhereRead2 = if defined(read2) then contaminations else read2,
                 reportPath = outputDir + "/" + readgroupName +  "_cutadapt_report.txt",
@@ -74,7 +73,6 @@ workflow QC {
             }
         }
     }
-
 
     output {
         File qcRead1 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read1
