@@ -12,13 +12,14 @@ workflow QC {
         String outputDir
         # Illumina universal adapter
         Array[String] adapters = ["AGATCGGAAGAG"]
+        Array[String]+? contaminations
         Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
 
         Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
             "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "1.16--py36_2"}
     }
 
-    Boolean runAdapterClipping = length(adapters) > 0
+    Boolean runAdapterClipping = length(adapters) + length(select_first(contaminations, [])) > 0
 
     call fastqc.Fastqc as FastqcRead1 {
         input:
@@ -45,7 +46,9 @@ workflow QC {
                 read1output = outputDir + "/cutadapt_" + basename(read1),
                 read2output = read2outputPath,
                 adapter = adapters,
+                anywhere = contaminations,
                 adapterRead2 = adapters,
+                anywhereRead2 = contaminations,
                 reportPath = outputDir + "/cutadaptReport.txt",
                 minimumLength = minimumReadLength,
                 dockerTag = dockerTags["cutadapt"]
