@@ -12,8 +12,16 @@
   files:
     - path: "test-output/ct_r1_fastqc.zip"
     - path: "test-output/ct_r2_fastqc.zip"
+    - path: "test-output/ct_r1_fastqc.html"
+      contains:
+        - "TruSeq Adapter, Index 18"
+    - path: "test-output/ct_r2_fastqc.html"
     - path: "test-output/cutadapt_ct_r1_fastqc.zip"
     - path: "test-output/cutadapt_ct_r2_fastqc.zip"
+    - path: "test-output/cutadapt_ct_r1_fastqc.html"
+      contains:
+        - "TruSeq Adapter, Index 18"
+    - path: "test-output/cutadapt_ct_r2_fastqc.html"
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
     - path: "test-output/cutadapt_ct_r2.fq.gz"
@@ -33,8 +41,18 @@
     - path: "test-output/ct_r1_fastqc.zip"
     - path: "test-output/ct_r2_fastqc.zip"
       should_exist: false
+    - path: "test-output/ct_r1_fastqc.html"
+      contains:
+        - "TruSeq Adapter, Index 18"
+    - path: "test-output/ct_r2_fastqc.html"
+      should_exist: false
     - path: "test-output/cutadapt_ct_r1_fastqc.zip"
     - path: "test-output/cutadapt_ct_r2_fastqc.zip"
+      should_exist: false
+    - path: "test-output/cutadapt_ct_r1_fastqc.html"
+      must_not_contain:
+        - "TruSeq Adapter, Index 18"
+    - path: "test-output/cutadapt_ct_r2_fastqc.html"
       should_exist: false
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
@@ -53,14 +71,18 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/ct_r1_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r1_fastqc.zip"
+    - path: "test-output/ct_r2_fastqc.zip"
+    - path: "test-output/ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
-    - path: "test-output/ct_r2_fastqc/fastqc_data.txt"
-    - path: "test-output/cutadapt_ct_r1_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r2_fastqc.html"
+    - path: "test-output/cutadapt_ct_r1_fastqc.zip"
+    - path: "test-output/cutadapt_ct_r2_fastqc.zip"
+    - path: "test-output/cutadapt_ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
-    - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/cutadapt_ct_r2_fastqc.html"
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq"
     - path: "test-output/cutadapt_ct_r2.fq"
@@ -78,15 +100,21 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/ct_r1_fastqc/fastqc_data.txt"
-      contains:
-        - "TruSeq Adapter, Index 18"
-    - path: "test-output/ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r1_fastqc.zip"
+    - path: "test-output/ct_r2_fastqc.zip"
       should_exist: false
-    - path: "test-output/cutadapt_ct_r1_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
-    - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r2_fastqc.html"
+      should_exist: false
+    - path: "test-output/cutadapt_ct_r1_fastqc.zip"
+    - path: "test-output/cutadapt_ct_r2_fastqc.zip"
+      should_exist: false
+    - path: "test-output/cutadapt_ct_r1_fastqc.html"
+      contains:
+        - "TruSeq Adapter, Index 18"
+    - path: "test-output/cutadapt_ct_r2_fastqc.html"
       should_exist: false
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
@@ -105,15 +133,21 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/ct_r1_fastqc/fastqc_data.txt"
-      contains:
-        - "TruSeq Adapter, Index 18"
-    - path: "test-output/ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r1_fastqc.zip"
+    - path: "test-output/ct_r2_fastqc.zip"
       should_exist: false
-    - path: "test-output/cutadapt_ct_r1_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
-    - path: "test-output/cutadapt_ct_r2_fastqc/fastqc_data.txt"
+    - path: "test-output/ct_r2_fastqc.html"
+      should_exist: false
+    - path: "test-output/cutadapt_ct_r1_fastqc.zip"
+    - path: "test-output/cutadapt_ct_r2_fastqc.zip"
+      should_exist: false
+    - path: "test-output/cutadapt_ct_r1_fastqc.html"
+      contains:
+        - "TruSeq Adapter, Index 18"
+    - path: "test-output/cutadapt_ct_r2_fastqc.html"
       should_exist: false
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq"
@@ -134,10 +168,14 @@
     contains:
       - "WorkflowSucceededState"
   files:
-    - path: "test-output/U0a_CGATGT_L001_R1_fastqc/fastqc_data.txt"
-    - path: "test-output/U0a_CGATGT_L001_R2_fastqc/fastqc_data.txt"
-    - path: "test-output/cutadapt_U0a_CGATGT_L001_R1_fastqc/fastqc_data.txt"
-    - path: "test-output/cutadapt_U0a_CGATGT_L001_R2_fastqc/fastqc_data.txt"
+    - path: "test-output/U0a_CGATGT_L001_R1_fastqc.zip"
+    - path: "test-output/U0a_CGATGT_L001_R2_fastqc.zip"
+    - path: "test-output/U0a_CGATGT_L001_R1_fastqc.html"
+    - path: "test-output/U0a_CGATGT_L001_R2_fastqc.html"
+    - path: "test-output/cutadapt_U0a_CGATGT_L001_R1_fastqc.zip"
+    - path: "test-output/cutadapt_U0a_CGATGT_L001_R2_fastqc.zip"
+    - path: "test-output/cutadapt_U0a_CGATGT_L001_R1_fastqc.html"
+    - path: "test-output/cutadapt_U0a_CGATGT_L001_R2_fastqc.html"
     - path: "test-output/U0a_CGATGT_L001_R1_cutadapt_report.txt"
     - path: "test-output/cutadapt_U0a_CGATGT_L001_R1.fastq.gz"
     - path: "test-output/cutadapt_U0a_CGATGT_L001_R2.fastq.gz"

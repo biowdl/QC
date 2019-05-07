@@ -101,7 +101,8 @@ def test_paired_end_zipped_before_adapters_read_two(workflow_dir):
 def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
     fastqc_data = (
             workflow_dir / Path("test-output") / Path(
-        "cutadapt_ct_r1_fastqc.zip"))
+                "cutadapt_ct_r1_fastqc.zip")
+    )
     assert adapters_present(
         fastqc_data).get('Illumina Universal Adapter') is False
 
@@ -110,23 +111,6 @@ def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
 def test_paired_end_zipped_after_no_adapters_read_two(workflow_dir):
     fastqc_data = (
             workflow_dir / Path("test-output") / Path(
-        "cutadapt_ct_r2_fastqc.zip"))
+                "cutadapt_ct_r2_fastqc.zip"))
     assert adapters_present(
         fastqc_data).get('Illumina Universal Adapter') is False
-
-
-@pytest.mark.workflow(name="single_end_zipped_contaminations")
-def test_single_end_zipped_contaminations_before(workflow_dir):
-    fastqc_data = (
-            workflow_dir / Path("test-output") / Path("ct_r1_fastqc.zip"))
-    assert "TruSeq Adapter, Index 18" in str(
-        contaminations_list(fastqc_data).values())
-
-
-@pytest.mark.workflow(name="single_end_zipped_contaminations")
-def test_single_end_zipped_contaminations_after(workflow_dir):
-    fastqc_data = (
-            workflow_dir / Path("test-output") / Path(
-        "cutadapt_ct_r1_fastqc.zip"))
-    assert "TruSeq Adapter, Index 18" not in str(
-        contaminations_list(fastqc_data).values())
