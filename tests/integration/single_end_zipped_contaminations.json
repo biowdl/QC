@@ -1,7 +1,7 @@
 {
   "QC.read1": "tests/data/ct_r1.fq.gz",
-  "QC.adapters": null,
-  "QC.contaminations": [
+  "QC.Cutadapt.adapterBoth": null,
+  "QC.Cutadapt.contaminations": [
     "GATCGGAAGAGCACACGTCTGAACTCCAGTCACGTCCGCATCTCGTATGCCGTCTTCTGCTTG",
     "GATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG"
   ]
