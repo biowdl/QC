@@ -12,16 +12,20 @@ workflow QC {
         String outputDir
         # Adapters and contaminations are optional and need at least one item if defined.
         # This is necessary so no empty flags are used in cutadapt.
-        Array[String]+? adapters = ["AGATCGGAAGAG"]  # Illumina universal adapter
-        Array[String]+? contaminations
-        Int minimumReadLength = 2 # Choose 2 here to compensate for cutadapt weirdness. I.e. Having empty or non-sensical 1 base reads.
+        # FIXME: Subworkflow inputs cannot be overridden using Cromwell. This
+        # FIXME: is necessary for this workflow to function properly as a subworkflow.
+        #Array[String]+? adapters = ["AGATCGGAAGAG"]  # Illumina universal adapter
+        #Array[String]+? contaminations
+
         # A readgroupName so cutadapt creates a unique report name. This is useful if all the QC files are dumped in one folder.
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
         Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
-            "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "1.16--py36_2"}
+            "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "2.3--py36h14c3975_0"}
     }
 
-    Boolean runAdapterClipping = length(select_first([adapters, []])) + length(select_first([contaminations, []])) > 0
+    # FIXME: Only makes sense with workflow inputs. Cromwell should be fixed.
+    #Boolean runAdapterClipping = length(select_first([adapters, []])) + length(select_first([contaminations, []])) > 0
+    Boolean runAdapterClipping = true
 
     call fastqc.Fastqc as FastqcRead1 {
         input:
@@ -47,13 +51,13 @@ workflow QC {
                 read2 = read2,
                 read1output = outputDir + "/cutadapt_" + basename(read1),
                 read2output = read2outputPath,
-                adapter = adapters,
-                anywhere = contaminations,
+                # Fixme: Adapters and contaminations now disabled so they can be user overridable. Cromwell should allow overriding subworkflow defaults.
+                #adapter = adapters,
+                #anywhere = contaminations,
                 # Fixme: Read2 is used here as `None` or JsNull. None will exist in WDL versions 1.1 and higher
-                adapterRead2 = if defined(read2) then adapters else read2,
-                anywhereRead2 = if defined(read2) then contaminations else read2,
+                #adapterRead2 = if defined(read2) then adapters else read2,
+                #anywhereRead2 = if defined(read2) then contaminations else read2,
                 reportPath = outputDir + "/" + readgroupName +  "_cutadapt_report.txt",
-                minimumLength = minimumReadLength,
                 dockerTag = dockerTags["cutadapt"]
         }
 
