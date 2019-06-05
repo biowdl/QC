@@ -81,6 +81,26 @@ workflow QC {
     output {
         File qcRead1 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read1
         File? qcRead2 = if runAdapterClipping then Cutadapt.cutRead2 else read2
+        File read1htmlReport = FastqcRead1.htmlReport
+        File read1reportZip = FastqcRead1.reportZip
+        File? read2htmlReport = FastqcRead2.htmlReport
+        File? read2reportZip = FastqcRead2.reportZip
+        File? read1afterHtmlReport = FastqcRead1After.htmlReport
+        File? read1afterReportZip = FastqcRead1After.reportZip
+        File? read2afterHtmlReport = FastqcRead2After.htmlReport
+        File? read2afterReportZip = FastqcRead2After.reportZip
+        File? cutadaptReport = Cutadapt.report
+        Array[File] reports = select_all([
+            read1htmlReport,
+            read1reportZip,
+            read2htmlReport,
+            read2reportZip,
+            read1afterHtmlReport,
+            read1afterReportZip,
+            read2afterHtmlReport,
+            read2afterReportZip,
+            cutadaptReport
+            ])
     }
  }
 
