@@ -9,7 +9,7 @@ workflow QC {
     input {
         File read1
         File? read2
-        String outputDir
+        String outputDir = "."
         # Adapters and contaminations are optional and need at least one item if defined.
         # This is necessary so no empty flags are used in cutadapt.
         # FIXME: Subworkflow inputs cannot be overridden using Cromwell. This
