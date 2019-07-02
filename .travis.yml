@@ -20,10 +20,10 @@ before_install:
   - conda config --add channels conda-forge
 
 install:
-  - conda install requirements-test.txt
+  - conda install --file requirements-test.txt
 
 script:
-  - pytest --tag $TEST
+  - pytest --tag $TEST tests/
 
 matrix:
   include:
