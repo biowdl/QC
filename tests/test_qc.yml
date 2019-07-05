@@ -2,10 +2,8 @@
   tags:
     - integration
   command: >-
-    bash -c '
-    TEST_JSON=tests/integration/paired_end_zipped.json ;
-    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON QC.wdl'
+    cromwell run -o tests/cromwell_options.json
+    -i tests/integration/paired_end_zipped.json QC.wdl
   stdout:
     contains:
       - "WorkflowSucceededState"
@@ -30,10 +28,8 @@
   tags:
     - integration
   command: >-
-    bash -c '
-    TEST_JSON=tests/integration/single_end_zipped_contaminations.json ;
-    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON QC.wdl'
+    cromwell run -o tests/cromwell_options.json
+    -i tests/integration/single_end_zipped_contaminations.json QC.wdl
   stdout:
     contains:
       - "WorkflowSucceededState"
@@ -63,10 +59,8 @@
   tags:
     - integration
   command: >-
-    bash -c '
-    TEST_JSON=tests/integration/paired_end.json ;
-    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON QC.wdl'
+    cromwell run -o tests/cromwell_options.json
+    -i tests/integration/paired_end.json QC.wdl
   stdout:
     contains:
       - "WorkflowSucceededState"
@@ -92,10 +86,8 @@
   tags:
     - integration
   command: >-
-    bash -c '
-    TEST_JSON=tests/integration/single_end_zipped.json ;
-    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON QC.wdl'
+    cromwell run -o tests/cromwell_options.json
+    -i tests/integration/single_end_zipped.json QC.wdl
   stdout:
     contains:
       - "WorkflowSucceededState"
@@ -125,10 +117,8 @@
   tags:
     - integration
   command: >-
-    bash -c '
-    TEST_JSON=tests/integration/single_end.json ;
-    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON QC.wdl'
+    cromwell run -o tests/cromwell_options.json
+    -i tests/integration/single_end.json QC.wdl
   stdout:
     contains:
       - "WorkflowSucceededState"
@@ -160,10 +150,8 @@
   tags:
     - functional
   command: >-
-    bash -c '
-    TEST_JSON=tests/functional/paired_end_zipped.json ;
-    sed -i "2i\"QC.outputDir\":\"$PWD/test-output\"," $TEST_JSON ;
-    cromwell run -i $TEST_JSON QC.wdl'
+    cromwell run -o tests/cromwell_options.json
+    -i tests/integration/tests/functional/paired_end_zipped.json QC.wdl
   stdout:
     contains:
       - "WorkflowSucceededState"

@@ -9,7 +9,7 @@ workflow QC {
     input {
         File read1
         File? read2
-        String outputDir
+        String outputDir = "."
         # Adapters and contaminations are optional and need at least one item if defined.
         # This is necessary so no empty flags are used in cutadapt.
         # FIXME: Subworkflow inputs cannot be overridden using Cromwell. This
@@ -19,8 +19,10 @@ workflow QC {
 
         # A readgroupName so cutadapt creates a unique report name. This is useful if all the QC files are dumped in one folder.
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
-        Map[String, String] dockerTags = {"fastqc": "0.11.7--4",
-            "biopet-extractadaptersfastqc": "0.2--1", "cutadapt": "2.3--py36h14c3975_0"}
+        Map[String, String] dockerImages = {
+        "fastqc": "quay.io/biocontainers/fastqc:0.11.7--4",
+        "cutadapt": "quay.io/biocontainers/cutadapt:2.3--py36h14c3975_0"
+        }
     }
 
     # FIXME: Only makes sense with workflow inputs. Cromwell should be fixed.
@@ -31,7 +33,7 @@ workflow QC {
         input:
             seqFile = read1,
             outdirPath = outputDir + "/",
-            dockerTag = dockerTags["fastqc"]
+            dockerImage = dockerImages["fastqc"]
     }
 
     if (defined(read2)) {
@@ -39,7 +41,7 @@ workflow QC {
             input:
                 seqFile = select_first([read2]),
                 outdirPath = outputDir + "/",
-                dockerTag = dockerTags["fastqc"]
+                dockerImage = dockerImages["fastqc"]
         }
         String read2outputPath = outputDir + "/cutadapt_" + basename(select_first([read2]))
     }
@@ -58,14 +60,14 @@ workflow QC {
                 #adapterRead2 = if defined(read2) then adapters else read2,
                 #anywhereRead2 = if defined(read2) then contaminations else read2,
                 reportPath = outputDir + "/" + readgroupName +  "_cutadapt_report.txt",
-                dockerTag = dockerTags["cutadapt"]
+                dockerImage = dockerImages["cutadapt"]
         }
 
         call fastqc.Fastqc as FastqcRead1After {
             input:
                 seqFile = Cutadapt.cutRead1,
                 outdirPath = outputDir + "/",
-                dockerTag = dockerTags["fastqc"]
+                dockerImage = dockerImages["fastqc"]
         }
 
         if (defined(read2)) {
@@ -73,7 +75,7 @@ workflow QC {
                 input:
                     seqFile = select_first([Cutadapt.cutRead2]),
                     outdirPath = outputDir + "/",
-                    dockerTag = dockerTags["fastqc"]
+                    dockerImage = dockerImages["fastqc"]
             }
         }
     }
