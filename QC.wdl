@@ -2,7 +2,6 @@ version 1.0
 # Copyright 2018 Sequencing Analysis Support Core - Leiden University Medical Center
 
 import "tasks/cutadapt.wdl" as cutadapt
-import "tasks/common.wdl" as common
 import "tasks/fastqc.wdl" as fastqc
 
 workflow QC {
@@ -21,7 +20,7 @@ workflow QC {
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
         Map[String, String] dockerImages = {
         "fastqc": "quay.io/biocontainers/fastqc:0.11.7--4",
-        "cutadapt": "quay.io/biocontainers/cutadapt:2.3--py36h14c3975_0"
+        "cutadapt": "quay.io/biocontainers/cutadapt:2.4--py37h14c3975_0"
         }
     }
 
