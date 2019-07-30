@@ -40,11 +40,10 @@ about pipeline inputs.
 `QC.read1`  is the only required input. In case of read pairs the reverse
 read can be set with `QC.read2`. The adapters for cutadapt can be  set
 with `QC.Cutadapt.adapter` and `QC.Cutadapt.adapterRead2` for read1 and
-read2 respectively. If read1 and read2 use the same adapter this can be
+read2 respectively. If read1 and read2 use the same adapters this can be
 set with `QC.Cutadapt.adapterBoth`. 
 
-An 
-output directory can be set using an `options.json` file. See [the 
+An output directory can be set using an `options.json` file. See [the 
 cromwell documentation](
 https://cromwell.readthedocs.io/en/stable/wf_options/Overview/) for more 
 information. 
@@ -60,8 +59,8 @@ Example `options.json` file:
 }
 ```
 Alternatively an output directory can be set with `QC.outputDir`. 
-`QC.outputDir` must be mounted in the docker container. Cromwell should
-be configured correctly to allow this.
+`QC.outputDir` must be mounted in the docker container. Cromwell will
+need a custom configuration to allow this.
 
 #### Example
 
@@ -80,7 +79,7 @@ This is because cutadapt accepts multiple adapters.
 ### Dependency requirements and tool versions
 Biowdl pipelines use docker images to ensure  reproducibility. This
 means that biowdl pipelines will run on any system that has docker 
-installed. Alternatively it can be run with singularity.
+installed. Alternatively they can be run with singularity.
 
 For more advanced configuration of docker or singularity please check 
 the [cromwelldocumentation on containers](
