@@ -34,12 +34,34 @@ about pipeline inputs.
 
 ```JSON
 {
-  "QC.read1": "Path to read1",
-  "QC.read2": "Path to read2",
-  "QC.outputDir":"Where the results should be output to",
-  "QC.alwaysRunAdapterClipping": "Boolean (Optional) Whether adapter clipping should always run. Use this if you want to add custom paramaters for read preprocessing. Defaults to 'false'",
+  "QC.read1": "Path to read1"
 }
 ```
+`QC.read1`  is the only required input. In case of read pairs the reverse
+read can be set with `QC.read2`. The adapters for cutadapt can be  set
+with `QC.Cutadapt.adapter` and `QC.Cutadapt.adapterRead2` for read1 and
+read2 respectively. If read1 and read2 use the same adapter this can be
+set with `QC.Cutadapt.adapterBoth`. 
+
+An 
+output directory can be set using an `options.json` file. See [the 
+cromwell documentation](
+https://cromwell.readthedocs.io/en/stable/wf_options/Overview/) for more 
+information. 
+
+Example `options.json` file:
+```JSON
+{
+"final_workflow_outputs_dir": "my-analysis-output",
+"use_relative_output_paths": true,
+"default_runtime_attributes": {
+  "docker_user": "$EUID"
+  }
+}
+```
+Alternatively an output directory can be set with `QC.outputDir`. 
+`QC.outputDir` must be mounted in the docker container. Cromwell should
+be configured correctly to allow this.
 
 #### Example
 
@@ -48,14 +70,25 @@ An example of an inputs.json might look like this:
 {
   "QC.read1":"/home/user/samples/sample_1/lib_1/rg_1/R1.fq.gz",
   "QC.read2":"/home/user/samples/sample_1/lib_1/rg_1/R2.fq.gz",
-  "QC.outputDir":"/home/user/analysis/QCed_reads/",
+  "QC.Cutadapt.adapterBoth": ["AGATCGGAAGAG"]
 }
 ```
 
+Note that `adapterBoth` uses a list of strings instead of a single string. 
+This is because cutadapt accepts multiple adapters.
+
 ### Dependency requirements and tool versions
-Included in the repository is an `environment.yml` file. This file includes
-all the tool version on which the workflow was tested. You can use conda and
-this file to create an environment with all the correct tools.
+Biowdl pipelines use docker images to ensure  reproducibility. This
+means that biowdl pipelines will run on any system that has docker 
+installed. Alternatively it can be run with singularity.
+
+For more advanced configuration of docker or singularity please check 
+the [cromwelldocumentation on containers](
+https://cromwell.readthedocs.io/en/stable/tutorials/Containers/).  
+
+Images from [biocontainers](https://biocontainers.pro) are preferred for 
+biowdl pipelines. The list of default images for this pipeline can be 
+found in the default for the `dockerImages` input. 
 
 ### Output
 
