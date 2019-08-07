@@ -82,7 +82,7 @@ means that biowdl pipelines will run on any system that has docker
 installed. Alternatively they can be run with singularity.
 
 For more advanced configuration of docker or singularity please check 
-the [cromwelldocumentation on containers](
+the [cromwell documentation on containers](
 https://cromwell.readthedocs.io/en/stable/tutorials/Containers/).  
 
 Images from [biocontainers](https://biocontainers.pro) are preferred for 
