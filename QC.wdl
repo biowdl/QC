@@ -9,24 +9,23 @@ workflow QC {
         File read1
         File? read2
         String outputDir = "."
-        # Adapters and contaminations are optional and need at least one item if defined.
-        # This is necessary so no empty flags are used in cutadapt.
-        # FIXME: Subworkflow inputs cannot be overridden using Cromwell. This
-        # FIXME: is necessary for this workflow to function properly as a subworkflow.
-        #Array[String]+? adapters = ["AGATCGGAAGAG"]  # Illumina universal adapter
-        #Array[String]+? contaminations
-
+        String? adapterForward = "AGATCGGAAGAG"  # Illumina universal adapter
+        String? adapterReverse = "AGATCGGAAGAG"  # Illumina universal adapter
+        Array[String]+? contaminations
         # A readgroupName so cutadapt creates a unique report name. This is useful if all the QC files are dumped in one folder.
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
         Map[String, String] dockerImages = {
         "fastqc": "quay.io/biocontainers/fastqc:0.11.7--4",
         "cutadapt": "quay.io/biocontainers/cutadapt:2.4--py37h14c3975_0"
         }
+        # Only run cutadapt if it makes sense.
+        Boolean runAdapterClipping = defined(adapterForward) || defined(adapterReverse) || length(select_first([contaminations, []])) > 0
     }
 
-    # FIXME: Only makes sense with workflow inputs. Cromwell should be fixed.
-    #Boolean runAdapterClipping = length(select_first([adapters, []])) + length(select_first([contaminations, []])) > 0
-    Boolean runAdapterClipping = true
+    # If read2 is defined but a reverse adapter is not given we set it empty.
+    # If read2 is defined and a reverse adapter is given we use that
+    # If read2 is not defined we set it empty.
+    Array[String] adapterReverseDefault = if defined(read2) then select_all([adapterReverse]) else []
 
     call fastqc.Fastqc as FastqcRead1 {
         input:
@@ -52,12 +51,10 @@ workflow QC {
                 read2 = read2,
                 read1output = outputDir + "/cutadapt_" + basename(read1),
                 read2output = read2outputPath,
-                # Fixme: Adapters and contaminations now disabled so they can be user overridable. Cromwell should allow overriding subworkflow defaults.
-                #adapter = adapters,
-                #anywhere = contaminations,
-                # Fixme: Read2 is used here as `None` or JsNull. None will exist in WDL versions 1.1 and higher
-                #adapterRead2 = if defined(read2) then adapters else read2,
-                #anywhereRead2 = if defined(read2) then contaminations else read2,
+                adapter = select_all([adapterForward]),
+                anywhere = contaminations,
+                adapterRead2 = adapterReverseDefault,
+                anywhereRead2 = if defined(read2) then contaminations else read2,
                 reportPath = outputDir + "/" + readgroupName +  "_cutadapt_report.txt",
                 dockerImage = dockerImages["cutadapt"]
         }
