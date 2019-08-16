@@ -34,14 +34,23 @@ about pipeline inputs.
 
 ```JSON
 {
-  "QC.read1": "Path to read1"
+  "QC.read1": "Path to file with forward reads / unpaired reads"
 }
 ```
 `QC.read1`  is the only required input. In case of read pairs the reverse
-read can be set with `QC.read2`. The adapters for cutadapt can be  set
-with `QC.Cutadapt.adapter` and `QC.Cutadapt.adapterRead2` for read1 and
-read2 respectively. If read1 and read2 use the same adapters this can be
-set with `QC.Cutadapt.adapterBoth`.
+read can be set with `QC.read2`. 
+
+Optional inputs:
+```JSON
+{
+  "QC.read2": "Path to file with reverse reads",
+  "QC.adapterForward":  "The adapter for the forward reads (read1), default = \"AGATCGGAAGAG\"",
+  "QC.adapterReverse": "The adapter for the reverse reads (read2), default = \"AGATCGGAAGAG\")",
+  "QC.contaminations": "A list of contaminations to be cleaned with cutadapt (Optional)",
+  "QC.runAdapterClipping": "Can be set to false to prevent cutadapt from running.",
+  "QC.readgroupName": "What basename should be used to save the fastq files. By default will use the name of the fastq as in <name>.fq.gz",
+}
+```
 
 An output directory can be set using an `options.json` file. See [the
 cromwell documentation](
