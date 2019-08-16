@@ -1,4 +1,6 @@
 {
   "QC.read1": "tests/data/ct_r1.fq.gz",
-  "QC.read2": "tests/data/ct_r2.fq.gz"
+  "QC.read2": "tests/data/ct_r2.fq.gz",
+  "QC.Cutadapt.adapter": ["AGATCGGAAGAG"],
+  "QC.Cutadapt.adapterRead2": ["AGATCGGAAGAG"]
 }
