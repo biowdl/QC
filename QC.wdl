@@ -10,7 +10,7 @@ workflow QC {
         File? read2
         String outputDir = "."
         String? adapterForward = "AGATCGGAAGAG"  # Illumina universal adapter
-        String? adapterReverse
+        String? adapterReverse = "AGATCGGAAGAG"  # Illumina universal adapter
         Array[String]+? contaminations
         # A readgroupName so cutadapt creates a unique report name. This is useful if all the QC files are dumped in one folder.
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
@@ -22,10 +22,10 @@ workflow QC {
         Boolean runAdapterClipping = defined(adapterForward) || defined(adapterReverse) || length(select_first([contaminations, []])) > 0
     }
 
-    # If read2 is defined but a reverse adapter is not given we take the illumina universal adapter.
+    # If read2 is defined but a reverse adapter is not given we set it empty.
     # If read2 is defined and a reverse adapter is given we use that
     # If read2 is not defined we set it empty.
-    Array[String] adapterReverseDefault = if defined(read2) then [select_first([adapterReverse, "AGATCGGAAGAG"])] else []
+    Array[String] adapterReverseDefault = if defined(read2) then select_all([adapterReverse]) else []
 
     call fastqc.Fastqc as FastqcRead1 {
         input:
