@@ -1,15 +1,11 @@
 ---
 layout: default
 title: Home
-version: develop
-latest: true
 ---
 
-This repository contains a collection of [BioWDL](https://github.com/biowdl)
-workflows which can be used for quality control preprocessing and reporting of
-sequencing data. The following workflows are available:
-- QC.wdl: Cuts reads using cutadapt on the basis of the quality reports produced by `QualityReport.wdl`.
-- QualityReport.wdl: Uses fastqc to produce quality reports.
+This repository contains the [BioWDL](https://github.com/biowdl)
+workflow which can be used for quality control preprocessing and 
+reporting of sequencing data.
 
 These workflows are part of [BioWDL](https://biowdl.github.io/)
 developed by the SASC team at [Leiden University Medical Center](https://www.lumc.nl/).
@@ -29,8 +25,6 @@ described below, but additional inputs are available.
 A template containing all possible inputs can be generated using
 Womtool as described in the
 [WOMtool documentation](http://cromwell.readthedocs.io/en/stable/WOMtool/).
-See [this page](/inputs.html) for some additional general notes and information
-about pipeline inputs.
 
 ```JSON
 {
