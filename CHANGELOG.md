@@ -9,7 +9,7 @@ This document is user facing. Please word the changes in such a way
 that users understand how the changes affect the new version.
 -->
 
-version 1.0.0-dev
+version 1.0.0
 ---------------------------
 + Remove default adapter setting for cutadapt. Set defaults in QC inputs.
 + Make sure documentation is up to date.
