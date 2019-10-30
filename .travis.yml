@@ -21,7 +21,6 @@ before_install:
 
 install:
   - conda install --file requirements-test.txt
-  - pip install wdl-aid
 
 script:
   - pytest --tag $TEST tests/
@@ -37,6 +36,7 @@ matrix:
     - env: TEST=Womtool validate and submodule up to date
       install:
         - conda install cromwell
+        - pip install wdl-aid
       script:
         - set -e
         - for F in *.wdl; do echo $F; womtool validate $F; done
