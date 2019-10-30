@@ -52,9 +52,11 @@ workflow QC {
                 read1output = outputDir + "/cutadapt_" + basename(read1),
                 read2output = read2outputPath,
                 adapter = select_all([adapterForward]),
-                anywhere = contaminations,
+                anywhere = select_first([contaminations, []]),
                 adapterRead2 = adapterReverseDefault,
-                anywhereRead2 = if defined(read2) then contaminations else read2,
+                anywhereRead2 = if defined(read2)
+                    then select_first([contaminations, []])
+                    else [],
                 reportPath = outputDir + "/" + readgroupName +  "_cutadapt_report.txt",
                 dockerImage = dockerImages["cutadapt"]
         }
@@ -77,8 +79,12 @@ workflow QC {
     }
 
     output {
-        File qcRead1 = if runAdapterClipping then select_first([Cutadapt.cutRead1]) else read1
-        File? qcRead2 = if runAdapterClipping then Cutadapt.cutRead2 else read2
+        File qcRead1 = if runAdapterClipping
+            then select_first([Cutadapt.cutRead1])
+            else read1
+        File? qcRead2 = if runAdapterClipping
+            then Cutadapt.cutRead2
+            else read2
         File read1htmlReport = FastqcRead1.htmlReport
         File read1reportZip = FastqcRead1.reportZip
         File? read2htmlReport = FastqcRead2.htmlReport
