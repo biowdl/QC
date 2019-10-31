@@ -106,6 +106,45 @@ workflow QC {
             cutadaptReport
             ])
     }
+
+    parameter_meta {
+        read1: {
+            description: "The first or single end FastQ file to be run through cutadapt.",
+            category: "required"
+        }
+        read2: {
+            description: "An optional second end FastQ file to be run through cutadapt.",
+            category: "common"
+        }
+        outputDir: {
+            description: "The directory to which the outputs will be written.",
+            category: "common"
+        }
+        adapterForward: {
+            description: "The adapter to be removed from the reads first or single end reads.",
+            category: "common"
+        }
+        adapterReverse: {
+            description: "The adapter to be removed from the reads second end reads.",
+            category: "common"
+        }
+        contaminations: {
+            description: "Contaminants/adapters to be removed from the reads.",
+            category: "common"
+        }
+        readgroupName: {
+            description: "The name of the readgroup.",
+            category: "common"
+        }
+        dockerImages: {
+            description: "The docker image used for this task. Changing this may result in errors which the developers may choose not to address.",
+            category: "advanced"
+        }
+        runAdapterClipping: {
+            description: "Whether or not adapters should be removed from the reads.",
+            category: "advanced"
+        }
+    }
  }
 
 
