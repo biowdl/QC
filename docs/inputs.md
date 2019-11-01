@@ -9,16 +9,16 @@ The following is an overview of all available inputs in
 QC.
 
 
-### Required inputs
+## Required inputs
 <dl>
 <dt id="QC.read1"><a href="#QC.read1">QC.read1</a></dt>
 <dd>
     <i>File &mdash; Default:</i> <code>None</code><br />
-    The first or single end FastQ file to be run through cutadapt.
+    The first or single end fastq file to be run through cutadapt.
 </dd>
 </dl>
 
-### Other common inputs
+## Other common inputs
 <dl>
 <dt id="QC.adapterForward"><a href="#QC.adapterForward">QC.adapterForward</a></dt>
 <dd>
@@ -43,7 +43,7 @@ QC.
 <dt id="QC.read2"><a href="#QC.read2">QC.read2</a></dt>
 <dd>
     <i>File? &mdash; Default:</i> <code>None</code><br />
-    An optional second end FastQ file to be run through cutadapt.
+    An optional second end fastq file to be run through cutadapt.
 </dd>
 <dt id="QC.readgroupName"><a href="#QC.readgroupName">QC.readgroupName</a></dt>
 <dd>
@@ -52,7 +52,7 @@ QC.
 </dd>
 </dl>
 
-### Advanced inputs
+## Advanced inputs
 <details>
 <summary> Show/Hide </summary>
 <dl>
@@ -573,7 +573,7 @@ QC.
 
 
 
-### Do not set these inputs!
+## Do not set these inputs!
 The following inputs should ***not*** be set, even though womtool may
 show them as being available inputs.
 
