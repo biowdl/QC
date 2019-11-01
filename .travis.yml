@@ -36,6 +36,7 @@ matrix:
     - env: TEST=Womtool validate and submodule up to date
       install:
         - conda install cromwell
+        - pip install wdl-aid
       script:
         - set -e
         - for F in *.wdl; do echo $F; womtool validate $F; done
@@ -50,3 +51,4 @@ matrix:
         - >
           git diff --exit-code ||
           (echo ERROR: Git changes detected. Submodules should either be tagged or on the latest version of develop. && exit 1)
+        - wdl-aid --strict QC.wdl > /dev/null
