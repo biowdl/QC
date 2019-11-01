@@ -109,11 +109,11 @@ workflow QC {
 
     parameter_meta {
         read1: {
-            description: "The first or single end FastQ file to be run through cutadapt.",
+            description: "The first or single end fastq file to be run through cutadapt.",
             category: "required"
         }
         read2: {
-            description: "An optional second end FastQ file to be run through cutadapt.",
+            description: "An optional second end fastq file to be run through cutadapt.",
             category: "common"
         }
         outputDir: {
