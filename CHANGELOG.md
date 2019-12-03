@@ -9,7 +9,7 @@ This document is user facing. Please word the changes in such a way
 that users understand how the changes affect the new version.
 -->
 
-version 1.2.0-dev
+version 1.2.0
 -----------------
 + Added parameter_meta to QC workflow.
 + Added an overview of all inputs to the docs.
