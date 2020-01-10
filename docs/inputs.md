@@ -13,7 +13,7 @@ QC.
 <dl>
 <dt id="QC.read1"><a href="#QC.read1">QC.read1</a></dt>
 <dd>
-    <i>File </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File </i><br />
     The first or single end fastq file to be run through cutadapt.
 </dd>
 </dl>
@@ -32,7 +32,7 @@ QC.
 </dd>
 <dt id="QC.contaminations"><a href="#QC.contaminations">QC.contaminations</a></dt>
 <dd>
-    <i>Array[String]+? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Array[String]+? </i><br />
     Contaminants/adapters to be removed from the reads.
 </dd>
 <dt id="QC.outputDir"><a href="#QC.outputDir">QC.outputDir</a></dt>
@@ -42,7 +42,7 @@ QC.
 </dd>
 <dt id="QC.read2"><a href="#QC.read2">QC.read2</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     An optional second end fastq file to be run through cutadapt.
 </dd>
 <dt id="QC.readgroupName"><a href="#QC.readgroupName">QC.readgroupName</a></dt>
@@ -58,12 +58,12 @@ QC.
 <dl>
 <dt id="QC.Cutadapt.bwa"><a href="#QC.Cutadapt.bwa">QC.Cutadapt.bwa</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --bwa flag.
 </dd>
 <dt id="QC.Cutadapt.colorspace"><a href="#QC.Cutadapt.colorspace">QC.Cutadapt.colorspace</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --colorspace flag.
 </dd>
 <dt id="QC.Cutadapt.cores"><a href="#QC.Cutadapt.cores">QC.Cutadapt.cores</a></dt>
@@ -73,33 +73,28 @@ QC.
 </dd>
 <dt id="QC.Cutadapt.cut"><a href="#QC.Cutadapt.cut">QC.Cutadapt.cut</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to cutadapt's --cut option.
 </dd>
 <dt id="QC.Cutadapt.discardTrimmed"><a href="#QC.Cutadapt.discardTrimmed">QC.Cutadapt.discardTrimmed</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --quality-cutoff option.
 </dd>
 <dt id="QC.Cutadapt.discardUntrimmed"><a href="#QC.Cutadapt.discardUntrimmed">QC.Cutadapt.discardUntrimmed</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --discard-untrimmed option.
 </dd>
 <dt id="QC.Cutadapt.doubleEncode"><a href="#QC.Cutadapt.doubleEncode">QC.Cutadapt.doubleEncode</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --double-encode flag.
 </dd>
 <dt id="QC.Cutadapt.errorRate"><a href="#QC.Cutadapt.errorRate">QC.Cutadapt.errorRate</a></dt>
 <dd>
-    <i>Float? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Float? </i><br />
     Equivalent to cutadapt's --error-rate option.
-</dd>
-<dt id="QC.Cutadapt.format"><a href="#QC.Cutadapt.format">QC.Cutadapt.format</a></dt>
-<dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
-    Equivalent to cutadapt's --format option.
 </dd>
 <dt id="QC.Cutadapt.front"><a href="#QC.Cutadapt.front">QC.Cutadapt.front</a></dt>
 <dd>
@@ -113,47 +108,47 @@ QC.
 </dd>
 <dt id="QC.Cutadapt.infoFilePath"><a href="#QC.Cutadapt.infoFilePath">QC.Cutadapt.infoFilePath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --info-file option.
 </dd>
 <dt id="QC.Cutadapt.interleaved"><a href="#QC.Cutadapt.interleaved">QC.Cutadapt.interleaved</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --interleaved flag.
 </dd>
 <dt id="QC.Cutadapt.length"><a href="#QC.Cutadapt.length">QC.Cutadapt.length</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to cutadapt's --length option.
 </dd>
 <dt id="QC.Cutadapt.lengthTag"><a href="#QC.Cutadapt.lengthTag">QC.Cutadapt.lengthTag</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --length-tag option.
 </dd>
 <dt id="QC.Cutadapt.maq"><a href="#QC.Cutadapt.maq">QC.Cutadapt.maq</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --maq flag.
 </dd>
 <dt id="QC.Cutadapt.maskAdapter"><a href="#QC.Cutadapt.maskAdapter">QC.Cutadapt.maskAdapter</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --mask-adapter flag.
 </dd>
 <dt id="QC.Cutadapt.matchReadWildcards"><a href="#QC.Cutadapt.matchReadWildcards">QC.Cutadapt.matchReadWildcards</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --match-read-wildcards flag.
 </dd>
 <dt id="QC.Cutadapt.maximumLength"><a href="#QC.Cutadapt.maximumLength">QC.Cutadapt.maximumLength</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to cutadapt's --maximum-length option.
 </dd>
 <dt id="QC.Cutadapt.maxN"><a href="#QC.Cutadapt.maxN">QC.Cutadapt.maxN</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to cutadapt's --max-n option.
 </dd>
 <dt id="QC.Cutadapt.memory"><a href="#QC.Cutadapt.memory">QC.Cutadapt.memory</a></dt>
@@ -168,122 +163,117 @@ QC.
 </dd>
 <dt id="QC.Cutadapt.nextseqTrim"><a href="#QC.Cutadapt.nextseqTrim">QC.Cutadapt.nextseqTrim</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --nextseq-trim option.
 </dd>
 <dt id="QC.Cutadapt.noIndels"><a href="#QC.Cutadapt.noIndels">QC.Cutadapt.noIndels</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --no-indels flag.
 </dd>
 <dt id="QC.Cutadapt.noMatchAdapterWildcards"><a href="#QC.Cutadapt.noMatchAdapterWildcards">QC.Cutadapt.noMatchAdapterWildcards</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --no-match-adapter-wildcards flag.
 </dd>
 <dt id="QC.Cutadapt.noTrim"><a href="#QC.Cutadapt.noTrim">QC.Cutadapt.noTrim</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --no-trim flag.
 </dd>
 <dt id="QC.Cutadapt.noZeroCap"><a href="#QC.Cutadapt.noZeroCap">QC.Cutadapt.noZeroCap</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --no-zero-cap flag.
 </dd>
 <dt id="QC.Cutadapt.overlap"><a href="#QC.Cutadapt.overlap">QC.Cutadapt.overlap</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to cutadapt's --overlap option.
 </dd>
 <dt id="QC.Cutadapt.pairFilter"><a href="#QC.Cutadapt.pairFilter">QC.Cutadapt.pairFilter</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --pair-filter option.
 </dd>
 <dt id="QC.Cutadapt.prefix"><a href="#QC.Cutadapt.prefix">QC.Cutadapt.prefix</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --prefix option.
 </dd>
 <dt id="QC.Cutadapt.qualityBase"><a href="#QC.Cutadapt.qualityBase">QC.Cutadapt.qualityBase</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to cutadapt's --quality-base option.
 </dd>
 <dt id="QC.Cutadapt.qualityCutoff"><a href="#QC.Cutadapt.qualityCutoff">QC.Cutadapt.qualityCutoff</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --quality-cutoff option.
 </dd>
 <dt id="QC.Cutadapt.restFilePath"><a href="#QC.Cutadapt.restFilePath">QC.Cutadapt.restFilePath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --rest-file option.
 </dd>
 <dt id="QC.Cutadapt.stripF3"><a href="#QC.Cutadapt.stripF3">QC.Cutadapt.stripF3</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --strip-f3 flag.
 </dd>
 <dt id="QC.Cutadapt.stripSuffix"><a href="#QC.Cutadapt.stripSuffix">QC.Cutadapt.stripSuffix</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --strip-suffix option.
 </dd>
 <dt id="QC.Cutadapt.suffix"><a href="#QC.Cutadapt.suffix">QC.Cutadapt.suffix</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --suffix option.
 </dd>
 <dt id="QC.Cutadapt.times"><a href="#QC.Cutadapt.times">QC.Cutadapt.times</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to cutadapt's --times option.
 </dd>
 <dt id="QC.Cutadapt.tooLongOutputPath"><a href="#QC.Cutadapt.tooLongOutputPath">QC.Cutadapt.tooLongOutputPath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --too-long-output option.
 </dd>
 <dt id="QC.Cutadapt.tooLongPairedOutputPath"><a href="#QC.Cutadapt.tooLongPairedOutputPath">QC.Cutadapt.tooLongPairedOutputPath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --too-long-paired-output option.
 </dd>
 <dt id="QC.Cutadapt.tooShortOutputPath"><a href="#QC.Cutadapt.tooShortOutputPath">QC.Cutadapt.tooShortOutputPath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --too-short-output option.
 </dd>
 <dt id="QC.Cutadapt.tooShortPairedOutputPath"><a href="#QC.Cutadapt.tooShortPairedOutputPath">QC.Cutadapt.tooShortPairedOutputPath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --too-short-paired-output option.
 </dd>
 <dt id="QC.Cutadapt.trimN"><a href="#QC.Cutadapt.trimN">QC.Cutadapt.trimN</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --trim-n flag.
-</dd>
-<dt id="QC.Cutadapt.trimPrimer"><a href="#QC.Cutadapt.trimPrimer">QC.Cutadapt.trimPrimer</a></dt>
-<dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
-    Equivalent to cutadapt's --trim-primer flag.
 </dd>
 <dt id="QC.Cutadapt.untrimmedOutputPath"><a href="#QC.Cutadapt.untrimmedOutputPath">QC.Cutadapt.untrimmedOutputPath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --untrimmed-output option.
 </dd>
 <dt id="QC.Cutadapt.untrimmedPairedOutputPath"><a href="#QC.Cutadapt.untrimmedPairedOutputPath">QC.Cutadapt.untrimmedPairedOutputPath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --untrimmed-paired-output option.
 </dd>
 <dt id="QC.Cutadapt.wildcardFilePath"><a href="#QC.Cutadapt.wildcardFilePath">QC.Cutadapt.wildcardFilePath</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to cutadapt's --wildcard-file option.
 </dd>
 <dt id="QC.Cutadapt.Z"><a href="#QC.Cutadapt.Z">QC.Cutadapt.Z</a></dt>
@@ -293,17 +283,17 @@ QC.
 </dd>
 <dt id="QC.Cutadapt.zeroCap"><a href="#QC.Cutadapt.zeroCap">QC.Cutadapt.zeroCap</a></dt>
 <dd>
-    <i>Boolean? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Boolean? </i><br />
     Equivalent to cutadapt's --zero-cap flag.
 </dd>
 <dt id="QC.dockerImages"><a href="#QC.dockerImages">QC.dockerImages</a></dt>
 <dd>
     <i>Map[String,String] </i><i>&mdash; Default:</i> <code>{"fastqc": "quay.io/biocontainers/fastqc:0.11.7--4", "cutadapt": "quay.io/biocontainers/cutadapt:2.4--py37h14c3975_0"}</code><br />
-    The docker image used for this task. Changing this may result in errors which the developers may choose not to address.
+    The docker images used. Changing this may result in errors which the developers may choose not to address.
 </dd>
 <dt id="QC.FastqcRead1.adapters"><a href="#QC.FastqcRead1.adapters">QC.FastqcRead1.adapters</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --adapters option.
 </dd>
 <dt id="QC.FastqcRead1.casava"><a href="#QC.FastqcRead1.casava">QC.FastqcRead1.casava</a></dt>
@@ -313,12 +303,12 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1.contaminants"><a href="#QC.FastqcRead1.contaminants">QC.FastqcRead1.contaminants</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --contaminants option.
 </dd>
 <dt id="QC.FastqcRead1.dir"><a href="#QC.FastqcRead1.dir">QC.FastqcRead1.dir</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to fastqc's --dir option.
 </dd>
 <dt id="QC.FastqcRead1.extract"><a href="#QC.FastqcRead1.extract">QC.FastqcRead1.extract</a></dt>
@@ -328,22 +318,22 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1.format"><a href="#QC.FastqcRead1.format">QC.FastqcRead1.format</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to fastqc's --format option.
 </dd>
 <dt id="QC.FastqcRead1.kmers"><a href="#QC.FastqcRead1.kmers">QC.FastqcRead1.kmers</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to fastqc's --kmers option.
 </dd>
 <dt id="QC.FastqcRead1.limits"><a href="#QC.FastqcRead1.limits">QC.FastqcRead1.limits</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --limits option.
 </dd>
 <dt id="QC.FastqcRead1.minLength"><a href="#QC.FastqcRead1.minLength">QC.FastqcRead1.minLength</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to fastqc's --min_length option.
 </dd>
 <dt id="QC.FastqcRead1.nano"><a href="#QC.FastqcRead1.nano">QC.FastqcRead1.nano</a></dt>
@@ -368,7 +358,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1After.adapters"><a href="#QC.FastqcRead1After.adapters">QC.FastqcRead1After.adapters</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --adapters option.
 </dd>
 <dt id="QC.FastqcRead1After.casava"><a href="#QC.FastqcRead1After.casava">QC.FastqcRead1After.casava</a></dt>
@@ -378,12 +368,12 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1After.contaminants"><a href="#QC.FastqcRead1After.contaminants">QC.FastqcRead1After.contaminants</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --contaminants option.
 </dd>
 <dt id="QC.FastqcRead1After.dir"><a href="#QC.FastqcRead1After.dir">QC.FastqcRead1After.dir</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to fastqc's --dir option.
 </dd>
 <dt id="QC.FastqcRead1After.extract"><a href="#QC.FastqcRead1After.extract">QC.FastqcRead1After.extract</a></dt>
@@ -393,22 +383,22 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1After.format"><a href="#QC.FastqcRead1After.format">QC.FastqcRead1After.format</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to fastqc's --format option.
 </dd>
 <dt id="QC.FastqcRead1After.kmers"><a href="#QC.FastqcRead1After.kmers">QC.FastqcRead1After.kmers</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to fastqc's --kmers option.
 </dd>
 <dt id="QC.FastqcRead1After.limits"><a href="#QC.FastqcRead1After.limits">QC.FastqcRead1After.limits</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --limits option.
 </dd>
 <dt id="QC.FastqcRead1After.minLength"><a href="#QC.FastqcRead1After.minLength">QC.FastqcRead1After.minLength</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to fastqc's --min_length option.
 </dd>
 <dt id="QC.FastqcRead1After.nano"><a href="#QC.FastqcRead1After.nano">QC.FastqcRead1After.nano</a></dt>
@@ -433,7 +423,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2.adapters"><a href="#QC.FastqcRead2.adapters">QC.FastqcRead2.adapters</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --adapters option.
 </dd>
 <dt id="QC.FastqcRead2.casava"><a href="#QC.FastqcRead2.casava">QC.FastqcRead2.casava</a></dt>
@@ -443,12 +433,12 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2.contaminants"><a href="#QC.FastqcRead2.contaminants">QC.FastqcRead2.contaminants</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --contaminants option.
 </dd>
 <dt id="QC.FastqcRead2.dir"><a href="#QC.FastqcRead2.dir">QC.FastqcRead2.dir</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to fastqc's --dir option.
 </dd>
 <dt id="QC.FastqcRead2.extract"><a href="#QC.FastqcRead2.extract">QC.FastqcRead2.extract</a></dt>
@@ -458,22 +448,22 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2.format"><a href="#QC.FastqcRead2.format">QC.FastqcRead2.format</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to fastqc's --format option.
 </dd>
 <dt id="QC.FastqcRead2.kmers"><a href="#QC.FastqcRead2.kmers">QC.FastqcRead2.kmers</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to fastqc's --kmers option.
 </dd>
 <dt id="QC.FastqcRead2.limits"><a href="#QC.FastqcRead2.limits">QC.FastqcRead2.limits</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --limits option.
 </dd>
 <dt id="QC.FastqcRead2.minLength"><a href="#QC.FastqcRead2.minLength">QC.FastqcRead2.minLength</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to fastqc's --min_length option.
 </dd>
 <dt id="QC.FastqcRead2.nano"><a href="#QC.FastqcRead2.nano">QC.FastqcRead2.nano</a></dt>
@@ -498,7 +488,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2After.adapters"><a href="#QC.FastqcRead2After.adapters">QC.FastqcRead2After.adapters</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --adapters option.
 </dd>
 <dt id="QC.FastqcRead2After.casava"><a href="#QC.FastqcRead2After.casava">QC.FastqcRead2After.casava</a></dt>
@@ -508,12 +498,12 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2After.contaminants"><a href="#QC.FastqcRead2After.contaminants">QC.FastqcRead2After.contaminants</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --contaminants option.
 </dd>
 <dt id="QC.FastqcRead2After.dir"><a href="#QC.FastqcRead2After.dir">QC.FastqcRead2After.dir</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to fastqc's --dir option.
 </dd>
 <dt id="QC.FastqcRead2After.extract"><a href="#QC.FastqcRead2After.extract">QC.FastqcRead2After.extract</a></dt>
@@ -523,22 +513,22 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2After.format"><a href="#QC.FastqcRead2After.format">QC.FastqcRead2After.format</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>String? </i><br />
     Equivalent to fastqc's --format option.
 </dd>
 <dt id="QC.FastqcRead2After.kmers"><a href="#QC.FastqcRead2After.kmers">QC.FastqcRead2After.kmers</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to fastqc's --kmers option.
 </dd>
 <dt id="QC.FastqcRead2After.limits"><a href="#QC.FastqcRead2After.limits">QC.FastqcRead2After.limits</a></dt>
 <dd>
-    <i>File? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>File? </i><br />
     Equivalent to fastqc's --limits option.
 </dd>
 <dt id="QC.FastqcRead2After.minLength"><a href="#QC.FastqcRead2After.minLength">QC.FastqcRead2After.minLength</a></dt>
 <dd>
-    <i>Int? </i><i>&mdash; Default:</i> <code>None</code><br />
+    <i>Int? </i><br />
     Equivalent to fastqc's --min_length option.
 </dd>
 <dt id="QC.FastqcRead2After.nano"><a href="#QC.FastqcRead2After.nano">QC.FastqcRead2After.nano</a></dt>
