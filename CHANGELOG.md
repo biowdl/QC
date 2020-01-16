@@ -11,6 +11,7 @@ that users understand how the changes affect the new version.
 
 version 1.3.0-dev
 -----------------
++ Added wdl-aid to linting.
 + Added miniwdl to linting.
 
 version 1.2.0
