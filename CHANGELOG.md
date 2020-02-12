@@ -11,6 +11,8 @@ that users understand how the changes affect the new version.
 
 version 1.3.0-dev
 -----------------
++ Add proper copyright headers to WDL files. So the free software license
+  is clear to end users who wish to adapt and modify.
 + Added wdl-aid to linting.
 + Added miniwdl to linting.
 
