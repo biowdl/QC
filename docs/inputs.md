@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Inputs
+title: "Inputs: QC"
 ---
 
 # Inputs for QC
@@ -331,6 +331,11 @@ QC.
     <i>File? </i><br />
     Equivalent to fastqc's --limits option.
 </dd>
+<dt id="QC.FastqcRead1.memory"><a href="#QC.FastqcRead1.memory">QC.FastqcRead1.memory</a></dt>
+<dd>
+    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    The amount of memory this job will use.
+</dd>
 <dt id="QC.FastqcRead1.minLength"><a href="#QC.FastqcRead1.minLength">QC.FastqcRead1.minLength</a></dt>
 <dd>
     <i>Int? </i><br />
@@ -395,6 +400,11 @@ QC.
 <dd>
     <i>File? </i><br />
     Equivalent to fastqc's --limits option.
+</dd>
+<dt id="QC.FastqcRead1After.memory"><a href="#QC.FastqcRead1After.memory">QC.FastqcRead1After.memory</a></dt>
+<dd>
+    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead1After.minLength"><a href="#QC.FastqcRead1After.minLength">QC.FastqcRead1After.minLength</a></dt>
 <dd>
@@ -461,6 +471,11 @@ QC.
     <i>File? </i><br />
     Equivalent to fastqc's --limits option.
 </dd>
+<dt id="QC.FastqcRead2.memory"><a href="#QC.FastqcRead2.memory">QC.FastqcRead2.memory</a></dt>
+<dd>
+    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    The amount of memory this job will use.
+</dd>
 <dt id="QC.FastqcRead2.minLength"><a href="#QC.FastqcRead2.minLength">QC.FastqcRead2.minLength</a></dt>
 <dd>
     <i>Int? </i><br />
@@ -525,6 +540,11 @@ QC.
 <dd>
     <i>File? </i><br />
     Equivalent to fastqc's --limits option.
+</dd>
+<dt id="QC.FastqcRead2After.memory"><a href="#QC.FastqcRead2After.memory">QC.FastqcRead2After.memory</a></dt>
+<dd>
+    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead2After.minLength"><a href="#QC.FastqcRead2After.minLength">QC.FastqcRead2After.minLength</a></dt>
 <dd>
