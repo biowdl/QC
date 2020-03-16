@@ -9,7 +9,7 @@ This document is user facing. Please word the changes in such a way
 that users understand how the changes affect the new version.
 -->
 
-version 1.3.0-dev
+version 1.3.0
 -----------------
 + Add proper copyright headers to WDL files. So the free software license
   is clear to end users who wish to adapt and modify.
