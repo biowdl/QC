@@ -66,9 +66,14 @@ QC.
     <i>Boolean? </i><br />
     Equivalent to cutadapt's --colorspace flag.
 </dd>
-<dt id="QC.Cutadapt.cores"><a href="#QC.Cutadapt.cores">QC.Cutadapt.cores</a></dt>
+<dt id="QC.Cutadapt.compressionLevel"><a href="#QC.Cutadapt.compressionLevel">QC.Cutadapt.compressionLevel</a></dt>
 <dd>
     <i>Int </i><i>&mdash; Default:</i> <code>1</code><br />
+    The compression level if gzipped output is used.
+</dd>
+<dt id="QC.Cutadapt.cores"><a href="#QC.Cutadapt.cores">QC.Cutadapt.cores</a></dt>
+<dd>
+    <i>Int </i><i>&mdash; Default:</i> <code>4</code><br />
     The number of cores to use.
 </dd>
 <dt id="QC.Cutadapt.cut"><a href="#QC.Cutadapt.cut">QC.Cutadapt.cut</a></dt>
@@ -276,11 +281,6 @@ QC.
     <i>String? </i><br />
     Equivalent to cutadapt's --wildcard-file option.
 </dd>
-<dt id="QC.Cutadapt.Z"><a href="#QC.Cutadapt.Z">QC.Cutadapt.Z</a></dt>
-<dd>
-    <i>Boolean </i><i>&mdash; Default:</i> <code>true</code><br />
-    Equivalent to cutadapt's -Z flag.
-</dd>
 <dt id="QC.Cutadapt.zeroCap"><a href="#QC.Cutadapt.zeroCap">QC.Cutadapt.zeroCap</a></dt>
 <dd>
     <i>Boolean? </i><br />
@@ -288,7 +288,7 @@ QC.
 </dd>
 <dt id="QC.dockerImages"><a href="#QC.dockerImages">QC.dockerImages</a></dt>
 <dd>
-    <i>Map[String,String] </i><i>&mdash; Default:</i> <code>{"fastqc": "quay.io/biocontainers/fastqc:0.11.7--4", "cutadapt": "quay.io/biocontainers/cutadapt:2.4--py37h14c3975_0"}</code><br />
+    <i>Map[String,String] </i><i>&mdash; Default:</i> <code>{"fastqc": "quay.io/biocontainers/fastqc:0.11.9--0", "cutadapt": "quay.io/biocontainers/cutadapt:2.8--py37h516909a_0"}</code><br />
     The docker images used. Changing this may result in errors which the developers may choose not to address.
 </dd>
 <dt id="QC.FastqcRead1.adapters"><a href="#QC.FastqcRead1.adapters">QC.FastqcRead1.adapters</a></dt>
