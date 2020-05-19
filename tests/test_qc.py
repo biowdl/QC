@@ -81,24 +81,26 @@ def contaminations_list(fastqc_zip: Path, only_known=False) -> Dict[str, str]:
     return contaminations
 
 
-@pytest.mark.workflow(name="paired_end_zipped")
-def test_paired_end_zipped_before_adapters_read_one(workflow_dir):
+@pytest.mark.workflow("single_end", "single_end_zipped", "paired_end",
+                      "paired_end_zipped")
+def test_before_adapters_present_read_one(workflow_dir):
     fastqc_data = (
             workflow_dir / Path("test-output") / Path("ct_r1_fastqc.zip"))
     assert adapters_present(
         fastqc_data).get('Illumina Universal Adapter') is True
 
 
-@pytest.mark.workflow(name="paired_end_zipped")
-def test_paired_end_zipped_before_adapters_read_two(workflow_dir):
+@pytest.mark.workflow("paired_end", "paired_end_zipped")
+def test_before_adapters_present_read_two(workflow_dir):
     fastqc_data = (
             workflow_dir / Path("test-output") / Path("ct_r2_fastqc.zip"))
     assert adapters_present(
         fastqc_data).get('Illumina Universal Adapter') is True
 
 
-@pytest.mark.workflow(name="paired_end_zipped")
-def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
+@pytest.mark.workflow("single_end", "single_end_zipped", "paired_end",
+                      "paired_end_zipped")
+def test_after_no_adapters_read_one(workflow_dir):
     fastqc_data = (
             workflow_dir / Path("test-output") / Path(
                 "cutadapt_ct_r1_fastqc.zip")
@@ -107,8 +109,8 @@ def test_paired_end_zipped_after_no_adapters_read_one(workflow_dir):
         fastqc_data).get('Illumina Universal Adapter') is False
 
 
-@pytest.mark.workflow(name="paired_end_zipped")
-def test_paired_end_zipped_after_no_adapters_read_two(workflow_dir):
+@pytest.mark.workflow("paired_end", "paired_end_zipped")
+def test_after_no_adapters_read_two(workflow_dir):
     fastqc_data = (
             workflow_dir / Path("test-output") / Path(
                 "cutadapt_ct_r2_fastqc.zip"))
