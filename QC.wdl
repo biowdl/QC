@@ -39,6 +39,7 @@ workflow QC {
         }
         # Only run cutadapt if it makes sense.
         Boolean runAdapterClipping = defined(adapterForward) || defined(adapterReverse) || length(select_first([contaminations, []])) > 0
+        Boolean extractFastqcZip = false
     }
 
     # If read2 is defined but a reverse adapter is not given we set it empty.
@@ -50,7 +51,8 @@ workflow QC {
         input:
             seqFile = read1,
             outdirPath = outputDir + "/",
-            dockerImage = dockerImages["fastqc"]
+            dockerImage = dockerImages["fastqc"],
+            extract = extractFastqcZip
     }
 
     if (defined(read2)) {
@@ -58,7 +60,8 @@ workflow QC {
             input:
                 seqFile = select_first([read2]),
                 outdirPath = outputDir + "/",
-                dockerImage = dockerImages["fastqc"]
+                dockerImage = dockerImages["fastqc"],
+                extract = extractFastqcZip
         }
         String read2outputPath = outputDir + "/cutadapt_" + basename(select_first([read2]))
     }
@@ -84,7 +87,8 @@ workflow QC {
             input:
                 seqFile = Cutadapt.cutRead1,
                 outdirPath = outputDir + "/",
-                dockerImage = dockerImages["fastqc"]
+                dockerImage = dockerImages["fastqc"],
+                extract = extractFastqcZip
         }
 
         if (defined(read2)) {
@@ -92,7 +96,8 @@ workflow QC {
                 input:
                     seqFile = select_first([Cutadapt.cutRead2]),
                     outdirPath = outputDir + "/",
-                    dockerImage = dockerImages["fastqc"]
+                    dockerImage = dockerImages["fastqc"],
+                    extract = extractFastqcZip
             }
         }
     }
@@ -113,6 +118,7 @@ workflow QC {
         File? read2afterHtmlReport = FastqcRead2After.htmlReport
         File? read2afterReportZip = FastqcRead2After.reportZip
         File? cutadaptReport = Cutadapt.report
+        Array[File] fastqcSummaries = select_all([FastqcRead1.summary, FastqcRead2.summary ,FastqcRead1After.summary, FastqcRead2After.summary]) 
         Array[File] reports = select_all([
             read1htmlReport,
             read1reportZip,
