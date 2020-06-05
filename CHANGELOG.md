@@ -11,6 +11,9 @@ that users understand how the changes affect the new version.
 
 version 1.5.0-develop
 ---------------------
++ The FastQC task can now set memory and threads independently. Memory for 
+  FastQC has been increased to support more types of NGS sequences without
+  out-of-memory errors.
 + Tasks were updated to contain the `time_minutes` runtime attribute and
   associated `timeMinutes` input, describing the maximum time the task will
   take to run.
