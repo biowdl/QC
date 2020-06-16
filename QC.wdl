@@ -143,6 +143,7 @@ workflow QC {
         dockerImages: {description: "The docker images used. Changing this may result in errors which the developers may choose not to address.",
                        category: "advanced"}
         runAdapterClipping: {description: "Whether or not adapters should be removed from the reads.", category: "advanced"}
+        extractFastqcZip: {description: "Whether to extract Fastqc's report zip files", category: "advanced"}
     }
  }
 
