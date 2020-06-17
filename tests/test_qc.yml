@@ -13,13 +13,25 @@
     - path: "test-output/ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
+    - path: "test-output/ct_r1_fastqc/summary.txt"
+      must_not_contain:
+        - "PASS\tAdapter Content"
     - path: "test-output/ct_r2_fastqc.html"
+    - path: "test-output/ct_r2_fastqc/summary.txt"
+      must_not_contain:
+        - "PASS\tAdapter Content"
     - path: "test-output/cutadapt_ct_r1_fastqc.zip"
     - path: "test-output/cutadapt_ct_r2_fastqc.zip"
     - path: "test-output/cutadapt_ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
+    - path: "test-output/cutadapt_ct_r1_fastqc/summary.txt"
+      contains:
+        - "PASS\tAdapter Content"
     - path: "test-output/cutadapt_ct_r2_fastqc.html"
+    - path: "test-output/cutadapt_ct_r2_fastqc/summary.txt"
+      contains:
+        - "PASS\tAdapter Content"
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq.gz"
     - path: "test-output/cutadapt_ct_r2.fq.gz"
@@ -40,12 +52,18 @@
     - path: "test-output/ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
+    - path: "test-output/ct_r1_fastqc/summary.txt"
+      must_not_contain:
+        - "PASS\tAdapter Content"
     - path: "test-output/ct_r2_fastqc.html"
       should_exist: false
     - path: "test-output/cutadapt_ct_r1_fastqc.zip"
     - path: "test-output/cutadapt_ct_r2_fastqc.zip"
       should_exist: false
     - path: "test-output/cutadapt_ct_r1_fastqc.html"
+    - path: "test-output/cutadapt_ct_r1_fastqc/summary.txt"
+      contains:
+        - "PASS\tAdapter Content"
       must_not_contain:
         - "TruSeq Adapter, Index 18"
     - path: "test-output/cutadapt_ct_r2_fastqc.html"
@@ -70,13 +88,24 @@
     - path: "test-output/ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
+    - path: "test-output/ct_r1_fastqc/summary.txt"
+      must_not_contain:
+        - "PASS\tAdapter Content"
     - path: "test-output/ct_r2_fastqc.html"
-    - path: "test-output/cutadapt_ct_r1_fastqc.zip"
+    - path: "test-output/ct_r2_fastqc/summary.txt"
+      must_not_contain:
+        - "PASS\tAdapter Content"
     - path: "test-output/cutadapt_ct_r2_fastqc.zip"
     - path: "test-output/cutadapt_ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
+    - path: "test-output/cutadapt_ct_r1_fastqc/summary.txt"
+      contains:
+        - "PASS\tAdapter Content"
     - path: "test-output/cutadapt_ct_r2_fastqc.html"
+    - path: "test-output/cutadapt_ct_r2_fastqc/summary.txt"
+      contains:
+        - "PASS\tAdapter Content"
     - path: "test-output/ct_r1_cutadapt_report.txt"
     - path: "test-output/cutadapt_ct_r1.fq"
     - path: "test-output/cutadapt_ct_r2.fq"
@@ -98,6 +127,9 @@
     - path: "test-output/ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
+    - path: "test-output/ct_r1_fastqc/summary.txt"
+      must_not_contain:
+        - "PASS\tAdapter Content"
     - path: "test-output/ct_r2_fastqc.html"
       should_exist: false
     - path: "test-output/cutadapt_ct_r1_fastqc.zip"
@@ -106,6 +138,9 @@
     - path: "test-output/cutadapt_ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
+    - path: "test-output/cutadapt_ct_r1_fastqc/summary.txt"
+      contains:
+        - "PASS\tAdapter Content"
     - path: "test-output/cutadapt_ct_r2_fastqc.html"
       should_exist: false
     - path: "test-output/ct_r1_cutadapt_report.txt"
@@ -131,12 +166,18 @@
         - "TruSeq Adapter, Index 18"
     - path: "test-output/ct_r2_fastqc.html"
       should_exist: false
+    - path: "test-output/ct_r1_fastqc/summary.txt"
+      must_not_contain:
+        - "PASS\tAdapter Content"
     - path: "test-output/cutadapt_ct_r1_fastqc.zip"
     - path: "test-output/cutadapt_ct_r2_fastqc.zip"
       should_exist: false
     - path: "test-output/cutadapt_ct_r1_fastqc.html"
       contains:
         - "TruSeq Adapter, Index 18"
+    - path: "test-output/cutadapt_ct_r1_fastqc/summary.txt"
+      contains:
+        - "PASS\tAdapter Content"
     - path: "test-output/cutadapt_ct_r2_fastqc.html"
       should_exist: false
     - path: "test-output/ct_r1_cutadapt_report.txt"
