@@ -41,6 +41,7 @@ workflow QC {
         Boolean runAdapterClipping = defined(adapterForward) || defined(adapterReverse) || length(select_first([contaminations, []])) > 0
         Boolean extractFastqcZip = false
     }
+    meta {allowNestedInputs: true}
 
     # If read2 is defined but a reverse adapter is not given we set it empty.
     # If read2 is defined and a reverse adapter is given we use that
