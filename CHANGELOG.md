@@ -11,6 +11,7 @@ that users understand how the changes affect the new version.
 
 version 1.5.0-develop
 ---------------------
++ Cutadapt has been updated to version 2.10
 + The FastQC task can now set memory and threads independently. Memory for 
   FastQC has been increased to support more types of NGS sequences without
   out-of-memory errors.
