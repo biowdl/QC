@@ -35,7 +35,7 @@ workflow QC {
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
         Map[String, String] dockerImages = {
         "fastqc": "quay.io/biocontainers/fastqc:0.11.9--0",
-        "cutadapt": "quay.io/biocontainers/cutadapt:2.10--py37h516909a_0"
+        "cutadapt": "quay.io/biocontainers/cutadapt:2.10--py37hf01694f_1"
         }
         # Only run cutadapt if it makes sense.
         Boolean runAdapterClipping = defined(adapterForward) || defined(adapterReverse) || length(select_first([contaminations, []])) > 0
