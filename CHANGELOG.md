@@ -9,7 +9,7 @@ This document is user facing. Please word the changes in such a way
 that users understand how the changes affect the new version.
 -->
 
-version 1.5.0-develop
+version 1.5.0
 ---------------------
 + Cutadapt has been updated to version 2.10
 + The FastQC task can now set memory and threads independently. Memory for 
