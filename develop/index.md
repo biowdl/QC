@@ -73,8 +73,8 @@ An example of an inputs.json might look like this:
 {
   "QC.read1":"/home/user/samples/sample_1/lib_1/rg_1/R1.fq.gz",
   "QC.read2":"/home/user/samples/sample_1/lib_1/rg_1/R2.fq.gz",
-  "QC.Cutadapt.adapter": ["AGATCGGAAGAG"],
-  "QC.Cutadapt.adapterRead2": ["AGATCGGAAGAG"]
+  "QC.adapterForward": ["AGATCGGAAGAG"],
+  "QC.adapterReverse": ["AGATCGGAAGAG"]
 }
 ```
 
