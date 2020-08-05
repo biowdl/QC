@@ -158,7 +158,7 @@ QC.
 </dd>
 <dt id="QC.Cutadapt.memory"><a href="#QC.Cutadapt.memory">QC.Cutadapt.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"~{300 + 100 * cores}M"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.Cutadapt.minimumLength"><a href="#QC.Cutadapt.minimumLength">QC.Cutadapt.minimumLength</a></dt>
@@ -236,6 +236,11 @@ QC.
     <i>String? </i><br />
     Equivalent to cutadapt's --suffix option.
 </dd>
+<dt id="QC.Cutadapt.timeMinutes"><a href="#QC.Cutadapt.timeMinutes">QC.Cutadapt.timeMinutes</a></dt>
+<dd>
+    <i>Int </i><i>&mdash; Default:</i> <code>1 + ceil((size([read1, read2],"G") * 12.0 / cores))</code><br />
+    The maximum amount of time the job will run in minutes.
+</dd>
 <dt id="QC.Cutadapt.times"><a href="#QC.Cutadapt.times">QC.Cutadapt.times</a></dt>
 <dd>
     <i>Int? </i><br />
@@ -288,8 +293,13 @@ QC.
 </dd>
 <dt id="QC.dockerImages"><a href="#QC.dockerImages">QC.dockerImages</a></dt>
 <dd>
-    <i>Map[String,String] </i><i>&mdash; Default:</i> <code>{"fastqc": "quay.io/biocontainers/fastqc:0.11.9--0", "cutadapt": "quay.io/biocontainers/cutadapt:2.8--py37h516909a_0"}</code><br />
+    <i>Map[String,String] </i><i>&mdash; Default:</i> <code>{"fastqc": "quay.io/biocontainers/fastqc:0.11.9--0", "cutadapt": "quay.io/biocontainers/cutadapt:2.10--py37hf01694f_1"}</code><br />
     The docker images used. Changing this may result in errors which the developers may choose not to address.
+</dd>
+<dt id="QC.extractFastqcZip"><a href="#QC.extractFastqcZip">QC.extractFastqcZip</a></dt>
+<dd>
+    <i>Boolean </i><i>&mdash; Default:</i> <code>false</code><br />
+    Whether to extract Fastqc's report zip files
 </dd>
 <dt id="QC.FastqcRead1.adapters"><a href="#QC.FastqcRead1.adapters">QC.FastqcRead1.adapters</a></dt>
 <dd>
@@ -311,15 +321,15 @@ QC.
     <i>String? </i><br />
     Equivalent to fastqc's --dir option.
 </dd>
-<dt id="QC.FastqcRead1.extract"><a href="#QC.FastqcRead1.extract">QC.FastqcRead1.extract</a></dt>
-<dd>
-    <i>Boolean </i><i>&mdash; Default:</i> <code>false</code><br />
-    Equivalent to fastqc's --extract flag.
-</dd>
 <dt id="QC.FastqcRead1.format"><a href="#QC.FastqcRead1.format">QC.FastqcRead1.format</a></dt>
 <dd>
     <i>String? </i><br />
     Equivalent to fastqc's --format option.
+</dd>
+<dt id="QC.FastqcRead1.javaXmx"><a href="#QC.FastqcRead1.javaXmx">QC.FastqcRead1.javaXmx</a></dt>
+<dd>
+    <i>String </i><i>&mdash; Default:</i> <code>"1750M"</code><br />
+    The maximum memory available to the program. Should be lower than `memory` to accommodate JVM overhead.
 </dd>
 <dt id="QC.FastqcRead1.kmers"><a href="#QC.FastqcRead1.kmers">QC.FastqcRead1.kmers</a></dt>
 <dd>
@@ -333,7 +343,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1.memory"><a href="#QC.FastqcRead1.memory">QC.FastqcRead1.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"2G"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead1.minLength"><a href="#QC.FastqcRead1.minLength">QC.FastqcRead1.minLength</a></dt>
@@ -361,6 +371,11 @@ QC.
     <i>Int </i><i>&mdash; Default:</i> <code>1</code><br />
     The number of cores to use.
 </dd>
+<dt id="QC.FastqcRead1.timeMinutes"><a href="#QC.FastqcRead1.timeMinutes">QC.FastqcRead1.timeMinutes</a></dt>
+<dd>
+    <i>Int </i><i>&mdash; Default:</i> <code>1 + ceil(size(seqFile,"G")) * 4</code><br />
+    The maximum amount of time the job will run in minutes.
+</dd>
 <dt id="QC.FastqcRead1After.adapters"><a href="#QC.FastqcRead1After.adapters">QC.FastqcRead1After.adapters</a></dt>
 <dd>
     <i>File? </i><br />
@@ -381,15 +396,15 @@ QC.
     <i>String? </i><br />
     Equivalent to fastqc's --dir option.
 </dd>
-<dt id="QC.FastqcRead1After.extract"><a href="#QC.FastqcRead1After.extract">QC.FastqcRead1After.extract</a></dt>
-<dd>
-    <i>Boolean </i><i>&mdash; Default:</i> <code>false</code><br />
-    Equivalent to fastqc's --extract flag.
-</dd>
 <dt id="QC.FastqcRead1After.format"><a href="#QC.FastqcRead1After.format">QC.FastqcRead1After.format</a></dt>
 <dd>
     <i>String? </i><br />
     Equivalent to fastqc's --format option.
+</dd>
+<dt id="QC.FastqcRead1After.javaXmx"><a href="#QC.FastqcRead1After.javaXmx">QC.FastqcRead1After.javaXmx</a></dt>
+<dd>
+    <i>String </i><i>&mdash; Default:</i> <code>"1750M"</code><br />
+    The maximum memory available to the program. Should be lower than `memory` to accommodate JVM overhead.
 </dd>
 <dt id="QC.FastqcRead1After.kmers"><a href="#QC.FastqcRead1After.kmers">QC.FastqcRead1After.kmers</a></dt>
 <dd>
@@ -403,7 +418,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1After.memory"><a href="#QC.FastqcRead1After.memory">QC.FastqcRead1After.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"2G"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead1After.minLength"><a href="#QC.FastqcRead1After.minLength">QC.FastqcRead1After.minLength</a></dt>
@@ -431,6 +446,11 @@ QC.
     <i>Int </i><i>&mdash; Default:</i> <code>1</code><br />
     The number of cores to use.
 </dd>
+<dt id="QC.FastqcRead1After.timeMinutes"><a href="#QC.FastqcRead1After.timeMinutes">QC.FastqcRead1After.timeMinutes</a></dt>
+<dd>
+    <i>Int </i><i>&mdash; Default:</i> <code>1 + ceil(size(seqFile,"G")) * 4</code><br />
+    The maximum amount of time the job will run in minutes.
+</dd>
 <dt id="QC.FastqcRead2.adapters"><a href="#QC.FastqcRead2.adapters">QC.FastqcRead2.adapters</a></dt>
 <dd>
     <i>File? </i><br />
@@ -451,15 +471,15 @@ QC.
     <i>String? </i><br />
     Equivalent to fastqc's --dir option.
 </dd>
-<dt id="QC.FastqcRead2.extract"><a href="#QC.FastqcRead2.extract">QC.FastqcRead2.extract</a></dt>
-<dd>
-    <i>Boolean </i><i>&mdash; Default:</i> <code>false</code><br />
-    Equivalent to fastqc's --extract flag.
-</dd>
 <dt id="QC.FastqcRead2.format"><a href="#QC.FastqcRead2.format">QC.FastqcRead2.format</a></dt>
 <dd>
     <i>String? </i><br />
     Equivalent to fastqc's --format option.
+</dd>
+<dt id="QC.FastqcRead2.javaXmx"><a href="#QC.FastqcRead2.javaXmx">QC.FastqcRead2.javaXmx</a></dt>
+<dd>
+    <i>String </i><i>&mdash; Default:</i> <code>"1750M"</code><br />
+    The maximum memory available to the program. Should be lower than `memory` to accommodate JVM overhead.
 </dd>
 <dt id="QC.FastqcRead2.kmers"><a href="#QC.FastqcRead2.kmers">QC.FastqcRead2.kmers</a></dt>
 <dd>
@@ -473,7 +493,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2.memory"><a href="#QC.FastqcRead2.memory">QC.FastqcRead2.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"2G"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead2.minLength"><a href="#QC.FastqcRead2.minLength">QC.FastqcRead2.minLength</a></dt>
@@ -501,6 +521,11 @@ QC.
     <i>Int </i><i>&mdash; Default:</i> <code>1</code><br />
     The number of cores to use.
 </dd>
+<dt id="QC.FastqcRead2.timeMinutes"><a href="#QC.FastqcRead2.timeMinutes">QC.FastqcRead2.timeMinutes</a></dt>
+<dd>
+    <i>Int </i><i>&mdash; Default:</i> <code>1 + ceil(size(seqFile,"G")) * 4</code><br />
+    The maximum amount of time the job will run in minutes.
+</dd>
 <dt id="QC.FastqcRead2After.adapters"><a href="#QC.FastqcRead2After.adapters">QC.FastqcRead2After.adapters</a></dt>
 <dd>
     <i>File? </i><br />
@@ -521,15 +546,15 @@ QC.
     <i>String? </i><br />
     Equivalent to fastqc's --dir option.
 </dd>
-<dt id="QC.FastqcRead2After.extract"><a href="#QC.FastqcRead2After.extract">QC.FastqcRead2After.extract</a></dt>
-<dd>
-    <i>Boolean </i><i>&mdash; Default:</i> <code>false</code><br />
-    Equivalent to fastqc's --extract flag.
-</dd>
 <dt id="QC.FastqcRead2After.format"><a href="#QC.FastqcRead2After.format">QC.FastqcRead2After.format</a></dt>
 <dd>
     <i>String? </i><br />
     Equivalent to fastqc's --format option.
+</dd>
+<dt id="QC.FastqcRead2After.javaXmx"><a href="#QC.FastqcRead2After.javaXmx">QC.FastqcRead2After.javaXmx</a></dt>
+<dd>
+    <i>String </i><i>&mdash; Default:</i> <code>"1750M"</code><br />
+    The maximum memory available to the program. Should be lower than `memory` to accommodate JVM overhead.
 </dd>
 <dt id="QC.FastqcRead2After.kmers"><a href="#QC.FastqcRead2After.kmers">QC.FastqcRead2After.kmers</a></dt>
 <dd>
@@ -543,7 +568,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2After.memory"><a href="#QC.FastqcRead2After.memory">QC.FastqcRead2After.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"4G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"2G"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead2After.minLength"><a href="#QC.FastqcRead2After.minLength">QC.FastqcRead2After.minLength</a></dt>
@@ -570,6 +595,11 @@ QC.
 <dd>
     <i>Int </i><i>&mdash; Default:</i> <code>1</code><br />
     The number of cores to use.
+</dd>
+<dt id="QC.FastqcRead2After.timeMinutes"><a href="#QC.FastqcRead2After.timeMinutes">QC.FastqcRead2After.timeMinutes</a></dt>
+<dd>
+    <i>Int </i><i>&mdash; Default:</i> <code>1 + ceil(size(seqFile,"G")) * 4</code><br />
+    The maximum amount of time the job will run in minutes.
 </dd>
 <dt id="QC.runAdapterClipping"><a href="#QC.runAdapterClipping">QC.runAdapterClipping</a></dt>
 <dd>
