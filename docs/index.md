@@ -8,7 +8,8 @@ workflow which can be used for quality control preprocessing and
 reporting of sequencing data.
 
 These workflows are part of [BioWDL](https://biowdl.github.io/)
-developed by the SASC team at [Leiden University Medical Center](https://www.lumc.nl/).
+developed by the SASC team
+at [Leiden University Medical Center](https://www.lumc.nl/).
 
 ## Usage
 
