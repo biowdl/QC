@@ -110,7 +110,6 @@
     - path: "test-output/cutadapt_ct_r1.fq"
     - path: "test-output/cutadapt_ct_r2.fq"
 
-
 - name: single_end_zipped
   tags:
     - integration
