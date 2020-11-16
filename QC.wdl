@@ -151,18 +151,18 @@ workflow QC {
         dockerImages: {description: "The docker images used. Changing this may result in errors which the developers may choose not to address.", category: "advanced"}
 
         # outputs
-        qcRead1: {description: ""}
-        qcRead2: {description: ""}
-        read1htmlReport: {description: ""}
-        read1reportZip: {description: ""}
-        read2htmlReport: {description: ""}
-        read2reportZip: {description: ""}
-        read1afterHtmlReport: {description: ""}
-        read1afterReportZip: {description: ""}
-        read2afterHtmlReport: {description: ""}
-        read2afterReportZip: {description: ""}
-        cutadaptReport: {description: ""}
-        fastqcSummaries: {description: ""}
-        reports: {description: ""}
+        qcRead1: {description: "The first or single end fastq file processed by CutAdapt."}
+        qcRead2: {description: "An optional second end fastq file processed by CutAdapt."}
+        read1htmlReport: {description: "Fastqc HTML report for the first or single end fastq file."}
+        read1reportZip: {description: "Fastqc zip archive containing data for the first or single end fastq file."}
+        read2htmlReport: {description: "Fastqc HTML report for the optional second end fastq file."}
+        read2reportZip: {description: "Fastqc zip archive containing data for the optional second end fastq file."}
+        read1afterHtmlReport: {description: "Fastqc HTML report for the first or single end fastq file after CutAdapt processing."}
+        read1afterReportZip: {description: "Fastqc zip archive containing data for the first or single end fastq file after CutAdapt processing."}
+        read2afterHtmlReport: {description: "Fastqc HTML report for the optional second end fastq file after CutAdapt processing."}
+        read2afterReportZip: {description: "Fastqc zip archive containing data for the optional second end fastq file after CutAdapt processing."}
+        cutadaptReport: {description: "Report from CutAdapt processing of input fastq file(s)."}
+        fastqcSummaries: {description: "Fastqc summary file(s)."}
+        reports: {description: "Collection of all reports produced by the workflow."}
     }
 }
