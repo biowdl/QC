@@ -8,6 +8,10 @@ This document is user facing. Please word the changes in such a way
 that users understand how the changes affect the new version.
 -->
 
+version 1.6.0
+---------------------
++ Update parameter_meta outputs.
+
 version 1.5.0
 ---------------------
 + Cutadapt has been updated to version 2.10.
