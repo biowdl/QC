@@ -39,8 +39,8 @@ workflow QC {
         Array[String]+? contaminations
 
         Map[String, String] dockerImages = {
-        "fastqc": "quay.io/biocontainers/fastqc:0.11.9--0",
-        "cutadapt": "quay.io/biocontainers/cutadapt:3.0--py37hf01694f_0"
+            "fastqc": "quay.io/biocontainers/fastqc:0.11.9--0",
+            "cutadapt": "quay.io/biocontainers/cutadapt:3.0--py37hf01694f_0"
         }
     }
 
@@ -134,7 +134,7 @@ workflow QC {
             read2afterHtmlReport,
             read2afterReportZip,
             cutadaptReport
-            ])
+        ])
     }
 
     parameter_meta {
