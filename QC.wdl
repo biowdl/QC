@@ -40,7 +40,7 @@ workflow QC {
 
         Map[String, String] dockerImages = {
         "fastqc": "quay.io/biocontainers/fastqc:0.11.9--0",
-        "cutadapt": "quay.io/biocontainers/cutadapt:2.10--py37hf01694f_1"
+        "cutadapt": "quay.io/biocontainers/cutadapt:3.0--py37hf01694f_0"
         }
     }
 

@@ -10,6 +10,7 @@ that users understand how the changes affect the new version.
 
 version 1.6.0
 ---------------------
++ Update CutAdapt to version 3.0.0.
 + Update parameter_meta outputs.
 
 version 1.5.0
