@@ -28,23 +28,26 @@ workflow QC {
         File read1
         File? read2
         String outputDir = "."
-        String? adapterForward = "AGATCGGAAGAG"  # Illumina universal adapter
-        String? adapterReverse = "AGATCGGAAGAG"  # Illumina universal adapter
-        Array[String]+? contaminations
         # A readgroupName so cutadapt creates a unique report name. This is useful if all the QC files are dumped in one folder.
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
-        Map[String, String] dockerImages = {
-        "fastqc": "quay.io/biocontainers/fastqc:0.11.9--0",
-        "cutadapt": "quay.io/biocontainers/cutadapt:2.10--py37hf01694f_1"
-        }
         # Only run cutadapt if it makes sense.
         Boolean runAdapterClipping = defined(adapterForward) || defined(adapterReverse) || length(select_first([contaminations, []])) > 0
         Boolean extractFastqcZip = false
+
+        String? adapterForward = "AGATCGGAAGAG"  # Illumina universal adapter
+        String? adapterReverse = "AGATCGGAAGAG"  # Illumina universal adapter
+        Array[String]+? contaminations
+
+        Map[String, String] dockerImages = {
+            "fastqc": "quay.io/biocontainers/fastqc:0.11.9--0",
+            "cutadapt": "quay.io/biocontainers/cutadapt:2.10--py37hf01694f_1"
+        }
     }
+
     meta {allowNestedInputs: true}
 
     # If read2 is defined but a reverse adapter is not given we set it empty.
-    # If read2 is defined and a reverse adapter is given we use that
+    # If read2 is defined and a reverse adapter is given we use that.
     # If read2 is not defined we set it empty.
     Array[String] adapterReverseDefault = if defined(read2) then select_all([adapterReverse]) else []
 
@@ -52,8 +55,8 @@ workflow QC {
         input:
             seqFile = read1,
             outdirPath = outputDir + "/",
-            dockerImage = dockerImages["fastqc"],
-            extract = extractFastqcZip
+            extract = extractFastqcZip,
+            dockerImage = dockerImages["fastqc"]
     }
 
     if (defined(read2)) {
@@ -61,9 +64,10 @@ workflow QC {
             input:
                 seqFile = select_first([read2]),
                 outdirPath = outputDir + "/",
-                dockerImage = dockerImages["fastqc"],
-                extract = extractFastqcZip
+                extract = extractFastqcZip,
+                dockerImage = dockerImages["fastqc"]
         }
+
         String read2outputPath = outputDir + "/cutadapt_" + basename(select_first([read2]))
     }
 
@@ -88,8 +92,8 @@ workflow QC {
             input:
                 seqFile = Cutadapt.cutRead1,
                 outdirPath = outputDir + "/",
-                dockerImage = dockerImages["fastqc"],
-                extract = extractFastqcZip
+                extract = extractFastqcZip,
+                dockerImage = dockerImages["fastqc"]
         }
 
         if (defined(read2)) {
@@ -97,8 +101,8 @@ workflow QC {
                 input:
                     seqFile = select_first([Cutadapt.cutRead2]),
                     outdirPath = outputDir + "/",
-                    dockerImage = dockerImages["fastqc"],
-                    extract = extractFastqcZip
+                    extract = extractFastqcZip,
+                    dockerImage = dockerImages["fastqc"]
             }
         }
     }
@@ -130,23 +134,35 @@ workflow QC {
             read2afterHtmlReport,
             read2afterReportZip,
             cutadaptReport
-            ])
+        ])
     }
 
     parameter_meta {
+        # inputs
         read1: {description: "The first or single end fastq file to be run through cutadapt.", category: "required"}
         read2: {description: "An optional second end fastq file to be run through cutadapt.", category: "common"}
         outputDir: {description: "The directory to which the outputs will be written.", category: "common"}
+        readgroupName: {description: "The name of the readgroup.", category: "common"}
+        runAdapterClipping: {description: "Whether or not adapters should be removed from the reads.", category: "advanced"}
+        extractFastqcZip: {description: "Whether to extract Fastqc's report zip files.", category: "advanced"}
         adapterForward: {description: "The adapter to be removed from the reads first or single end reads.", category: "common"}
         adapterReverse: {description: "The adapter to be removed from the reads second end reads.", category: "common"}
         contaminations: {description: "Contaminants/adapters to be removed from the reads.", category: "common"}
-        readgroupName: {description: "The name of the readgroup.", category: "common"}
-        dockerImages: {description: "The docker images used. Changing this may result in errors which the developers may choose not to address.",
-                       category: "advanced"}
-        runAdapterClipping: {description: "Whether or not adapters should be removed from the reads.", category: "advanced"}
-        extractFastqcZip: {description: "Whether to extract Fastqc's report zip files", category: "advanced"}
+        dockerImages: {description: "The docker images used. Changing this may result in errors which the developers may choose not to address.", category: "advanced"}
+
+        # outputs
+        qcRead1: {description: "The first or single end fastq file processed by CutAdapt."}
+        qcRead2: {description: "An optional second end fastq file processed by CutAdapt."}
+        read1htmlReport: {description: "Fastqc HTML report for the first or single end fastq file."}
+        read1reportZip: {description: "Fastqc zip archive containing data for the first or single end fastq file."}
+        read2htmlReport: {description: "Fastqc HTML report for the optional second end fastq file."}
+        read2reportZip: {description: "Fastqc zip archive containing data for the optional second end fastq file."}
+        read1afterHtmlReport: {description: "Fastqc HTML report for the first or single end fastq file after CutAdapt processing."}
+        read1afterReportZip: {description: "Fastqc zip archive containing data for the first or single end fastq file after CutAdapt processing."}
+        read2afterHtmlReport: {description: "Fastqc HTML report for the optional second end fastq file after CutAdapt processing."}
+        read2afterReportZip: {description: "Fastqc zip archive containing data for the optional second end fastq file after CutAdapt processing."}
+        cutadaptReport: {description: "Report from CutAdapt processing of input fastq file(s)."}
+        fastqcSummaries: {description: "Fastqc summary file(s)."}
+        reports: {description: "Collection of all reports produced by the workflow."}
     }
- }
-
-
-
+}

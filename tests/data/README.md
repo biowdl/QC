@@ -1,11 +1,9 @@
 Fixtures
 ========
-
 Various files for bioinformatics pipelines integration test.
 
 
 ## Sequencing files (FASTQ)
-
 | :File Name:                   | :Description:                                                                                |
 | ----------------------------- | ---------------------------------------------------------------------------------------------|
 | ct_r1.fq.gz                   | gzipped FASTQ file, sanger encoding, contains low quality base and Illumina adapters, pair 1 |
@@ -16,6 +14,5 @@ Various files for bioinformatics pipelines integration test.
 
 
 ## Alignment files (SAM, BAM)
-
 | :File Name:                   | :Description:                                                          |
 | ----------------------------- | ---------------------------------------------------------------------- |
