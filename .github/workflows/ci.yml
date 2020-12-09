@@ -7,10 +7,6 @@ on:
       - "**.yml"  # Ci configuration, tests and docker images 
       - "!docs/**"
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   lint:
     runs-on: ubuntu-latest
