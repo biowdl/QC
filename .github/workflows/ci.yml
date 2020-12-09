@@ -32,14 +32,15 @@ jobs:
         run: bash scripts/biowdl_lint.sh
   test:
     runs-on: ubuntu-latest
-    matrix:
-      test: [
-        "paired_end_zipped",
-        "paired_end",
-        "single_end_zipped",
-        "single_end_zipped_contaminations",
-        "single_end"
-      ]
+    strategy:
+      matrix:
+        test: [
+          "paired_end_zipped",
+          "paired_end",
+          "single_end_zipped",
+          "single_end_zipped_contaminations",
+          "single_end"
+        ]
     steps:
       - name: install miniconda
         run: |
