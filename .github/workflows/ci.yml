@@ -35,13 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test: [
-          "paired_end_zipped",
-          "paired_end",
-          "single_end_zipped",
-          "single_end_zipped_contaminations",
-          "single_end"
-        ]
+        test:
+          - paired_end_zipped
+          - paired_end
+          - single_end_zipped
+          - single_end_zipped_contaminations
+          - single_end
     steps:
       - uses: actions/checkout@v2.3.4
         with:
