@@ -18,6 +18,11 @@ jobs:
     steps:
       - name: install miniconda
         uses: conda-incubator/setup-miniconda@v2.0.1
+      - name: Set up conda channels
+        run: | 
+          conda config --add channels defaults
+          conda config --add channels bioconda
+          conda config --add channels conda-forge
       - name: install requirements
         run: conda install cromwell miniwdl wdl-aid
       - name: run linting
@@ -37,6 +42,11 @@ jobs:
     steps:
       - name: install miniconda
         uses: conda-incubator/setup-miniconda@v2.0.1
+      - name: Set up conda channels
+        run: | 
+          conda config --add channels defaults
+          conda config --add channels bioconda
+          conda config --add channels conda-forge
       - name: install requirements
         run: conda install  --file requirements-test.txt
       - name: Run test
