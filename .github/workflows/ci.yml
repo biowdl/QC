@@ -26,8 +26,10 @@ jobs:
           conda config --add channels defaults
           conda config --add channels bioconda
           conda config --add channels conda-forge
-      - name: install requirements
-        run: conda install cromwell miniwdl wdl-aid
+      - name: install requirements and activate environment
+        run: |
+          conda create -n lint miniwdl cromwell wdl-aid
+          conda activate test      
       - name: run linting
         run: bash scripts/biowdl_lint.sh
   test:
@@ -53,8 +55,10 @@ jobs:
           conda config --add channels defaults
           conda config --add channels bioconda
           conda config --add channels conda-forge
-      - name: install requirements
-        run: conda install  --file requirements-test.txt
+      - name: install requirements and activate environment
+        run: |
+          conda create -n test --file requirements-test.txt
+          conda activate test
       - name: Run test
         run: pytest --keep-workflow-wd-on-fail --tag ${{ matrix.test }} tests/
       - name: Check logs in case of failure
