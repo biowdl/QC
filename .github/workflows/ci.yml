@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Womtool validate and submodule up to date.
     steps:
-      - uses: checkout@v2.3.4
+      - uses: actions/checkout@v2.3.4
         with:
           submodules: recursive
       - name: install miniconda
@@ -43,7 +43,7 @@ jobs:
           "single_end"
         ]
     steps:
-      - uses: checkout@v2.3.4
+      - uses: actions/checkout@v2.3.4
         with:
           submodules: recursive
       - name: install miniconda
