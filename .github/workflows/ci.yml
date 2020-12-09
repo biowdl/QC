@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Womtool validate and submodule up to date.
     steps:
+      - uses: checkout@v2.3.4
+        with:
+          submodules: recursive
       - name: install miniconda
         uses: conda-incubator/setup-miniconda@v2.0.1
       - name: Set up conda channels
@@ -40,6 +43,9 @@ jobs:
           "single_end"
         ]
     steps:
+      - uses: checkout@v2.3.4
+        with:
+          submodules: recursive
       - name: install miniconda
         uses: conda-incubator/setup-miniconda@v2.0.1
       - name: Set up conda channels
