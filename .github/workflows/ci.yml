@@ -9,7 +9,9 @@ on:
 
 defaults:
   run:
-    shell: bash -l {0}
+    # This is needed for miniconda, see:
+    # https://github.com/marketplace/actions/setup-miniconda#important
+    shell: bash -l {0}  
 
 jobs:
   lint:
@@ -27,9 +29,7 @@ jobs:
       - name: install requirements
         run: conda install -n test cromwell miniwdl wdl-aid
       - name: run linting
-        run: |
-          printenv
-          bash scripts/biowdl_lint.sh
+        run: bash scripts/biowdl_lint.sh
   test:
     needs: lint  # Don't start testing before the lint has succeeded.
     runs-on: ubuntu-latest
