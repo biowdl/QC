@@ -19,10 +19,13 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2.0.1
         with:
           channels: conda-forge,bioconda,defaults
+        # Conda-incubator uses 'test' environment by default.
       - name: install requirements
         run: conda install -n test cromwell miniwdl wdl-aid
       - name: run linting
-        run: bash scripts/biowdl_lint.sh
+        run: |
+          printenv
+          bash scripts/biowdl_lint.sh
   test:
     needs: lint  # Don't start testing before the lint has succeeded.
     runs-on: ubuntu-latest
