@@ -9,11 +9,11 @@ that users understand how the changes affect the new version.
 -->
 
 version 1.6.0
----------------------
+---------------------------
 + Update parameter_meta outputs.
 
 version 1.5.0
----------------------
+---------------------------
 + Cutadapt has been updated to version 2.10.
 + The FastQC task can now set memory and threads independently. Memory for
   FastQC has been increased to support more types of NGS sequences without
@@ -23,18 +23,18 @@ version 1.5.0
   take to run.
 
 version 1.4.0
------------------
+---------------------------
 + Update versions of Fastqc and Cutadapt.
 
 version 1.3.0
------------------
+---------------------------
 + Add proper copyright headers to WDL files. So the free software license
   is clear to end users who wish to adapt and modify.
 + Added wdl-aid to linting.
 + Added miniwdl to linting.
 
 version 1.2.0
------------------
+---------------------------
 + Added parameter_meta to QC workflow.
 + Added an overview of all inputs to the docs.
 + Fixed various issues causing miniwdl to be unable to parse the workflow.
