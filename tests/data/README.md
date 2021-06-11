@@ -12,7 +12,3 @@ Various files for the integration tests.
 | ct_r2.fq.gz                   | gzipped FASTQ file, sanger encoding, contains low quality base and Illumina adapters, pair 2 |
 | ct_r2.not_sync.fq             |                                                                                              |
 | ----------------------------- | ---------------------------------------------------------------------------------------------|
-
-## Alignment files (SAM, BAM)
-| :File Name:                   | :Description:                                                          |
-| ----------------------------- | ---------------------------------------------------------------------- |
