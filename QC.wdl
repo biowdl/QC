@@ -28,7 +28,8 @@ workflow QC {
         File read1
         File? read2
         String outputDir = "."
-        # A readgroupName so cutadapt creates a unique report name. This is useful if all the QC files are dumped in one folder.
+        # A readgroupName so cutadapt creates a unique report name.
+        # This is useful if all the QC files are dumped in one folder.
         String readgroupName = sub(basename(read1),"(\.fq)?(\.fastq)?(\.gz)?", "")
         # Only run cutadapt if it makes sense.
         Boolean runAdapterClipping = defined(adapterForward) || defined(adapterReverse) || length(select_first([contaminations, []])) > 0
@@ -44,7 +45,9 @@ workflow QC {
         }
     }
 
-    meta {allowNestedInputs: true}
+    meta {
+        allowNestedInputs: true
+    }
 
     # If read2 is defined but a reverse adapter is not given we set it empty.
     # If read2 is defined and a reverse adapter is given we use that.
