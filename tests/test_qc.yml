@@ -6,7 +6,7 @@
     -i tests/integration/paired_end_zipped.json QC.wdl
   stdout:
     contains:
-      - "WorkflowSucceededState"
+      - "SingleWorkflowRunnerActor workflow finished with status 'Succeeded'."
   files:
     - path: "test-output/ct_r1_fastqc.zip"
     - path: "test-output/ct_r2_fastqc.zip"
@@ -44,7 +44,7 @@
     -i tests/integration/single_end_zipped_contaminations.json QC.wdl
   stdout:
     contains:
-      - "WorkflowSucceededState"
+      - "SingleWorkflowRunnerActor workflow finished with status 'Succeeded'."
   files:
     - path: "test-output/ct_r1_fastqc.zip"
     - path: "test-output/ct_r2_fastqc.zip"
@@ -81,7 +81,7 @@
     -i tests/integration/paired_end.json QC.wdl
   stdout:
     contains:
-      - "WorkflowSucceededState"
+      - "SingleWorkflowRunnerActor workflow finished with status 'Succeeded'."
   files:
     - path: "test-output/ct_r1_fastqc.zip"
     - path: "test-output/ct_r2_fastqc.zip"
@@ -118,7 +118,7 @@
     -i tests/integration/single_end_zipped.json QC.wdl
   stdout:
     contains:
-      - "WorkflowSucceededState"
+      - "SingleWorkflowRunnerActor workflow finished with status 'Succeeded'."
   files:
     - path: "test-output/ct_r1_fastqc.zip"
     - path: "test-output/ct_r2_fastqc.zip"
@@ -155,7 +155,7 @@
     -i tests/integration/single_end.json QC.wdl
   stdout:
     contains:
-      - "WorkflowSucceededState"
+      - "SingleWorkflowRunnerActor workflow finished with status 'Succeeded'."
   files:
     - path: "test-output/ct_r1_fastqc.zip"
     - path: "test-output/ct_r2_fastqc.zip"

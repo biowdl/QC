@@ -1,7 +1,6 @@
 # QC
-This repository contains the [Biowdl](https://github.com/biowdl) 
-workflow usable for performing quality control preprocessing and
-reporting.
+This repository contains the [Biowdl](https://github.com/biowdl) workflow
+usable for performing quality control preprocessing and reporting.
 
 ## Documentation
 Documentation for this workflow can be
