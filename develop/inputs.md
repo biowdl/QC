@@ -158,7 +158,7 @@ QC.
 </dd>
 <dt id="QC.Cutadapt.memory"><a href="#QC.Cutadapt.memory">QC.Cutadapt.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"~{300 + 100 * cores}M"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"5G"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.Cutadapt.minimumLength"><a href="#QC.Cutadapt.minimumLength">QC.Cutadapt.minimumLength</a></dt>
@@ -299,7 +299,7 @@ QC.
 <dt id="QC.extractFastqcZip"><a href="#QC.extractFastqcZip">QC.extractFastqcZip</a></dt>
 <dd>
     <i>Boolean </i><i>&mdash; Default:</i> <code>false</code><br />
-    Whether to extract Fastqc's report zip files
+    Whether to extract Fastqc's report zip files.
 </dd>
 <dt id="QC.FastqcRead1.adapters"><a href="#QC.FastqcRead1.adapters">QC.FastqcRead1.adapters</a></dt>
 <dd>
@@ -617,11 +617,11 @@ QC.
 The following inputs should ***not*** be set, even though womtool may
 show them as being available inputs.
 
-* QC.FastqcRead1.NoneFile
-* QC.FastqcRead1.NoneArray
-* QC.FastqcRead2.NoneFile
-* QC.FastqcRead2.NoneArray
-* QC.FastqcRead1After.NoneFile
-* QC.FastqcRead1After.NoneArray
-* QC.FastqcRead2After.NoneFile
-* QC.FastqcRead2After.NoneArray
+* QC.FastqcRead1.noneFile
+* QC.FastqcRead1.noneArray
+* QC.FastqcRead2.noneFile
+* QC.FastqcRead2.noneArray
+* QC.FastqcRead1After.noneFile
+* QC.FastqcRead1After.noneArray
+* QC.FastqcRead2After.noneFile
+* QC.FastqcRead2After.noneArray
