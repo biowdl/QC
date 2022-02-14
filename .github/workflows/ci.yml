@@ -38,9 +38,9 @@ jobs:
           # Increase this value to manually invalidate the cache
           CACHE_NUMBER: 0
         with:
-          path: /usr/share/miniconda/envs/test
+          path: /usr/share/miniconda/envs/workflow-test
           key:
-            ${{runner.os}}-test-${{ env.CACHE_NUMBER }}-${{env.DATE}}-${{ hashFiles('.github/lint-environment.yml') }}
+            ${{runner.os}}-workflow-test-${{ env.CACHE_NUMBER }}-${{env.DATE}}-${{ hashFiles('.github/lint-environment.yml') }}
         id: env_cache
 
       # Use the builtin conda. This is the fastest installation. It may not be
@@ -58,17 +58,17 @@ jobs:
         # Activation is therefore done separately.    
 
       - name: Create test environment if no cache is present
-        run: conda env create -n test -f .github/lint-environment.yml
+        run: conda env create -n workflow-test -f .github/lint-environment.yml
         if: steps.env_cache.outputs.cache-hit != 'true'
       
       - name: Install requirements if no cache is present.
-        run: conda install -n test --file requirements-test.txt
+        run: conda install -n workflow-test --file requirements-test.txt
         if: steps.env_cache.outputs.cache-hit != 'true'
 
       - name: Activate test environment
         # The new PATH should be passed to the environment, otherwise it won't register.
         run: |
-          conda activate test
+          conda activate workflow-test
           echo "PATH=$PATH" >> $GITHUB_ENV
 
       - name: Run test.
