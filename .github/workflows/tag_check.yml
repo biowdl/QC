@@ -35,4 +35,3 @@ jobs:
             else 
               echo "contains tag: $(git tag -l --points-at HEAD)";
             fi'
-    
