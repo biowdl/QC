@@ -9,16 +9,10 @@ on:
       - master
     tags:
 
-defaults:
-  run:
-    # This is needed for miniconda, see:
-    # https://github.com/marketplace/actions/setup-miniconda#important
-    shell: bash -l {0}  
-
 jobs:
-  lint:
+  submodule_check:
     runs-on: ubuntu-latest
-    name: Linting checks
+    name: Check tagged submodules
     steps:
       - uses: actions/checkout@v2.3.4
         with:
