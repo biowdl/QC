@@ -36,11 +36,11 @@ jobs:
         uses: pat-s/always-upload-cache@v2.1.5
         env:
           # Increase this value to manually invalidate the cache
-          CACHE_NUMBER: 2
+          CACHE_NUMBER: 0
         with:
           path: /usr/share/miniconda/envs/workflow-test
           key:
-            ${{runner.os}}-workflow-test-${{ env.CACHE_NUMBER }}-${{env.DATE}}-${{ hashFiles('.github/lint-environment.yml') }}
+            ${{runner.os}}-workflow-test-${{ env.CACHE_NUMBER }}-${{env.DATE}}-${{ hashFiles('requirements-test.txt') }}
         id: env_cache
 
       # Use the builtin conda. This is the fastest installation. It may not be
