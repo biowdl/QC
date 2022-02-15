@@ -24,7 +24,10 @@ jobs:
           submodules: false
           fetch-depth: 1
       - id: get_tests
-        run: echo "::set-output name=tests::$(cat ci_tests.json)"
+        # Conveniently, bash strips away all newlines when making a variable.
+        run: |
+          TESTS=$(cat ci_test.json)
+          echo "::set-output name=tests::$TESTS"
   test:
     needs: 
       - get_workflow_tests
