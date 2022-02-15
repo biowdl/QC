@@ -26,7 +26,8 @@ jobs:
       - id: get_tests
         # Conveniently, bash strips away all newlines when making a variable.
         run: |
-          TESTS=$(cat ci_tests.json)
+          TESTS="$(cat ci_tests.json)"
+          echo "$TESTS"
           echo "::set-output name=tests::$TESTS"
   test:
     needs: 
