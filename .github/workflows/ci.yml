@@ -14,16 +14,20 @@ defaults:
     shell: bash -l {0}
 
 jobs:
+  get_workflow_tests:
+    runs-on: ubuntu-latest
+    outputs:
+      test_list: ${{ steps.get_tests.outputs.tests }}
+    steps:
+      - id: get_tests
+        run: echo "::set-output name=tests::$(cat ci_tests.json)"
   test:
+    needs: 
+      - get_workflow_tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test:
-          - paired_end_zipped
-          - paired_end
-          - single_end_zipped
-          - single_end_zipped_contaminations
-          - single_end
+        test: ${{fromJson(needs.get_workflow_tests.outputs.test_list)}}
     steps:
       - uses: actions/checkout@v2.3.4 # https://github.com/actions/checkout.
         with:

@@ -1,0 +1,7 @@
+[
+    "paired_end_zipped",
+    "paired_end",
+    "single_end_zipped",
+    "single_end_zipped_contaminations",
+    "single_end"
+]
