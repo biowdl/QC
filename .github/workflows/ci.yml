@@ -24,9 +24,9 @@ jobs:
           submodules: false
           fetch-depth: 1
       - id: get_tests
-        # Conveniently, bash strips away all newlines when making a variable.
         run: |
-          TESTS="$(cat ci_tests.json)"
+          # Remove all whitespace first
+          TESTS="$(cat ci_tests.json | tr -d '\r\n\t ')"
           echo "$TESTS"
           echo "::set-output name=tests::$TESTS"
   test:
