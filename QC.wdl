@@ -35,8 +35,8 @@ workflow QC {
         Boolean runAdapterClipping = defined(adapterForward) || defined(adapterReverse) || length(select_first([contaminations, []])) > 0
         Boolean extractFastqcZip = false
 
-        String? adapterForward = "AGATCGGAAGAG"  # Illumina universal adapter
-        String? adapterReverse = "AGATCGGAAGAG"  # Illumina universal adapter
+        String? adapterForward
+        String? adapterReverse
         Array[String]+? contaminations
 
         Map[String, String] dockerImages = {

@@ -1,4 +1,5 @@
 {
     "QC.read1": "tests/data/ct_r1.fq",
+    "QC.adapterForward": "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA",
     "QC.extractFastqcZip": true
 }
