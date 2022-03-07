@@ -8,6 +8,11 @@ This document is user facing. Please word the changes in such a way
 that users understand how the changes affect the new version.
 -->
 
+version 2.0.0
+---------------------------
++ By default, no adapters are set anymore. Adapters should be manually set by
+  the user.
+
 version 1.6.0
 ---------------------------
 + Update parameter_meta outputs.
