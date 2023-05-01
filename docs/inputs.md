@@ -22,12 +22,12 @@ QC.
 <dl>
 <dt id="QC.adapterForward"><a href="#QC.adapterForward">QC.adapterForward</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>"AGATCGGAAGAG"</code><br />
+    <i>String? </i><br />
     The adapter to be removed from the reads first or single end reads.
 </dd>
 <dt id="QC.adapterReverse"><a href="#QC.adapterReverse">QC.adapterReverse</a></dt>
 <dd>
-    <i>String? </i><i>&mdash; Default:</i> <code>"AGATCGGAAGAG"</code><br />
+    <i>String? </i><br />
     The adapter to be removed from the reads second end reads.
 </dd>
 <dt id="QC.contaminations"><a href="#QC.contaminations">QC.contaminations</a></dt>
@@ -158,7 +158,7 @@ QC.
 </dd>
 <dt id="QC.Cutadapt.memory"><a href="#QC.Cutadapt.memory">QC.Cutadapt.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"5G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"5GiB"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.Cutadapt.minimumLength"><a href="#QC.Cutadapt.minimumLength">QC.Cutadapt.minimumLength</a></dt>
@@ -293,7 +293,7 @@ QC.
 </dd>
 <dt id="QC.dockerImages"><a href="#QC.dockerImages">QC.dockerImages</a></dt>
 <dd>
-    <i>Map[String,String] </i><i>&mdash; Default:</i> <code>{"fastqc": "quay.io/biocontainers/fastqc:0.11.9--0", "cutadapt": "quay.io/biocontainers/cutadapt:2.10--py37hf01694f_1"}</code><br />
+    <i>Map[String,String] </i><i>&mdash; Default:</i> <code>{"fastqc": "quay.io/biocontainers/fastqc:0.12.1--hdfd78af_0", "cutadapt": "quay.io/biocontainers/cutadapt:4.4--py310h1425a21_0"}</code><br />
     The docker images used. Changing this may result in errors which the developers may choose not to address.
 </dd>
 <dt id="QC.extractFastqcZip"><a href="#QC.extractFastqcZip">QC.extractFastqcZip</a></dt>
@@ -343,7 +343,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1.memory"><a href="#QC.FastqcRead1.memory">QC.FastqcRead1.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"2G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"2GiB"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead1.minLength"><a href="#QC.FastqcRead1.minLength">QC.FastqcRead1.minLength</a></dt>
@@ -418,7 +418,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead1After.memory"><a href="#QC.FastqcRead1After.memory">QC.FastqcRead1After.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"2G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"2GiB"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead1After.minLength"><a href="#QC.FastqcRead1After.minLength">QC.FastqcRead1After.minLength</a></dt>
@@ -493,7 +493,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2.memory"><a href="#QC.FastqcRead2.memory">QC.FastqcRead2.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"2G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"2GiB"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead2.minLength"><a href="#QC.FastqcRead2.minLength">QC.FastqcRead2.minLength</a></dt>
@@ -568,7 +568,7 @@ QC.
 </dd>
 <dt id="QC.FastqcRead2After.memory"><a href="#QC.FastqcRead2After.memory">QC.FastqcRead2After.memory</a></dt>
 <dd>
-    <i>String </i><i>&mdash; Default:</i> <code>"2G"</code><br />
+    <i>String </i><i>&mdash; Default:</i> <code>"2GiB"</code><br />
     The amount of memory this job will use.
 </dd>
 <dt id="QC.FastqcRead2After.minLength"><a href="#QC.FastqcRead2After.minLength">QC.FastqcRead2After.minLength</a></dt>
@@ -617,11 +617,11 @@ QC.
 The following inputs should ***not*** be set, even though womtool may
 show them as being available inputs.
 
-* QC.FastqcRead1.noneFile
 * QC.FastqcRead1.noneArray
-* QC.FastqcRead2.noneFile
+* QC.FastqcRead1.noneFile
 * QC.FastqcRead2.noneArray
-* QC.FastqcRead1After.noneFile
+* QC.FastqcRead2.noneFile
 * QC.FastqcRead1After.noneArray
-* QC.FastqcRead2After.noneFile
+* QC.FastqcRead1After.noneFile
 * QC.FastqcRead2After.noneArray
+* QC.FastqcRead2After.noneFile
